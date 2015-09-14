@@ -238,7 +238,30 @@ module TSOS {
                         _StdOut.putText("Help displays a list of (hopefully) valid commands.");
                         break;
                     // TODO: Make descriptive MANual page entries for the the rest of the shell commands here.
-                    default:
+                    
+					//Providing manual for each command
+					case "ver":
+						 _StdOut.putText("Ver displays current version.");
+						 
+				    case "shutdown":
+						 _StdOut.putText("Shutdown shutsdown the OS ");
+						 
+					case "cls":
+						 _StdOut.putText("Cls clears the screen and resets cursor position");
+
+					case "man":
+						 _StdOut.putText("Man <topic> provides a manual for the command in the topic field");
+						 
+					case "trace":
+						 _StdOut.putText("Trace <on | off> turns off or on the trace function of the OS");
+						 
+					case "rot13":
+						 _StdOut.putText("rot13 <string> provides the rot13 obfuscation of the provided string");	 
+					
+					case "prompt":
+						 _StdOut.putText("Prompt <string> sets the prompt");
+					
+					default:
                         _StdOut.putText("No manual entry for " + args[0] + ".");
                 }
             } else {
