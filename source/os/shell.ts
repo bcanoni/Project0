@@ -82,6 +82,26 @@ module TSOS {
                                   "prompt",
                                   "<string> - Sets the prompt.");
             this.commandList[this.commandList.length] = sc;
+			
+			// date
+            sc = new ShellCommand(this.shellDate,
+                                  "date",
+                                  "- Displays the current date.");
+            this.commandList[this.commandList.length] = sc;
+			
+			// whereami
+			sc = new ShellCommand(this.shellWhereAmI,
+                                  "whereami",
+                                  "- Displays the current location");
+            this.commandList[this.commandList.length] = sc;
+			
+		    // luigi
+            sc = new ShellCommand(this.shellLuigi,
+                                  "luigi",
+                                  "- Displays the current luigi.");
+            this.commandList[this.commandList.length] = sc;
+			
+		
 
             // ps  - list the running processes and their IDs
             // kill <id> - kills the specified process id.
@@ -213,6 +233,26 @@ module TSOS {
         public shellVer(args) {
             _StdOut.putText(APP_NAME + " version " + APP_VERSION);
         }
+		
+		public shellDate(args) {
+		    _StdOut.putText(APP_DATE);
+		}
+		
+		public shellWhereAmI(args) {
+		    _StdOut.putText(APP_LOC);
+		}
+		
+		public shellLuigi(args) {
+		   _StdOut.putText("you asked for it..");
+		   _StdOut.advanceLine();
+		   
+		for (var x in APP_LUIGI){
+		    _StdOut.advanceLine();
+		    _StdOut.putText(APP_LUIGI[x]);
+			
+			
+			}
+		}
 
         public shellHelp(args) {
             _StdOut.putText("Commands:");

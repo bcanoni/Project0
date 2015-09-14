@@ -14,6 +14,32 @@
 const APP_NAME: string    = "BC-OS";   // My initials and OS ...
 const APP_VERSION: string = "0.1337";   // 1337 
 
+const APP_DATE: string = "09/15/2015"; //implement some kind of checking date later
+
+const APP_LOC: string = "A galaxy kind of far away "; //temp location
+
+const APP_LUIGI: string[] = ["░░░░░░░░░░░░░░░█\n",
+"░░███░░░░░░░███░█\n",
+"░█░░░█░░░░░█░░░█░█\n",
+"░░░░░░░░░░░░░░░░░█\n",
+"░░███░░░░░░░███░░█ \n",
+"░█░░░█░░░░░█░░░██\n",
+"█░░░███░░░█░░░███\n",
+"█░░████░░░█░░████\n",
+"█░░░███░░░█░░░███\n",
+"░█░░░█░░░░░█████\n",
+"░░███░░░░░█░░░░░██\n",
+"░░░░░░░░░░░░░░░░░█ █\n",
+"░░██░░░░██░░░░░░░░███\n",
+"░░░████████░░░░░░░███\n",
+"░░░░████████░░░░░███\n",
+"░░░░░░████████████\n",
+"░░░░░░░░░░░░░░░█\n",
+"░░░░░░░░░░░████\n",
+"░░░░░░░░░░░░█\n",
+"░░░░░░░░░░░█\n",
+"░░░░░░░"]; //ignore this..
+
 const CPU_CLOCK_INTERVAL: number = 100;   // This is in ms (milliseconds) so 1000 = 1 second.
 
 const TIMER_IRQ: number = 0;  // Pages 23 (timer), 9 (interrupts), and 561 (interrupt priority).

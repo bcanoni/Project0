@@ -3,6 +3,8 @@
 ///<reference path="shellCommand.ts" />
 ///<reference path="userCommand.ts" />
 /* ------------
+   Brian Canoni
+
    Shell.ts
 
    The OS Shell - The "command line interface" (CLI) for the console.
@@ -48,6 +50,15 @@ var TSOS;
             this.commandList[this.commandList.length] = sc;
             // prompt <string>
             sc = new TSOS.ShellCommand(this.shellPrompt, "prompt", "<string> - Sets the prompt.");
+            this.commandList[this.commandList.length] = sc;
+            // date
+            sc = new TSOS.ShellCommand(this.shellDate, "date", "- Displays the current date.");
+            this.commandList[this.commandList.length] = sc;
+            // whereami
+            sc = new TSOS.ShellCommand(this.shellWhereAmI, "whereami", "- Displays the current location");
+            this.commandList[this.commandList.length] = sc;
+            // luigi
+            sc = new TSOS.ShellCommand(this.shellLuigi, "luigi", "- Displays the current luigi.");
             this.commandList[this.commandList.length] = sc;
             // ps  - list the running processes and their IDs
             // kill <id> - kills the specified process id.
@@ -170,6 +181,20 @@ var TSOS;
         };
         Shell.prototype.shellVer = function (args) {
             _StdOut.putText(APP_NAME + " version " + APP_VERSION);
+        };
+        Shell.prototype.shellDate = function (args) {
+            _StdOut.putText(APP_DATE);
+        };
+        Shell.prototype.shellWhereAmI = function (args) {
+            _StdOut.putText(APP_LOC);
+        };
+        Shell.prototype.shellLuigi = function (args) {
+            _StdOut.putText("you asked for it..");
+            _StdOut.advanceLine();
+            for (var x in APP_LUIGI) {
+                _StdOut.advanceLine();
+                _StdOut.putText(APP_LUIGI[x]);
+            }
         };
         Shell.prototype.shellHelp = function (args) {
             _StdOut.putText("Commands:");
