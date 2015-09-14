@@ -191,6 +191,7 @@ var TSOS;
         Shell.prototype.shellLuigi = function (args) {
             _StdOut.putText("you asked for it..");
             _StdOut.advanceLine();
+            //TODO fix this 
             for (var x in APP_LUIGI) {
                 _StdOut.advanceLine();
                 _StdOut.putText(APP_LUIGI[x]);
@@ -224,18 +225,34 @@ var TSOS;
                     //Providing manual for each command
                     case "ver":
                         _StdOut.putText("Ver displays current version.");
+                        break;
                     case "shutdown":
                         _StdOut.putText("Shutdown shutsdown the OS ");
+                        break;
                     case "cls":
                         _StdOut.putText("Cls clears the screen and resets cursor position");
+                        break;
                     case "man":
                         _StdOut.putText("Man <topic> provides a manual for the command in the topic field");
+                        break;
                     case "trace":
                         _StdOut.putText("Trace <on | off> turns off or on the trace function of the OS");
+                        break;
                     case "rot13":
                         _StdOut.putText("rot13 <string> provides the rot13 obfuscation of the provided string");
+                        break;
                     case "prompt":
                         _StdOut.putText("Prompt <string> sets the prompt");
+                        break;
+                    case "date":
+                        _StdOut.putText("Date displays the date");
+                        break;
+                    case "whereami":
+                        _StdOut.putText("whereami displays where you are");
+                        break;
+                    case "luigi":
+                        _StdOut.putText(APP_LUIGI); //TODO FIX THIS
+                        break;
                     default:
                         _StdOut.putText("No manual entry for " + args[0] + ".");
                 }
