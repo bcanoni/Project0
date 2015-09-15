@@ -196,6 +196,7 @@ var TSOS;
                 _StdOut.advanceLine();
                 _StdOut.putText("" + APP_PIZZA[x]);
             }
+            _StdOut.advanceLine();
             _StdOut.putText("What a delicious pizza.");
         };
         Shell.prototype.shellHelp = function (args) {

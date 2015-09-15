@@ -95,10 +95,10 @@ module TSOS {
                                   "- Displays the current location");
             this.commandList[this.commandList.length] = sc;
 			
-		    // luigi
-            sc = new ShellCommand(this.shellLuigi,
-                                  "luigi",
-                                  "- Displays the current luigi.");
+		    // Pizza
+            sc = new ShellCommand(this.shellPizza,
+                                  "pizza",
+                                  "- Displays the current pizza.");
             this.commandList[this.commandList.length] = sc;
 			
 		
@@ -242,17 +242,19 @@ module TSOS {
 		    _StdOut.putText(APP_LOC);
 		}
 		
-		public shellLuigi(args) {
-		   _StdOut.putText("you asked for it..");
+		public shellPizza(args) {
+		   _StdOut.putText("Here it comes..");
 		  
 		   _StdOut.advanceLine();
 		   //TODO fix this 
-		for (var x in 10){
-		    //_StdOut.advanceLine();
-		    _StdOut.putText("l\b");
+		for (var x in APP_PIZZA){
+		    _StdOut.advanceLine();
+		    _StdOut.putText("" + APP_PIZZA[x]);
 			
 			
 			}
+			_StdOut.advanceLine();
+			_StdOut.putText("What a delicious pizza.");
 		}
 
         public shellHelp(args) {
@@ -319,8 +321,8 @@ module TSOS {
 					     _StdOut.putText("whereami displays where you are");
 						 break;
 						 
-				    case "luigi":
-					     _StdOut.putText(APP_LUIGI); //TODO FIX THIS
+				    case "Pizza":
+					     _StdOut.putText(APP_PIZZA); //TODO FIX THIS
 						 break;
 						 
 					
