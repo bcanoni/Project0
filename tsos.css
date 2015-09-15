@@ -1,7 +1,7 @@
 /* TSOS.css */
 
 body {
-  background: #909193 url(distrib/images/linen.png) repeat;
+  background: #909193 url(distrib/images/bliss.jpg) repeat;
   font-family: Helvetica, Verdana, Arial, sans-serif;
   font-size: 12pt;
   font-weight: normal;
@@ -33,6 +33,12 @@ h3 {
 #display {
   background-color:#DFDBC3;
   border: 2px solid red;
+  cursor: default;
+}
+
+#status {
+  background-color:#DFDBC3;
+  border: 2px solid blue;
   cursor: default;
 }
 

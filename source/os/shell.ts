@@ -244,11 +244,12 @@ module TSOS {
 		
 		public shellLuigi(args) {
 		   _StdOut.putText("you asked for it..");
+		  
 		   _StdOut.advanceLine();
 		   //TODO fix this 
-		for (var x in APP_LUIGI){
-		    _StdOut.advanceLine();
-		    _StdOut.putText(APP_LUIGI[x]);
+		for (var x in 10){
+		    //_StdOut.advanceLine();
+		    _StdOut.putText("l\b");
 			
 			
 			}

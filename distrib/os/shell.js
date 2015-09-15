@@ -194,7 +194,7 @@ var TSOS;
             //TODO fix this 
             for (var x in APP_LUIGI) {
                 _StdOut.advanceLine();
-                _StdOut.putText(APP_LUIGI[x]);
+                _StdOut.putText("|" + APP_LUIGI[x]);
             }
         };
         Shell.prototype.shellHelp = function (args) {
