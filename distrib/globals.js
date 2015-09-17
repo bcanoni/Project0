@@ -12,7 +12,8 @@
 //
 var APP_NAME = "BC-OS"; // My initials and OS ...
 var APP_VERSION = "0.1337"; // 1337 
-var APP_DATE = "09/15/2015"; //implement some kind of checking date later
+//var d = new Date();
+//const APP_DATE: string = d.toLocaleDateString() + " " + d.toLocaleTimeString(); 
 var APP_LOC = "A galaxy kind of far away "; //temp location
 /*
 const APP_Pizza: string[] = ["                    ____",

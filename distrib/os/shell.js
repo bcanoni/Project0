@@ -183,7 +183,9 @@ var TSOS;
             _StdOut.putText(APP_NAME + " version " + APP_VERSION);
         };
         Shell.prototype.shellDate = function (args) {
-            _StdOut.putText(APP_DATE);
+            var d = new Date();
+            var dat = d.toLocaleDateString() + " " + d.toLocaleTimeString();
+            _StdOut.putText(dat);
         };
         Shell.prototype.shellWhereAmI = function (args) {
             _StdOut.putText(APP_LOC);
@@ -196,6 +198,7 @@ var TSOS;
                 _StdOut.advanceLine();
                 _StdOut.putText("" + APP_PIZZA[x]);
             }
+            _StdOut.advanceLine();
             _StdOut.putText("What a delicious pizza.");
         };
         Shell.prototype.shellHelp = function (args) {

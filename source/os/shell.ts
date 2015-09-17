@@ -235,7 +235,11 @@ module TSOS {
         }
 		
 		public shellDate(args) {
-		    _StdOut.putText(APP_DATE);
+		var d = new Date();
+
+        var dat = d.toLocaleDateString() + " " + d.toLocaleTimeString(); 
+		 
+		    _StdOut.putText(dat);
 		}
 		
 		public shellWhereAmI(args) {

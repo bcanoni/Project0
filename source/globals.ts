@@ -14,7 +14,9 @@
 const APP_NAME: string    = "BC-OS";   // My initials and OS ...
 const APP_VERSION: string = "0.1337";   // 1337 
 
-const APP_DATE: string = "09/15/2015"; //implement some kind of checking date later
+//var d = new Date();
+
+//const APP_DATE: string = d.toLocaleDateString() + " " + d.toLocaleTimeString(); 
 
 const APP_LOC: string = "A galaxy kind of far away "; //temp location
 
