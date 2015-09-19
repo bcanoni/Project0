@@ -27,6 +27,7 @@ var TSOS;
             var sc;
             //
             // Load the command list.
+            document.getElementById("Status").value = "Status: Running";
             // ver
             sc = new TSOS.ShellCommand(this.shellVer, "ver", "- Displays the current version data.");
             this.commandList[this.commandList.length] = sc;
@@ -50,6 +51,10 @@ var TSOS;
             this.commandList[this.commandList.length] = sc;
             // prompt <string>
             sc = new TSOS.ShellCommand(this.shellPrompt, "prompt", "<string> - Sets the prompt.");
+            this.commandList[this.commandList.length] = sc;
+            // status <string>
+            sc = new TSOS.ShellCommand(this.shellStatus, "status", "<string> - Sets the status.");
+            ;
             this.commandList[this.commandList.length] = sc;
             // date
             sc = new TSOS.ShellCommand(this.shellDate, "date", "- Displays the current date.");
@@ -200,6 +205,15 @@ var TSOS;
             }
             _StdOut.advanceLine();
             _StdOut.putText("What a delicious pizza.");
+        };
+        Shell.prototype.shellStatus = function (args) {
+            if (args.length > 0) {
+                var status = args[0];
+                document.getElementById("Status").value = "Status: " + status;
+            }
+            else {
+                _StdOut.putText("Usage: Status <status>  Please supply a status.");
+            }
         };
         Shell.prototype.shellHelp = function (args) {
             _StdOut.putText("Commands:");

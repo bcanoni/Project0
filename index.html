@@ -37,6 +37,43 @@
 
 <body onload="onDocumentLoad()">
 
+<div id="header">
+  
+    
+        <tr>
+            <td>  <input type ="text"
+                         class = "status"
+                         id = "Status"
+						 value = "Status: Not Running"
+                         disabled = "disabled">
+                <input type = "text"
+                       id = "date"
+                       disabled = "disabled"></button>
+
+
+
+                <script>
+				status();
+				
+				 function status() 
+				 {
+				 var d = new Date();
+                    document.getElementById("date").value = d.toLocaleDateString() + " " + d.toLocaleTimeString(); 
+					setTimeout(status,1000);
+					}
+                </script>
+            </td>
+        </tr>
+    
+
+</div>
+
+
+
+
+
+
+
 <div id="divMain" style="width:100%;">
 
    <div id="divButtonBar" style="margin:4px;">
@@ -102,19 +139,7 @@
    </div>
 </div>
 
- <div id="divStatus" style="margin:4px; width:500px; height:12px; float:left;">
-      <label>
-         Status
-         
-      </label>
-	  
-	  
-	  <canvas id="status"
-              width="500px"
-              height="50px"
-              tabindex="3">
-      </canvas>
-   </div>
+ 
 
 <p class="footerText" style="clear:both;">
    <br>

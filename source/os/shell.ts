@@ -26,7 +26,9 @@ module TSOS {
         public commandList = [];
         public curses = "[fuvg],[cvff],[shpx],[phag],[pbpxfhpxre],[zbgureshpxre],[gvgf]";
         public apologies = "[sorry]";
-
+        
+		
+		
         constructor() {
         }
 
@@ -34,7 +36,9 @@ module TSOS {
             var sc;
             //
             // Load the command list.
-
+  
+  
+			(<HTMLInputElement> document.getElementById("Status")).value = "Status: Running";
             // ver
             sc = new ShellCommand(this.shellVer,
                                   "ver",
@@ -82,6 +86,12 @@ module TSOS {
                                   "prompt",
                                   "<string> - Sets the prompt.");
             this.commandList[this.commandList.length] = sc;
+			
+			// status <string>
+			sc = new ShellCommand(this.shellStatus,
+								  "status",
+								  "<string> - Sets the status.");									;
+			 this.commandList[this.commandList.length] = sc;
 			
 			// date
             sc = new ShellCommand(this.shellDate,
@@ -259,6 +269,21 @@ module TSOS {
 			}
 			_StdOut.advanceLine();
 			_StdOut.putText("What a delicious pizza.");
+		}
+		
+		public shellStatus(args) {
+		     if (args.length > 0)
+			 {
+			 var status = args[0];
+		     (<HTMLInputElement> document.getElementById("Status")).value = "Status: " + status;
+			 //document.getElementById("shellStatus").value = "Status: " +  status;
+		     } 
+			 else
+			 {
+			 _StdOut.putText("Usage: Status <status>  Please supply a status.");
+			 
+			 }
+		
 		}
 
         public shellHelp(args) {
