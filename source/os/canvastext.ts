@@ -154,6 +154,8 @@ module TSOS {
             ctx.lineCap = "round";
             ctx.lineWidth = 2.0 * mag;
             ctx.strokeStyle = "black";
+			
+			ctx.translate(70,70);
 
             for (var i = 0; i < len; i++) {
                 var c = CanvasTextFunctions.letter(str.charAt(i));
