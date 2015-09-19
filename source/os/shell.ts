@@ -346,6 +346,10 @@ module TSOS {
 					     _StdOut.putText("Date displays the date");
 						 break;
 						 
+					case "status":
+					     _StdOut.putText("status <string> updates the status to the provided string");
+						 break;
+						 
 				    case "whereami":
 					     _StdOut.putText("whereami displays where you are");
 						 break;
