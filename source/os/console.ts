@@ -45,7 +45,31 @@ module TSOS {
                     _OsShell.handleInput(this.buffer);
                     // ... and reset our buffer.
                     this.buffer = "";
-                } else {
+                }
+				else if (chr === String.fromCharCode(8)) { // delete
+				//delete letter right before
+				
+				
+				     //clear from canvas in form of rectangles the width of letters? hopefully this works...
+                     var bufferlength = this.buffer.length;
+
+
+                    var deleteAmount = _DrawingContext.measureText(this.currentFont, this.currentFontSize, this.buffer.substr(bufferlength - 1, bufferlength));
+				    _DrawingContext.clearRect(this.currentXPosition - deleteAmount , this.currentYPosition - 14, 18, 18);
+                    
+					//kept forgetting to put the cursor back
+					this.currentXPosition = this.currentXPosition - deleteAmount;
+
+                    this.buffer = this.buffer.substr(0, bufferlength - 1);	
+				
+				
+				
+				
+				}
+				
+				
+				
+				else {
                     // This is a "normal" character, so ...
                     // ... draw it on the screen...
                     this.putText(chr);
@@ -86,6 +110,20 @@ module TSOS {
                                      _FontHeightMargin;
 
             // TODO: Handle scrolling. (iProject 1)
+			/* uhhh might have the right idea here but not sure
+			if(this.currentYPosition > 500)
+			{
+			var img = _DrawingContext.getImageData(0,0,500,500);
+			_DrawingContext.clearRect(0,0,500,500);
+			_DrawingContext.putImageData(img, 0,-100);
+			
+			
+			
+			
+			}
+			*/
+			
+			
         }
     }
  }
