@@ -111,7 +111,11 @@ module TSOS {
                                   "- Displays the current pizza.");
             this.commandList[this.commandList.length] = sc;
 			
-		
+		     //bsod
+            sc = new ShellCommand(this.shellBsod,
+                                  "bsod",
+                                  "- Test BSOD.");
+            this.commandList[this.commandList.length] = sc;
 
             // ps  - list the running processes and their IDs
             // kill <id> - kills the specified process id.
@@ -276,13 +280,21 @@ module TSOS {
 			 {
 			 var status = args[0];
 		     (<HTMLInputElement> document.getElementById("Status")).value = "Status: " + status;
-			 //document.getElementById("shellStatus").value = "Status: " +  status;
+			
 		     } 
 			 else
 			 {
 			 _StdOut.putText("Usage: Status <status>  Please supply a status.");
 			 
 			 }
+		
+		}
+		
+		public shellBsod(args) {
+		
+		var img = document.getElementById("bsod");
+		_DrawingContext.drawImage(img,0,0);
+		_Kernel.krnShutdown();
 		
 		}
 
@@ -295,6 +307,7 @@ module TSOS {
         }
 
         public shellShutdown(args) {
+		     
              _StdOut.putText("Shutting down...");
              // Call Kernel shutdown routine.
             _Kernel.krnShutdown();
@@ -354,8 +367,12 @@ module TSOS {
 					     _StdOut.putText("whereami displays where you are");
 						 break;
 						 
-				    case "Pizza":
-					     _StdOut.putText(APP_PIZZA); //TODO FIX THIS
+				    case "pizza":
+					     _StdOut.putText("Makes a perfect pizza"); 
+						 break;
+						 
+				    case "bsod":
+					     _StdOut.putText("displays bsod and shutsdown"); 
 						 break;
 						 
 					

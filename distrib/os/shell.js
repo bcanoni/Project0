@@ -65,6 +65,9 @@ var TSOS;
             // Pizza
             sc = new TSOS.ShellCommand(this.shellPizza, "pizza", "- Displays the current pizza.");
             this.commandList[this.commandList.length] = sc;
+            //bsod
+            sc = new TSOS.ShellCommand(this.shellBsod, "bsod", "- Test BSOD.");
+            this.commandList[this.commandList.length] = sc;
             // ps  - list the running processes and their IDs
             // kill <id> - kills the specified process id.
             //
@@ -215,6 +218,11 @@ var TSOS;
                 _StdOut.putText("Usage: Status <status>  Please supply a status.");
             }
         };
+        Shell.prototype.shellBsod = function (args) {
+            var img = document.getElementById("bsod");
+            _DrawingContext.drawImage(img, 0, 0);
+            _Kernel.krnShutdown();
+        };
         Shell.prototype.shellHelp = function (args) {
             _StdOut.putText("Commands:");
             for (var i in _OsShell.commandList) {
@@ -271,8 +279,11 @@ var TSOS;
                     case "whereami":
                         _StdOut.putText("whereami displays where you are");
                         break;
-                    case "Pizza":
-                        _StdOut.putText(APP_PIZZA); //TODO FIX THIS
+                    case "pizza":
+                        _StdOut.putText("Makes a perfect pizza");
+                        break;
+                    case "bsod":
+                        _StdOut.putText("displays bsod and shutsdown");
                         break;
                     default:
                         _StdOut.putText("No manual entry for " + args[0] + ".");
