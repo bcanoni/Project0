@@ -68,6 +68,9 @@ var TSOS;
             //bsod
             sc = new TSOS.ShellCommand(this.shellBsod, "bsod", "- Test BSOD.");
             this.commandList[this.commandList.length] = sc;
+            //load
+            sc = new TSOS.ShellCommand(this.shellLoad, "load", "- Loads and validates user code.");
+            this.commandList[this.commandList.length] = sc;
             // ps  - list the running processes and their IDs
             // kill <id> - kills the specified process id.
             //
@@ -220,8 +223,12 @@ var TSOS;
         };
         Shell.prototype.shellBsod = function (args) {
             var img = document.getElementById("bsod");
+            document.getElementById("Status").value = "Status: dead";
             _DrawingContext.drawImage(img, 0, 0);
             _Kernel.krnShutdown();
+        };
+        Shell.prototype.shellLoad = function (args) {
+            _StdOut.putText("Not Implemented");
         };
         Shell.prototype.shellHelp = function (args) {
             _StdOut.putText("Commands:");
@@ -284,6 +291,9 @@ var TSOS;
                         break;
                     case "bsod":
                         _StdOut.putText("displays bsod and shutsdown");
+                        break;
+                    case "load":
+                        _StdOut.putText("load takes in and processes user code");
                         break;
                     default:
                         _StdOut.putText("No manual entry for " + args[0] + ".");

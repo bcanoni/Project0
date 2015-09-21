@@ -116,6 +116,12 @@ module TSOS {
                                   "bsod",
                                   "- Test BSOD.");
             this.commandList[this.commandList.length] = sc;
+			
+			 //load
+            sc = new ShellCommand(this.shellLoad,
+                                  "load",
+                                  "- Loads and validates user code.");
+            this.commandList[this.commandList.length] = sc;
 
             // ps  - list the running processes and their IDs
             // kill <id> - kills the specified process id.
@@ -293,8 +299,15 @@ module TSOS {
 		public shellBsod(args) {
 		
 		var img = document.getElementById("bsod");
+		 (<HTMLInputElement> document.getElementById("Status")).value = "Status: dead";
 		_DrawingContext.drawImage(img,0,0);
 		_Kernel.krnShutdown();
+		
+		}
+		
+		public shellLoad(args)		{
+		
+		_StdOut.putText("Not Implemented");
 		
 		}
 
@@ -373,6 +386,10 @@ module TSOS {
 						 
 				    case "bsod":
 					     _StdOut.putText("displays bsod and shutsdown"); 
+						 break;
+						 
+				    case "load":
+					     _StdOut.putText("load takes in and processes user code"); 
 						 break;
 						 
 					
