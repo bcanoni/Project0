@@ -92,18 +92,17 @@ var TSOS;
                 _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) +
                 _FontHeightMargin;
             // TODO: Handle scrolling. (iProject 1)
-            /* uhhh might have the right idea here but not sure
-            if(this.currentYPosition > 500)
-            {
-            var img = _DrawingContext.getImageData(0,0,500,500);
-            _DrawingContext.clearRect(0,0,500,500);
-            _DrawingContext.putImageData(img, 0,-100);
-            
-            
-            
-            
+            // uhhh might have the right idea here but not sure
+            if (this.currentYPosition >= _Canvas.height) {
+                var diff = _DefaultFontSize +
+                    _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) +
+                    _FontHeightMargin; //just using the same formula as the current y position above 
+                alert(diff);
+                var img = _DrawingContext.getImageData(0, diff, _Canvas.width, _Canvas.height);
+                _DrawingContext.clearRect(0, 0, _Canvas.width, _Canvas.height);
+                _DrawingContext.putImageData(img, 0, 0);
+                this.currentYPosition = _Canvas.height - this.currentFontSize;
             }
-            */
         };
         return Console;
     })();
