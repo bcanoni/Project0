@@ -173,6 +173,12 @@ module TSOS {
 
         public krnTrapError(msg) {
             Control.hostLog("OS ERROR - TRAP: " + msg);
+			
+			var img = document.getElementById("bsod");
+		    (<HTMLInputElement> document.getElementById("Status")).value = "Status: dead";
+	       	_DrawingContext.drawImage(img,0,0);  
+			
+			
             // TODO: Display error on console, perhaps in some sort of colored screen. (Maybe blue?)
             this.krnShutdown();
         }

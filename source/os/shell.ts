@@ -312,7 +312,10 @@ module TSOS {
 		
 		public shellLoad(args)		{
 		
-		_StdOut.putText("Not Implemented");
+		//take in user data?
+		//taProgramInput
+		//only hex and spaces accept
+		//0-9 A-F and spaces 
 		
 		}
 
