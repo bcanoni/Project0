@@ -10,10 +10,10 @@
    ---------------------------------- */
 
 module TSOS {
-
+      var pos = 0;
     // Extends DeviceDriver
     export class DeviceDriverKeyboard extends DeviceDriver {
-
+       
         constructor() {
             // Override the base method pointers.
             super(this.krnKbdDriverEntry, this.krnKbdDispatchKeyPress);
@@ -35,11 +35,48 @@ module TSOS {
 			
 			//have to check a lot of symbols here by code
 			
-			  if (keyCode == 8) { //backspace
+			if (keyCode == 8) { //backspace
                 chr = String.fromCharCode(keyCode);
                 _KernelInputQueue.enqueue(chr);
             }
 			
+			else if (keyCode == 9) { //tab
+                chr = String.fromCharCode(keyCode);
+                _KernelInputQueue.enqueue(chr);
+            }
+			
+			else if (keyCode == 38) { //up
+			 /* 
+			 alert(pos + ": " + _CommandLog[0]);
+			  if(_CommandLog[pos-1] !==null)
+				{
+              _KernelInputQueue.enqueue(_CommandLog[pos-1]);
+				pos--;
+				}
+				else
+				{
+				//do nothing
+				}
+				*/
+				chr = String.fromCharCode(keyCode);
+				_KernelInputQueue.enqueue(chr);
+            }
+			
+		    else if (keyCode == 40) { //down
+				  /*
+				  if(_CommandLog[pos+1] !==null)
+				  {
+                _KernelInputQueue.enqueue(_CommandLog[pos+1]);
+				pos++;
+				}
+				else
+				{
+				//do nothing
+				}
+				*/
+				chr = String.fromCharCode(keyCode);
+				_KernelInputQueue.enqueue(chr);
+            }
 				 
 			
             else if (keyCode == 49 && isShifted == true) { //!
@@ -212,6 +249,14 @@ module TSOS {
             } else if (((keyCode >= 48) && (keyCode <= 57)) ||   // digits
 						(keyCode == 32)                     ||   // space
                         (keyCode == 13)) {                       // enter
+						
+						
+						if(keyCode == 13)
+						{						
+						pos++;
+						}
+						
+						
                 chr = String.fromCharCode(keyCode);
                 _KernelInputQueue.enqueue(chr);
             }

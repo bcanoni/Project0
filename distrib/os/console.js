@@ -42,6 +42,7 @@ var TSOS;
                     // The enter key marks the end of a console command, so ...
                     // ... tell the shell ...
                     _OsShell.handleInput(this.buffer);
+                    _CommandLog.push(this.buffer);
                     // ... and reset our buffer.
                     this.buffer = "";
                 }
@@ -54,6 +55,11 @@ var TSOS;
                     //kept forgetting to put the cursor back
                     this.currentXPosition = this.currentXPosition - deleteAmount;
                     this.buffer = this.buffer.substr(0, bufferlength - 1);
+                }
+                else if (chr === String.fromCharCode(9)) {
+                    //somehow detect what has been typed	
+                    alert(chr);
+                    alert(this.buffer);
                 }
                 else {
                     // This is a "normal" character, so ...
