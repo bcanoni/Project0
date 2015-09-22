@@ -232,7 +232,38 @@ var TSOS;
             _Kernel.krnShutdown();
         };
         Shell.prototype.shellLoad = function (args) {
-            _StdOut.putText("Not Implemented");
+            //take in user data?
+            //taProgramInput
+            //only hex and spaces accept
+            //0-9 A-F and spaces 
+            var success = false;
+            var userCode = document.getElementById("taProgramInput").value;
+            userCode = userCode.replace(/\s/g, ""); //destroy all spaces
+            var output = "";
+            //alert(userCode);
+            //if i see any non hex display a warning message instead otherwise parse by twos
+            for (var x = 0; x < userCode.length; x += 2) {
+                //seems a regular expression would help here as well 
+                var temp = userCode.charAt(x) + userCode.charAt(x + 1); //this represents a grouping of hex
+                //alert(temp);
+                var patHex = /[^g-z]/g;
+                var isHex = temp.match(patHex);
+                if (isHex == null || isHex.length < 2) {
+                    //alert("THIS ISNT HEX");
+                    x = userCode.length;
+                    success = false;
+                }
+                else {
+                    success = true;
+                    //The code was hex so add it to output after converting it
+                    output += String.fromCharCode(parseInt(temp, 16));
+                }
+            }
+            if (success) {
+                _StdOut.putText(output);
+            }
+            else
+                _StdOut.putText("Invalid Code");
         };
         Shell.prototype.shellHelp = function (args) {
             _StdOut.putText("Commands:");
