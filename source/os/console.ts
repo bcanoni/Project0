@@ -12,7 +12,7 @@
 module TSOS {
 
     export class Console {
-
+         
         constructor(public currentFont = _DefaultFontFamily,
                     public currentFontSize = _DefaultFontSize,
                     public currentXPosition = 0,
@@ -21,6 +21,7 @@ module TSOS {
         }
 
         public init(): void {
+		   
             this.clearScreen();
             this.resetXY();
         }
@@ -33,19 +34,25 @@ module TSOS {
             this.currentXPosition = 0;
             this.currentYPosition = this.currentFontSize;
         }
-
+        
         public handleInput(): void {
 		     var commands = [];
-		
+			
+		     //var pos = 1;
 		
             while (_KernelInputQueue.getSize() > 0) {
                 // Get the next character from the kernel input queue.
                 var chr = _KernelInputQueue.dequeue();
                 // Check to see if it's "special" (enter or ctrl-c) or "normal" (anything else that the keyboard device driver gave us).
-                if (chr === String.fromCharCode(13)) { //     Enter key
+               
+
+
+			   if (chr === String.fromCharCode(13)) { //     Enter key
                     // The enter key marks the end of a console command, so ...
                     // ... tell the shell ...
                     _OsShell.handleInput(this.buffer);
+					//pos++;
+					_CommandHistory.push(this.buffer);
                     // ... and reset our buffer.
                     this.buffer = "";
                 }
@@ -113,7 +120,7 @@ module TSOS {
 					 var deleteAmount = _DrawingContext.measureText(this.currentFont, this.currentFontSize, this.buffer.substr(bufferlength - 1, bufferlength));
 				    
 					//Just delete the whole line?
-					_DrawingContext.clearRect(10 , this.currentYPosition - 14, 500, 18);
+					_DrawingContext.clearRect(10 , this.currentYPosition - 14, 500, 19);
                     
 					//kept forgetting to put the cursor back
 					this.currentXPosition = this.currentXPosition - deleteAmount;
@@ -121,6 +128,60 @@ module TSOS {
                     this.buffer = output;
 					
                         _StdOut.putText(this.buffer);
+				
+				}
+				
+				else if (chr === String.fromCharCode(38)) { //up
+				
+				    if(_CommandHistory.length>1)//there is a history
+					{
+				    //DELETE LINE 
+				    var deleteAmount = _DrawingContext.measureText(this.currentFont, this.currentFontSize, this.buffer.substr(bufferlength - 1, bufferlength));
+				    
+					//Just delete the whole line?
+					_DrawingContext.clearRect(10 , this.currentYPosition - 14, 500, 19);
+                    
+					//kept forgetting to put the cursor back
+					this.currentXPosition = this.currentXPosition - deleteAmount;
+				    //DELETE COMPLETE
+					
+					//ok now I have to use my command history global 
+					
+					  //add popped commands to a down array 
+					   this.buffer = _CommandHistory.pop();
+					  _DownCommands.push(this.buffer);
+					 
+					  _StdOut.putText(this.buffer);
+					  
+					  
+					}
+					
+					
+					
+				}
+				
+				else if (chr === String.fromCharCode(40)) { //down
+				
+				
+				  if(_DownCommands.length>1)//there is stuff in the down array
+					{
+				    //DELETE LINE 
+				    var deleteAmount = _DrawingContext.measureText(this.currentFont, this.currentFontSize, this.buffer.substr(bufferlength - 1, bufferlength));
+				    
+					//Just delete the whole line?
+					_DrawingContext.clearRect(10 , this.currentYPosition - 14, 500, 19);
+                    
+					//kept forgetting to put the cursor back
+					this.currentXPosition = this.currentXPosition - deleteAmount;
+				    //DELETE COMPLETE
+					
+					//now take the first element in the array and delete that 
+					this.buffer = _DownCommands[0];
+					 _StdOut.putText(this.buffer);
+					//now slice that ish
+					_DownCommands= _DownCommands.slice(1);
+					
+					}
 				
 				}
 				

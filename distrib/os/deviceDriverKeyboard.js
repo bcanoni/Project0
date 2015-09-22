@@ -42,6 +42,14 @@ var TSOS;
                 chr = String.fromCharCode(keyCode);
                 _KernelInputQueue.enqueue(chr);
             }
+            else if (keyCode == 38) {
+                chr = String.fromCharCode(keyCode);
+                _KernelInputQueue.enqueue(chr);
+            }
+            else if (keyCode == 40) {
+                chr = String.fromCharCode(keyCode);
+                _KernelInputQueue.enqueue(chr);
+            }
             else if (keyCode == 49 && isShifted == true) {
                 chr = String.fromCharCode(33);
                 _KernelInputQueue.enqueue(chr);
