@@ -38,16 +38,11 @@ module TSOS {
             while (_KernelInputQueue.getSize() > 0) {
                 // Get the next character from the kernel input queue.
                 var chr = _KernelInputQueue.dequeue();
-				
                 // Check to see if it's "special" (enter or ctrl-c) or "normal" (anything else that the keyboard device driver gave us).
-  
-
-
-				if (chr === String.fromCharCode(13)) { //     Enter key
+                if (chr === String.fromCharCode(13)) { //     Enter key
                     // The enter key marks the end of a console command, so ...
                     // ... tell the shell ...
                     _OsShell.handleInput(this.buffer);
-					_CommandLog.push(this.buffer);
                     // ... and reset our buffer.
                     this.buffer = "";
                 }
@@ -72,22 +67,9 @@ module TSOS {
 				
 				}
 				
-					else if (chr === String.fromCharCode(9)) { // tab...
-					//somehow detect what has been typed	
-                    alert(chr);
-				    alert(this.buffer);		
-				
-				
-				}
-				
-			
-				
-				
-				
 				
 				
 				else {
-				  
                     // This is a "normal" character, so ...
                     // ... draw it on the screen...
                     this.putText(chr);

@@ -15,7 +15,6 @@ var __extends = (this && this.__extends) || function (d, b) {
    ---------------------------------- */
 var TSOS;
 (function (TSOS) {
-    var pos = 0;
     // Extends DeviceDriver
     var DeviceDriverKeyboard = (function (_super) {
         __extends(DeviceDriverKeyboard, _super);
@@ -38,27 +37,6 @@ var TSOS;
             if (keyCode == 8) {
                 chr = String.fromCharCode(keyCode);
                 _KernelInputQueue.enqueue(chr);
-            }
-            else if (keyCode == 9) {
-                chr = String.fromCharCode(keyCode);
-                _KernelInputQueue.enqueue(chr);
-            }
-            else if (keyCode == 38) {
-                alert(pos + ": " + _CommandLog[0]);
-                if (_CommandLog[pos - 1] !== null) {
-                    _KernelInputQueue.enqueue(_CommandLog[pos - 1]);
-                    pos--;
-                }
-                else {
-                }
-            }
-            else if (keyCode == 40) {
-                if (_CommandLog[pos + 1] !== null) {
-                    _KernelInputQueue.enqueue(_CommandLog[pos + 1]);
-                    pos++;
-                }
-                else {
-                }
             }
             else if (keyCode == 49 && isShifted == true) {
                 chr = String.fromCharCode(33);
@@ -203,9 +181,6 @@ var TSOS;
             else if (((keyCode >= 48) && (keyCode <= 57)) ||
                 (keyCode == 32) ||
                 (keyCode == 13)) {
-                if (keyCode == 13) {
-                    pos++;
-                }
                 chr = String.fromCharCode(keyCode);
                 _KernelInputQueue.enqueue(chr);
             }
