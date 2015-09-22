@@ -40,7 +40,27 @@ module TSOS {
                 _KernelInputQueue.enqueue(chr);
             }
 			
-				 
+			else if (keyCode == 9) { //tab
+			    chr = String.fromCharCode(keyCode);
+                _KernelInputQueue.enqueue(chr);
+			
+			}	
+
+			else if (keyCode == 38) { //up
+			    chr = String.fromCharCode(keyCode);
+                _KernelInputQueue.enqueue(chr);
+			
+			}	
+			
+			else if (keyCode == 40) { //down
+			    chr = String.fromCharCode(keyCode);
+                _KernelInputQueue.enqueue(chr);
+			
+			}	
+
+
+
+			
 			
             else if (keyCode == 49 && isShifted == true) { //!
                 chr = String.fromCharCode(33);

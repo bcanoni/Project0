@@ -34,6 +34,8 @@ var TSOS;
             this.currentYPosition = this.currentFontSize;
         };
         Console.prototype.handleInput = function () {
+            var commands = [];
+            //var pos = 1;
             while (_KernelInputQueue.getSize() > 0) {
                 // Get the next character from the kernel input queue.
                 var chr = _KernelInputQueue.dequeue();
@@ -42,6 +44,8 @@ var TSOS;
                     // The enter key marks the end of a console command, so ...
                     // ... tell the shell ...
                     _OsShell.handleInput(this.buffer);
+                    //pos++;
+                    _CommandHistory.push(this.buffer);
                     // ... and reset our buffer.
                     this.buffer = "";
                 }
@@ -54,6 +58,70 @@ var TSOS;
                     //kept forgetting to put the cursor back
                     this.currentXPosition = this.currentXPosition - deleteAmount;
                     this.buffer = this.buffer.substr(0, bufferlength - 1);
+                }
+                else if (chr === String.fromCharCode(9)) {
+                    var output = "";
+                    //take currently entered stuff in the buffer and see if itll auto complete to anything
+                    //alert("wow it made it here");
+                    //go through all commands
+                    for (var x = 0; x < _OsShell.commandList.length; x++) {
+                        //if command contains part of current buffer
+                        if (_OsShell.commandList[x].command.search(this.buffer) == 0) {
+                            commands.push(_OsShell.commandList[x].command);
+                        }
+                    }
+                    //pop the command off now and output it 
+                    if (commands.length >= 1) {
+                        //multi tab...? just do the first one
+                        output = commands.pop();
+                    }
+                    else if (commands.length == 0) {
+                        output = "help"; //help as default command seems helpful
+                    }
+                    else {
+                        // input doesnt match anything
+                        //just put back the stuff
+                        output = this.buffer;
+                    }
+                    var deleteAmount = _DrawingContext.measureText(this.currentFont, this.currentFontSize, this.buffer.substr(bufferlength - 1, bufferlength));
+                    //Just delete the whole line?
+                    _DrawingContext.clearRect(10, this.currentYPosition - 14, 500, 19);
+                    //kept forgetting to put the cursor back
+                    this.currentXPosition = this.currentXPosition - deleteAmount;
+                    this.buffer = output;
+                    _StdOut.putText(this.buffer);
+                }
+                else if (chr === String.fromCharCode(38)) {
+                    if (_CommandHistory.length > 1) {
+                        //DELETE LINE 
+                        var deleteAmount = _DrawingContext.measureText(this.currentFont, this.currentFontSize, this.buffer.substr(bufferlength - 1, bufferlength));
+                        //Just delete the whole line?
+                        _DrawingContext.clearRect(10, this.currentYPosition - 14, 500, 19);
+                        //kept forgetting to put the cursor back
+                        this.currentXPosition = this.currentXPosition - deleteAmount;
+                        //DELETE COMPLETE
+                        //ok now I have to use my command history global 
+                        //add popped commands to a down array 
+                        this.buffer = _CommandHistory.pop();
+                        _DownCommands.push(this.buffer);
+                        _StdOut.putText(this.buffer);
+                    }
+                }
+                else if (chr === String.fromCharCode(40)) {
+                    if (_DownCommands.length > 1) {
+                        //DELETE LINE 
+                        var deleteAmount = _DrawingContext.measureText(this.currentFont, this.currentFontSize, this.buffer.substr(bufferlength - 1, bufferlength));
+                        //Just delete the whole line?
+                        _DrawingContext.clearRect(10, this.currentYPosition - 14, 500, 19);
+                        //kept forgetting to put the cursor back
+                        this.currentXPosition = this.currentXPosition - deleteAmount;
+                        //DELETE COMPLETE
+                        //now take the first element in the array and delete that 
+                        this.buffer = _DownCommands[0];
+                        _StdOut.putText(this.buffer);
+                        //now slice that ish
+                        _DownCommands = _DownCommands.slice(1);
+                    }
                 }
                 else {
                     // This is a "normal" character, so ...
@@ -93,11 +161,13 @@ var TSOS;
                 _FontHeightMargin;
             // TODO: Handle scrolling. (iProject 1)
             // uhhh might have the right idea here but not sure
+            //This will move up in increments of one line until it is above the height
+            //I wonder if I can move up in multiples .. Nah....
             if (this.currentYPosition >= _Canvas.height) {
                 var diff = _DefaultFontSize +
                     _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) +
                     _FontHeightMargin; //just using the same formula as the current y position above 
-                alert(diff);
+                //alert(diff); ///just testing
                 var img = _DrawingContext.getImageData(0, diff, _Canvas.width, _Canvas.height);
                 _DrawingContext.clearRect(0, 0, _Canvas.width, _Canvas.height);
                 _DrawingContext.putImageData(img, 0, 0);
