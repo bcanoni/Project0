@@ -214,8 +214,12 @@ var TSOS;
         };
         Shell.prototype.shellStatus = function (args) {
             if (args.length > 0) {
+                var str = args[0];
+                for (var x = 1; x < args.length; x++) {
+                    str += " " + args[x];
+                }
                 var status = args[0];
-                document.getElementById("Status").value = "Status: " + status;
+                document.getElementById("Status").value = "Status: " + str;
             }
             else {
                 _StdOut.putText("Usage: Status <status>  Please supply a status.");

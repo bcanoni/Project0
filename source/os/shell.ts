@@ -284,8 +284,13 @@ module TSOS {
 		public shellStatus(args) {
 		     if (args.length > 0)
 			 {
+			 var str = args[0];
+			 for( var x = 1; x<args.length ; x++)
+			 {
+			   str += " " + args[x];
+			 }
 			 var status = args[0];
-		     (<HTMLInputElement> document.getElementById("Status")).value = "Status: " + status;
+		     (<HTMLInputElement> document.getElementById("Status")).value = "Status: " + str;
 			
 		     } 
 			 else
