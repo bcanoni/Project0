@@ -35,6 +35,9 @@ module TSOS {
         }
 
         public handleInput(): void {
+		     var commands = [];
+		
+		
             while (_KernelInputQueue.getSize() > 0) {
                 // Get the next character from the kernel input queue.
                 var chr = _KernelInputQueue.dequeue();
@@ -66,6 +69,61 @@ module TSOS {
 				
 				
 				}
+				
+			    else if (chr === String.fromCharCode(9)) { //tab
+				
+				var output = "";
+				
+				
+				//take currently entered stuff in the buffer and see if itll auto complete to anything
+				//alert("wow it made it here");
+				
+				//go through all commands
+				  for (var x= 0 ; x < _OsShell.commandList.length; x++) {
+				  
+				        //if command contains part of current buffer
+                        if(_OsShell.commandList[x].command.search(this.buffer) == 0){
+                            commands.push(_OsShell.commandList[x].command);
+                        }
+                    }
+					
+					//pop the command off now and output it 
+					
+					
+					
+					
+					if(commands.length >= 1)
+					{
+					//multi tab...? just do the first one
+					output = commands.pop();
+					}
+					else if (commands.length == 0 )
+					{
+					 output="help"; //help as default command seems helpful
+					
+					}
+					else 
+					{
+					// input doesnt match anything
+				    //just put back the stuff
+					output = this.buffer;
+					}
+					
+					
+					 var deleteAmount = _DrawingContext.measureText(this.currentFont, this.currentFontSize, this.buffer.substr(bufferlength - 1, bufferlength));
+				    
+					//Just delete the whole line?
+					_DrawingContext.clearRect(10 , this.currentYPosition - 14, 500, 18);
+                    
+					//kept forgetting to put the cursor back
+					this.currentXPosition = this.currentXPosition - deleteAmount;
+
+                    this.buffer = output;
+					
+                        _StdOut.putText(this.buffer);
+				
+				}
+				
 				
 				
 				
