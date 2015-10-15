@@ -71,6 +71,9 @@ var TSOS;
             //load
             sc = new TSOS.ShellCommand(this.shellLoad, "load", "- Loads and validates user code.");
             this.commandList[this.commandList.length] = sc;
+            //run
+            sc = new TSOS.ShellCommand(this.shellRun, "run", "- Run <PID> program");
+            this.commandList[this.commandList.length] = sc;
             // ps  - list the running processes and their IDs
             // kill <id> - kills the specified process id.
             //
@@ -265,6 +268,9 @@ var TSOS;
             else
                 _StdOut.putText("Invalid Code");
         };
+        Shell.prototype.shellRun = function (args) {
+            _StdOut.putText("RUN LOL");
+        };
         Shell.prototype.shellHelp = function (args) {
             _StdOut.putText("Commands:");
             for (var i in _OsShell.commandList) {
@@ -329,6 +335,9 @@ var TSOS;
                         break;
                     case "load":
                         _StdOut.putText("load takes in and processes user code");
+                        break;
+                    case "run":
+                        _StdOut.putText("run <pid> runs program at specified location");
                         break;
                     default:
                         _StdOut.putText("No manual entry for " + args[0] + ".");

@@ -123,6 +123,13 @@ module TSOS {
                                   "- Loads and validates user code.");
             this.commandList[this.commandList.length] = sc;
 
+			 //run
+            sc = new ShellCommand(this.shellRun,
+                                  "run",
+                                  "- Run <PID> program");
+            this.commandList[this.commandList.length] = sc;
+			
+			
             // ps  - list the running processes and their IDs
             // kill <id> - kills the specified process id.
 
@@ -310,6 +317,8 @@ module TSOS {
 		
 		}
 		
+		
+		
 		public shellLoad(args)		{
 		
 		//take in user data?
@@ -372,6 +381,14 @@ module TSOS {
 		
 		
 		
+		
+		}
+		
+		
+		
+	     public shellRun(args) {
+		
+	      _StdOut.putText("RUN LOL");
 		
 		}
 
@@ -454,6 +471,10 @@ module TSOS {
 						 
 				    case "load":
 					     _StdOut.putText("load takes in and processes user code"); 
+						 break;
+						 
+				    case "run":
+					    _StdOut.putText("run <pid> runs program at specified location"); 
 						 break;
 						 
 					
