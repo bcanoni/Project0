@@ -42,5 +42,63 @@ module TSOS {
             // TODO: Accumulate CPU usage and profiling statistics here.
             // Do the real work here. Be sure to set this.isExecuting appropriately.
         }
+		
+		/*
+		
+		
+		//public execute(input) : void 
+		//{
+		var IR = input;
+		switch(ir) {
+		//A9 LDA  load acc with constant
+		case "A9": 
+		{
+		
+		
+		break;
+		}
+		
+		
+		
+		
+		//AD LDA  load acc from memory
+		case "AD":
+		{
+		
+		break;
+		}
+		
+		
+		//8D STA store acc in memory
+		
+			case "8D":
+		{
+		
+		break;
+		}
+		
+		//6D ADC add with carry adds constants of address to the contents of accumulator and puts results in accumulator
+		
+		//A2 LDX loads x register with a constant
+		
+		//AE LDX loads the X register from memory
+		
+		//A0 LDY loads y register with a constant 
+		
+		//ACloads the y register from memory
+		
+		//EA NOP no operation
+		
+		//00 Break (really a system call)
+		
+		//EC CPX compare a byte in memory to x regi sets the z zero flag if equal 
+		
+		//D0 BNE branch n bytes if z flag is 0-470-12872-5
+		
+		//EE INC increment the value of a byte
+		
+		//FF SYS system call
+		
+		*/
     }
 }
