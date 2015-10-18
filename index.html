@@ -15,6 +15,7 @@
    <script type="text/javascript" src="distrib/host/control.js"></script>
    <script type="text/javascript" src="distrib/host/devices.js"></script>
    <script type="text/javascript" src="distrib/host/cpu.js"></script>
+   <script type="text/javascript" src="distrib/host/memory.js"></script>
 
    <!-- Virtual OS Routines: Make sure Kernel code is last, since it needs those above it. -->
    <script type="text/javascript" src="distrib/os/interrupt.js"></script>
@@ -67,11 +68,6 @@
     
 
 </div>
-
-
-
-
-
 
 
 <div id="divMain" style="width:100%;">
@@ -139,21 +135,62 @@
 	  
    </div>
    
-     <div id="divMemory" style="position: absolute; left:900px; top: 58px;">
+     <div id="divMemory" style="position: absolute; left:900px; top: 58px;height:180px;width:400px; overflow:auto;">
   <Label>
     Memory
 	 <br>
-	 <textarea name="memoryDisp"
-			   id  ="memoryDisp"
-			   rows="8"
-			   cols="48"
-       ></textarea>
-      </label>
+	 <table id="memTable" border="1" style="width:100%;background-color:white">
+									
+										<tr>
+											<th>Address</th>
+											<th>1</th>
+											<th>2</th>
+											<th>3</th>
+											<th>4</th>
+											<th>5</th>
+											<th>6</th>
+											<th>7</th>
+											<th>8</th>
+										</tr>
+									
+									
+										
+									
+								</table>
    
    
     
    
 </div>
+
+<div id="cpuDisplay" style="position: absolute; left:900px; top: 250px;">
+						<label>CPU</label>
+						
+						
+								<table id="cpuTable" border="1" style="width:100%;background-color:white">
+									
+										<tr>
+											<th>PC</th>
+											<th>Acc</th>
+											<th>X-Reg</th>
+											<th>Y-Reg</th>
+											<th>Z-Reg</th>
+										</tr>
+									
+									
+										<tr>
+											<td id="pcDisplay">0</td>
+											<td id="accDisplay">0</td>
+											<td id="xRegDisplay">0</td>
+											<td id="yRegDisplay">0</td>
+											<td id="zRegDisplay">0</td>
+										</tr>
+									
+								</table>
+							
+							
+						
+					</div>
    
 
    <div id="divUserProgramInput" style="margin-left:520px;">
