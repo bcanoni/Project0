@@ -235,6 +235,15 @@ var TSOS;
             _Kernel.krnShutdown();
         };
         Shell.prototype.shellLoad = function (args) {
+            //CLEAR MEM TABLE FOR NOW
+            for (var x = 0; x <= _Memory.sizeMem; x += 8) {
+                //each of 8 bits
+                for (var y = 7; y >= 0; y--) {
+                    var cell = document.getElementById("cell" + x + "" + y);
+                    //alert("cell"+x+""+y);
+                    cell.innerHTML = "00";
+                }
+            }
             //take in user data?
             //taProgramInput
             //only hex and spaces accept
@@ -264,10 +273,15 @@ var TSOS;
             }
             if (success) {
                 //alert(output);
-                success = false;
-                _MemManager.updateMemoryTable(output);
-                _StdOut.putText("Program Successfully loaded at PID: " + _PID);
-                _PID++; //increment pid
+                if (output.length > 256) {
+                    _StdOut.putText("User code too long for current amount of memory");
+                }
+                else {
+                    success = false;
+                    _MemManager.loadProgram(output);
+                    _StdOut.putText("Program Successfully loaded at PID: " + _PID);
+                    _PID++; //increment pid
+                }
             }
             else
                 _StdOut.putText("Invalid Code");
