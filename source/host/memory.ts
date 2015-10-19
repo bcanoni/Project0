@@ -1,3 +1,6 @@
+///<reference path="../globals.ts" />
+
+
 /*
 comments
 
@@ -18,7 +21,7 @@ export class Memory {
 	 
 	  public init(): void {
 	 
-	    alert("wut");
+	    //alert("wut");
 		
 		this.sizeMem = 256;
 		this.Data = new Array(256);
@@ -36,6 +39,7 @@ export class Memory {
 		 {
 			var footer = <HTMLTableElement>memTable.createTFoot();
 			var row =  <HTMLTableRowElement> footer.insertRow(0);
+			row.id = "row"+x;
 			//each of 8 bits
 			
 			
@@ -44,6 +48,7 @@ export class Memory {
 						var cell = row.insertCell(0);
 		    
 						cell.innerHTML = "00";
+						cell.id="cell"+x +""+ y;
 						this.Data[y] = "00";
 			
 					}

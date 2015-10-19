@@ -22,7 +22,6 @@ var TSOS;
             this.commandList = [];
             this.curses = "[fuvg],[cvff],[shpx],[phag],[pbpxfhpxre],[zbgureshpxre],[gvgf]";
             this.apologies = "[sorry]";
-            this.pid = 0; //used for assigning pid in pcb
         }
         Shell.prototype.init = function () {
             var sc;
@@ -260,11 +259,15 @@ var TSOS;
                 else {
                     success = true;
                     //The code was hex so add it to output after converting it
-                    output += String.fromCharCode(parseInt(temp, 16));
+                    output += temp; //String.fromCharCode(parseInt(temp , 16));
                 }
             }
             if (success) {
-                _StdOut.putText(output);
+                //alert(output);
+                success = false;
+                _MemManager.updateMemoryTable(output);
+                _StdOut.putText("Program Successfully loaded at PID: " + _PID);
+                _PID++; //increment pid
             }
             else
                 _StdOut.putText("Invalid Code");

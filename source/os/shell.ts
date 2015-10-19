@@ -27,7 +27,7 @@ module TSOS {
         public curses = "[fuvg],[cvff],[shpx],[phag],[pbpxfhpxre],[zbgureshpxre],[gvgf]";
         public apologies = "[sorry]";
 		
-		public pid=0; //used for assigning pid in pcb
+		
         
 		
 		
@@ -35,6 +35,8 @@ module TSOS {
         }
 
         public init() {
+		
+		    
             var sc;
             //
             // Load the command list.
@@ -338,30 +340,25 @@ module TSOS {
 		for(var x = 0; x < userCode.length ; x+=2)
 		{
 		
-		//seems a regular expression would help here as well 
-        var temp = userCode.charAt(x) + userCode.charAt(x+1); //this represents a grouping of hex
+			//seems a regular expression would help here as well 
+			var temp = userCode.charAt(x) + userCode.charAt(x+1); //this represents a grouping of hex
 		
-		//alert(temp);
-		var patHex = /[^g-z]/g;
-		var isHex = temp.match(patHex);
+			//alert(temp);
+			var patHex = /[^g-z]/g;
+			var isHex = temp.match(patHex);
 		
-		if(isHex == null || isHex.length<2 )
-		{
-		//alert("THIS ISNT HEX");
-		x=userCode.length;
-		success = false;
-		}
-		else 
-		{
-		success = true;
-		//The code was hex so add it to output after converting it
-		output += String.fromCharCode(parseInt(temp , 16));
-		
-		
-		}
-
-		
-		
+				if(isHex == null || isHex.length<2 )
+				{
+					//alert("THIS ISNT HEX");
+					x=userCode.length;
+					success = false;
+				}
+				else 
+				{
+					success = true;
+					//The code was hex so add it to output after converting it
+					output += temp;//String.fromCharCode(parseInt(temp , 16));
+				}		
 		
 		
 		
@@ -370,19 +367,16 @@ module TSOS {
 		
 		if(success)
 		{
-		 _StdOut.putText(output);
+		//alert(output);
+		
+		success=false; 
+		 _MemManager.updateMemoryTable(output);
+		 _StdOut.putText("Program Successfully loaded at PID: " + _PID);
+		 _PID++; //increment pid
 		}
 		else
-		 _StdOut.putText("Invalid Code");
-		
-		
-		
-		
-		
-		
-		
-		
-		
+		 _StdOut.putText("Invalid Code");	
+    		 
 		
 		}
 		

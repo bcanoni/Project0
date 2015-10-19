@@ -86,7 +86,12 @@ const KEYBOARD_IRQ: number = 1;
 var _CPU: TSOS.Cpu;  // Utilize TypeScript's type annotation system to ensure that _CPU is an instance of the Cpu class.
 var _Memory: TSOS.Memory; //try
 var _PCB: TSOS.PCB; //pcb
+var _MemManager: TSOS.MemoryManager; // M M
 
+
+
+
+var _PID: number = 0;
 
 var _OSclock: number = 0;  // Page 23.
 
@@ -121,6 +126,8 @@ var _StdOut;
 // UI
 var _Console: TSOS.Console;
 var _OsShell: TSOS.Shell;
+
+
 
 // At least this OS is not trying to kill you. (Yet.)
 var _SarcasticMode: boolean = false;
