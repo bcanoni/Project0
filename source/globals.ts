@@ -85,6 +85,7 @@ const KEYBOARD_IRQ: number = 1;
 //
 var _CPU: TSOS.Cpu;  // Utilize TypeScript's type annotation system to ensure that _CPU is an instance of the Cpu class.
 var _Memory: TSOS.Memory; //try
+var _PCB: TSOS.PCB; //pcb
 
 
 var _OSclock: number = 0;  // Page 23.
@@ -96,6 +97,10 @@ var _CommandHistory: string[] = [""];
 var _DownCommands: string[]  = [] ;
 
 var _Canvas: HTMLCanvasElement;         // Initialized in Control.hostInit().
+
+var _MemTable: HTMLTableElement;
+var _CPUTable: HTMLTableElement;
+
 var _DrawingContext: any; // = _Canvas.getContext("2d");  // Assigned here for type safety, but re-initialized in Control.hostInit() for OCD and logic.
 var _DefaultFontFamily: string = "sans";        // Ignored, I think. The was just a place-holder in 2008, but the HTML canvas may have use for it.
 var _DefaultFontSize: number = 13;

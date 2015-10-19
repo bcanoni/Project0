@@ -22,6 +22,7 @@ var TSOS;
             this.commandList = [];
             this.curses = "[fuvg],[cvff],[shpx],[phag],[pbpxfhpxre],[zbgureshpxre],[gvgf]";
             this.apologies = "[sorry]";
+            this.pid = 0; //used for assigning pid in pcb
         }
         Shell.prototype.init = function () {
             var sc;

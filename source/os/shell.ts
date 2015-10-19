@@ -26,6 +26,8 @@ module TSOS {
         public commandList = [];
         public curses = "[fuvg],[cvff],[shpx],[phag],[pbpxfhpxre],[zbgureshpxre],[gvgf]";
         public apologies = "[sorry]";
+		
+		public pid=0; //used for assigning pid in pcb
         
 		
 		
