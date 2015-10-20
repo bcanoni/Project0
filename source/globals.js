@@ -80,6 +80,7 @@ var _DownCommands = [];
 var _Canvas; // Initialized in Control.hostInit().
 var _MemTable;
 var _CPUTable;
+var _ProgramSize; //size of prog calculated at load
 var _DrawingContext; // = _Canvas.getContext("2d");  // Assigned here for type safety, but re-initialized in Control.hostInit() for OCD and logic.
 var _DefaultFontFamily = "sans"; // Ignored, I think. The was just a place-holder in 2008, but the HTML canvas may have use for it.
 var _DefaultFontSize = 13;

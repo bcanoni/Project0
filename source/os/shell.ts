@@ -358,7 +358,7 @@ module TSOS {
 		var userCode = (<HTMLInputElement> document.getElementById("taProgramInput")).value;	
 		userCode = userCode.replace(/\s/g, "")  ; //destroy all spaces
 		var output = "";
-		
+		_ProgramSize = 0;
 		//alert(userCode);
 		
 		//if i see any non hex display a warning message instead otherwise parse by twos
@@ -382,6 +382,7 @@ module TSOS {
 				{
 					success = true;
 					//The code was hex so add it to output after converting it
+					_ProgramSize++;
 					output += temp;//String.fromCharCode(parseInt(temp , 16));
 				}		
 		
@@ -416,8 +417,12 @@ module TSOS {
 		
 		
 	     public shellRun(args) {
-		
-	      _StdOut.putText("RUN LOL");
+		 //clear cpu values
+		 _CPU.clearCpu();
+		 
+		 
+		   //dont need to run on pid yet but keep that in mind for later
+	      _CPU.isExecuting =true;
 		
 		}
 
