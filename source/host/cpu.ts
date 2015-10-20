@@ -199,7 +199,7 @@ module TSOS {
 					
 					
 					
-					if(this.Zflag === parseInt(_Memory.Data[decAddress]))
+					if(this.Xreg === parseInt(_Memory.Data[decAddress]))
 					this.Zflag = 0;
 					else
 					this.Zflag = 1;
@@ -251,10 +251,15 @@ module TSOS {
                 break;
 				
 				case "EE": //EE INC increment the value of a byte
-                   i=_MemManager.toAddress();
-                        a=parseInt(_Memory.Data[i],16);
+                   var byteOne = _Memory.Data[this.PC+1];
+					var byteTwo = _Memory.Data[this.PC+2];
+					
+					var hexAddress = (byteTwo + byteOne);
+					
+					var decAddress = _MemManager.toAddress(hexAddress);
+                        a=parseInt(_Memory.Data[decAddress],16);
                         a=a+1;
-                        _Memory.Data[i]=a.toString(16);
+                        _Memory.Data[decAddress]=a.toString(16);
                         this.PC++;
                 break;
 				
