@@ -20,7 +20,7 @@ var TSOS;
             _PCB = new TSOS.PCB();
             _PCB.init();
             //_StdOut.putText("new process, pid= " + _PCB.pid);
-            this.updateMemoryTable(program);
+            this.updateMemoryTable();
         };
         MemoryManager.prototype.toAddress = function () {
             var index;
@@ -32,7 +32,7 @@ var TSOS;
             index = parseInt(address, 16);
             return index;
         };
-        MemoryManager.prototype.updateMemoryTable = function (program) {
+        MemoryManager.prototype.updateMemoryTable = function () {
             //var memoryIndex=0;
             //var rowIndex;
             //var colIndex;
@@ -40,8 +40,9 @@ var TSOS;
             //EACH CELL HAS AN ID 'cell00'  cell + row num + cell num 0-7
             var curRow = 0;
             var curCell = 7;
-            for (var z = 0; z < program.length; z += 2) {
-                var temp = program.charAt(z) + program.charAt(z + 1); //this represents a grouping of hex
+            for (var z = 0; z < 256; z++) {
+                //var temp = program.charAt(z) + program.charAt(z+1); //this represents a grouping of hex
+                var temp = _Memory.Data[z];
                 var cell = document.getElementById("cell" + curRow + "" + curCell);
                 //alert("cell"+curRow+""+curCell);
                 cell.innerHTML = temp;

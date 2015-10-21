@@ -37,7 +37,7 @@ module TSOS {
             _PCB.init();
             //_StdOut.putText("new process, pid= " + _PCB.pid);
              
-            this.updateMemoryTable(program);
+            this.updateMemoryTable();
 
           
 
@@ -61,7 +61,7 @@ module TSOS {
 		
 		
 		
-		public updateMemoryTable(program): void{
+		public updateMemoryTable(): void{
             //var memoryIndex=0;
             //var rowIndex;
             //var colIndex;
@@ -73,9 +73,10 @@ module TSOS {
 			var curRow = 0;
 			var curCell = 7;
 			
-			for(var z = 0; z < program.length ; z+=2)
+			for(var z = 0; z < 256 ; z++)
 		    {
-			var temp = program.charAt(z) + program.charAt(z+1); //this represents a grouping of hex
+			//var temp = program.charAt(z) + program.charAt(z+1); //this represents a grouping of hex
+			var temp = _Memory.Data[z];
 			    
 				
 				

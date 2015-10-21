@@ -228,6 +228,7 @@ var TSOS;
                 cell.innerHTML = "" + this.Yreg;
                 cell = document.getElementById("zRegDisplay");
                 cell.innerHTML = "" + this.Zflag;
+                _MemManager.updateTable();
             }
         };
         Cpu.prototype.getConstantNumber = function (num) {
