@@ -228,6 +228,7 @@ module TSOS {
                                      _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) +
                                      _FontHeightMargin;
 
+			this.putText(">");
             // TODO: Handle scrolling. (iProject 1)
 			// uhhh might have the right idea here but not sure
 			//This will move up in increments of one line until it is above the height
