@@ -1,16 +1,17 @@
 ///<reference path="../globals.ts" />
 /// <reference path="./PCB.ts"/>
-
+/// <reference path="../host/memory.ts"/>
+/*
+Brian Canoni
+MemoryManager
+*/
 module TSOS {
 
     export class MemoryManager {
 
 
         constructor(){}
-
-
-		//load 
-		
+		//load 		
         public loadProgram(program: string):void {
             
             var index=0;
@@ -25,8 +26,8 @@ module TSOS {
             }
 			
 			//populate
-            for (var c = 0; c < program.length; c+=2) {
-
+            for (var c = 0; c < program.length; c+=2) 
+			{
 
                 _Memory.Data[index] = program.charAt(c)+program.charAt(c+1);
                 index++;
@@ -45,13 +46,14 @@ module TSOS {
         }
 
         
-        public toAddress(): number{
+        public toAddress(): number
+		{
             var index;
             _CPU.PC++;
             var b=_Memory.Data[_CPU.PC];
             _CPU.PC++;
-            var a=_Memory.Data[_CPU.PC];
-            var address=a.concat(b);
+            var a: string =String(_Memory.Data[_CPU.PC]);
+            var address: string =String(String(a).concat(String(b)));
             index=parseInt(address,16);
             return index;
 
@@ -61,11 +63,11 @@ module TSOS {
 		
 		
 		
-		public updateMemoryTable(): void{
+		public updateMemoryTable(): void
+		{
             //var memoryIndex=0;
             //var rowIndex;
-            //var colIndex;
-			
+            //var colIndex;			
 			
 			//EACH ROW HAS AN ID   'row0' row + row num
 			//EACH CELL HAS AN ID 'cell00'  cell + row num + cell num 0-7
@@ -75,76 +77,57 @@ module TSOS {
 			
 			for(var z = 0; z < 256 ; z++)
 		    {
-			//var temp = program.charAt(z) + program.charAt(z+1); //this represents a grouping of hex
-			var temp = _Memory.Data[z];
-			    
-				
-				
-				
+                			
+				var temp: string = String(_Memory.Data[z]);	
+				temp.toUpperCase();
+				if(temp.length ==1)
+				temp+= "0";
 				
 					
-						var cell = <HTMLTableDataCellElement>document.getElementById("cell"+curRow+""+curCell);
-						//alert("cell"+curRow+""+curCell);
-						cell.innerHTML = temp;
-					  
-						curCell--;
-					if(curCell<0)
-					{
+				var cell = <HTMLTableDataCellElement>document.getElementById("cell"+curRow+""+curCell);
+				cell.innerHTML = temp;
+				curCell--;
+				if(curCell<0)
+				{	
 				    curRow+=8;
 					curCell=7;
-					}
+				}
 						
 			
-			}
-			
-			
-			/*
-			//put prog in memory at first free available row.
-			//free row Ill define as all zeros
-			
-			var freeRow;
-			
-			var checker = "00000000";
-			var temp = "";
-			for(var x = x<_Memory.Data.size(); x+=8)
-			{
-			  var c = 0;
-              while(c <8 )
-              {
-                temp += _Memory.Data[x+c];
-
-				c++;
-			  }
-			  if(temp === checker)
-			  {
-			  //row is empty start populating form here
-			  //end loop
-			
-			   freeRow = x;
-			   x = _Memory.Data.size();
-			  }
-			  else
-			  temp ="";
-			
-			}
-			*/
-		    
-
-            
-
-
-
-
-
-                       
+			}            
                     
                 
 
 
 
-            }
-
-
+        }
+		
+		public initMemoryTable(): void
+		{
+		var memTable: HTMLTableElement = (<HTMLTableElement> document.getElementById("memTable"));
+		 
+			//row name
+			for(var x = _Memory.sizeMem; x>= 0; x-=8)
+			{
+				var footer = <HTMLTableElement>memTable.createTFoot();
+				var row =  <HTMLTableRowElement> footer.insertRow(0);
+				row.id = "row"+x;
+				//each of 8 bits
+			
+			
+				for(var y = 0; y < 8; y++ ) 
+				{
+					var cell = row.insertCell(0);
+					cell.innerHTML = "00";
+					cell.id="cell"+x +""+ y;
+					_Memory.Data[y] = "00";
+			
+				}			
+				var cell = row.insertCell(0);
+				cell.innerHTML = "0x"+x.toString(16);	
+					
+			}			
+		}
 
 
 

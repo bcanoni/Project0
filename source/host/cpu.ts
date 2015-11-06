@@ -331,7 +331,7 @@ module TSOS {
 			cell = <HTMLTableDataCellElement>document.getElementById("zRegDisplay");
 			cell.innerHTML = ""+this.Zflag;
 			
-			_MemManager.updateTable();
+			_MemManager.updateMemoryTable();
 			
 			
 			
