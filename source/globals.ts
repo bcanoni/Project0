@@ -20,22 +20,7 @@ const APP_VERSION: string = "0.1337";   // 1337
 
 const APP_LOC: string = "A galaxy kind of far away "; //temp location
 
-/*
-const APP_Pizza: string[] = ["                    ____",
-"               _,--~~    ~~--._",
-"           /' m%%o(_)%%o%%%%o%%m `\\ ",
-"          /' %%@=%o%%%o%%%o%(_)o%%% `\\ ",
-"        /  %o%%%%%=@%%%(_)%%o%%@=%%  \\ ",
-"       |  (_)%(_)%%o%%%o%%%%=@(_)%%%  |",
-"       | %%o%%%%o%%%(_)%%o%%o%%%%o%%% |",
-"       | %%o%(_)%%%%%o%(_)%%%o%%o%o%% |",
-"       |  (_)%%=@%(_)%o%o%%(_)%o(_)%  |",
-"        \\ ~%%o%%%%%o%o%=@%%o%%@%%o%~ /",
-"         \\. ~o%%(_)%%%o%(_)%%(_)o~ ,/",
-"           \\_ ~o%=@%(_)%o%%(_)%~ _/",
-"             `\\_~~o%%%o%%%%%~~_/'",
-"                `--..____,,--'"];
-*/
+
 
 
 const APP_PIZZA: string[] = ["   __",
@@ -46,37 +31,12 @@ const APP_PIZZA: string[] = ["   __",
          " \\\\__..--''"];
 
 
-/*
-const APP_LUIGI: string[] = ["░░░░░░░░░░░░░░░█",
-"░░███░░░░░░░███░█",
-"░█░░░█░░░░░█░░░█░█",
-"░░░░░░░░░░░░░░░░░█",
-"░░███░░░░░░░███░░█ ",
-"░█░░░█░░░░░█░░░██",
-"█░░░███░░░█░░░███",
-"█░░████░░░█░░████",
-"█░░░███░░░█░░░███",
-"░█░░░█░░░░░█████",
-"░░███░░░░░█░░░░░██",
-"░░░░░░░░░░░░░░░░░█ █",
-"░░██░░░░██░░░░░░░░███",
-"░░░████████░░░░░░░███",
-"░░░░████████░░░░░███",
-"░░░░░░████████████",
-"░░░░░░░░░░░░░░░█",
-"░░░░░░░░░░░████",
-"░░░░░░░░░░░░█",
-"░░░░░░░░░░░█",
-"░░░░░░░"]; //ignore this..
-*/
 
 const CPU_CLOCK_INTERVAL: number = 100;   // This is in ms (milliseconds) so 1000 = 1 second.
 
 const TIMER_IRQ: number = 0;  // Pages 23 (timer), 9 (interrupts), and 561 (interrupt priority).
                               // NOTE: The timer is different from hardware/host clock pulses. Don't confuse these.
 const KEYBOARD_IRQ: number = 1;
-
-
 
 
 //
@@ -87,9 +47,6 @@ var _CPU: TSOS.Cpu;  // Utilize TypeScript's type annotation system to ensure th
 var _Memory: TSOS.Memory; //try
 var _PCB: TSOS.PCB; //pcb
 var _MemManager: TSOS.MemoryManager; // M M
-
-
-
 
 var _PID: number = 0;
 

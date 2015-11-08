@@ -260,6 +260,8 @@ module TSOS {
                 break;
 				
 				case "FF": //FF SYS system call
+				    
+					//_StdOut.putPrompt();
                     
 
                         if(this.Xreg==1){

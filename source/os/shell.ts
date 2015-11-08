@@ -17,30 +17,20 @@
 
 // TODO: Write a base class / prototype for system services and let Shell inherit from it.
 
-
-
 module TSOS {
     export class Shell {
         // Properties
         public promptStr = ">";
         public commandList = [];
         public curses = "[fuvg],[cvff],[shpx],[phag],[pbpxfhpxre],[zbgureshpxre],[gvgf]";
-        public apologies = "[sorry]";
-		
-		
-        
-		
+        public apologies = "[sorry]";    		
 		
         constructor() {
         }
 
-        public init() {
-		
-		    
+        public init() {		    
             var sc;
-            //
-            // Load the command list.
-  
+            // Load the command list. 
   
 			(<HTMLInputElement> document.getElementById("Status")).value = "Status: Running";
             // ver
@@ -135,7 +125,15 @@ module TSOS {
 			
 			
             // ps  - list the running processes and their IDs
+			sc = new ShellCommand(this.shellPS,
+                                  "ps",
+                                  "- display running processes and their IDs");
+            this.commandList[this.commandList.length] = sc;
             // kill <id> - kills the specified process id.
+			sc = new ShellCommand(this.shellKill,
+                                  "kill",
+                                  "- Kill <PID> program");
+            this.commandList[this.commandList.length] = sc;
 
             //
             // Display the initial prompt.
