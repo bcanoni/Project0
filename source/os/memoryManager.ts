@@ -75,7 +75,7 @@ module TSOS {
 			var curRow = 0;
 			var curCell = 7;
 			
-			for(var z = 0; z < 256 ; z++)
+			for(var z = 0; z < _Memory.sizeMem ; z++)
 		    {
                 			
 				var temp: string = String(_Memory.Data[z]);	

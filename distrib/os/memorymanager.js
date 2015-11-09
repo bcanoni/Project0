@@ -45,7 +45,7 @@ var TSOS;
             //EACH CELL HAS AN ID 'cell00'  cell + row num + cell num 0-7
             var curRow = 0;
             var curCell = 7;
-            for (var z = 0; z < 256; z++) {
+            for (var z = 0; z < _Memory.sizeMem; z++) {
                 var temp = String(_Memory.Data[z]);
                 temp.toUpperCase();
                 if (temp.length == 1)

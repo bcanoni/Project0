@@ -123,7 +123,7 @@ module TSOS {
                                   "- Run <PID> program");
             this.commandList[this.commandList.length] = sc;
 			
-			
+			/*
             // ps  - list the running processes and their IDs
 			sc = new ShellCommand(this.shellPS,
                                   "ps",
@@ -134,7 +134,7 @@ module TSOS {
                                   "kill",
                                   "- Kill <PID> program");
             this.commandList[this.commandList.length] = sc;
-
+            */
             //
             // Display the initial prompt.
             this.putPrompt();
@@ -392,7 +392,7 @@ module TSOS {
 		if(success)
 		{
 		//alert(output);
-			if(output.length>256)
+			if(output.length>=_Memory.sizeMem)
 			{
 			_StdOut.putText("User code too long for current amount of memory");
 			

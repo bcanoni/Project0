@@ -63,11 +63,11 @@ module TSOS {
 			 _Kernel.krnTrace('CPU cycle');
 			if(this.isExecuting)
 			{
-			 ir = _Memory.Data[this.PC];
-			 //alert(ir + "@" + this.PC);
-			 //step by step loool
-			 switch(ir)
-			 {
+			ir = _Memory.Data[this.PC];
+			//alert(ir + "@" + this.PC);
+			//step by step loool
+			switch(ir)
+			{
 			    case "A9":  //A9 LDA  load acc with constant
                     this.PC++;
                     this.Acc =parseInt(_Memory.Data[this.PC], 16);
@@ -167,24 +167,7 @@ module TSOS {
                 break;
 				
 				case "EC": //EC CPX compare a byte in memory to x regi sets the z zero flag if equal 
-                        /*
-						i = parseInt(_Memory.Data[this.PC+1] + "" + _Memory.Data[this.PC+2]); 
-						alert(i);
-                       // i=_MemManager.toAddress();
-						//alert(i);
-                        a=this.getConstantNumber(_Memory.Data[i]);
-                        b=this.Xreg;
-						alert(a + " " + b);
-                        if(a===b){
-                            this.Zflag=0;
-                        }else{
-                            this.Zflag=1;
-                        }
-                        this.PC++;
-                    this.PC++;
-					*/
-					
-					
+                    				
 					var byteOne = _Memory.Data[this.PC+1];
 					var byteTwo = _Memory.Data[this.PC+2];
 					
@@ -201,9 +184,7 @@ module TSOS {
 					this.Zflag = 1;
 					
 					this.PC++;
-					//this.PC++;
-					
-					
+					//this.PC++;				
 					
                 break;
 				
@@ -215,31 +196,18 @@ module TSOS {
 					//i._MemManager.toAddress()
 					//alert(i);
 					if(this.Zflag === 1 )
-					{
-					   
-					
-                var check =  this.PC + parseInt(_Memory.Data[this.PC],16);
-                this.PC += parseInt(_Memory.Data[this.PC],16)+1;
-                
-				
-				//alert(_ProgramSize + " " + this.PC);
-                if (check>= 256 ) 
-				{
-                    
-                    this.PC -= 256;
-					
-					//_Memory.Data[0]="A9";//wtf
-					//alert(this.PC);
-                }
-             
-					
-					
+					{					
+						var check =  this.PC + parseInt(_Memory.Data[this.PC],16);
+						this.PC += parseInt(_Memory.Data[this.PC],16)+1;
+						
+						if (check>= _Memory.sizeMem ) 
+						{                    
+							this.PC -= _Memory.sizeMem;
+					    }				
 					}
 					else
 					{
-					this.PC++;
-					
-					
+					this.PC++;					
 					}
                   
             
@@ -247,7 +215,7 @@ module TSOS {
                 break;
 				
 				case "EE": //EE INC increment the value of a byte
-                   var byteOne = _Memory.Data[this.PC+1];
+                    var byteOne = _Memory.Data[this.PC+1];
 					var byteTwo = _Memory.Data[this.PC+2];
 					
 					var hexAddress = (byteTwo + byteOne);
@@ -264,32 +232,33 @@ module TSOS {
 					//_StdOut.putPrompt();
                     
 
-                        if(this.Xreg==1){
+                        if(this.Xreg==1)
+						{
                             _StdOut.putText(""+this.Yreg);
 							_StdOut.advanceLine();
                             this.PC++;
 
 
-                        }else if(this.Xreg==2){
+                        }
+						else if(this.Xreg==2)
+						{
                             //00 terminated
 							var temp = true;
-							var c = 0;
-							
-							
-							
-							
+							var c = 0;							
 							
 							while(temp)
 							{
-							_StdOut.putText(""+String.fromCharCode(parseInt(_Memory.Data[this.Yreg+c],16)));
-							c++;
-							temp = ("00" !== _Memory.Data[this.Yreg+c]);
+								_StdOut.putText(""+String.fromCharCode(parseInt(_Memory.Data[this.Yreg+c],16)));
+								c++;
+								temp = ("00" !== _Memory.Data[this.Yreg+c]);
 							
 							}
 							_StdOut.advanceLine();
                             this.PC++;
 
-                        }else{
+                        }
+						else
+						{
                             _StdOut.putText("Value in Xreg must be 1 or 0");
                             this.isExecuting=false;
                         }
@@ -301,27 +270,13 @@ module TSOS {
                         _StdOut.putText("missing code : " + _Memory.Data[this.PC]);
 						_StdOut.advanceLine();
 						
-						//  alert(this.PC + " " + this.Zflag);
-                    //i=parseInt(_Memory.Data[this.PC],16);
-                    //this.PC++;
 					
-					//i=_MemManager.toAddress()
-					
-					//if(this.Zflag === 0 )
-					//{
-					//this.PC = i;
-					
-					//}
-					//else
-					//{
-					//this.PC++;
-					//}
                   
 			 
-			 }
+			}
 			 
 			 
-			 //Update cpu registers 
+		    //Update cpu registers 
 			var cell = <HTMLTableDataCellElement>document.getElementById("pcDisplay");
 			cell.innerHTML = ""+this.PC;
 			cell = <HTMLTableDataCellElement>document.getElementById("accDisplay");
@@ -342,14 +297,15 @@ module TSOS {
 			
 			
         }
-		public getConstantNumber(num:string):number {
+		
+		public getConstantNumber(num:string):number 
+		{		
             var v = parseInt(num, 16);
             return v;
-
-
         }
 		
-		public clearCpu(): void {
+		public clearCpu(): void 
+		{
             this.PC = 0;
             this.Acc = 0;
             this.Xreg = 0;
@@ -357,55 +313,8 @@ module TSOS {
             this.Zflag = 0;
             this.isExecuting = false;
 
-
         }
 		
-		/*
 		
-		
-		//public execute(input) : void 
-		//{
-		var IR = input;
-		switch(ir) {
-		//A9 LDA  load acc with constant
-		case "A9": 
-		{
-		
-		
-		break;
-		}
-		
-		
-		
-		
-		//AD LDA  load acc from memory
-		case "AD":
-		{
-		
-		break;
-		}
-		
-		
-		//8D STA store acc in memory
-		
-			case "8D":
-		{
-		
-		break;
-		}
-		
-		//6D ADC add with carry adds constants of address to the contents of accumulator and puts results in accumulator
-		//A2 LDX loads x register with a constant
-		//AE LDX loads the X register from memory
-		//A0 LDY loads y register with a constant 
-		//ACloads the y register from memory
-		//EA NOP no operation
-		//00 Break (really a system call)
-		//EC CPX compare a byte in memory to x regi sets the z zero flag if equal 
-		//D0 BNE branch n bytes if z flag is 0-470-12872-5
-		//EE INC increment the value of a byte
-		//FF SYS system call
-		
-		*/
     }
 }

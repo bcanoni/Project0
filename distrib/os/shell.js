@@ -25,8 +25,7 @@ var TSOS;
         }
         Shell.prototype.init = function () {
             var sc;
-            //
-            // Load the command list.
+            // Load the command list. 
             document.getElementById("Status").value = "Status: Running";
             // ver
             sc = new TSOS.ShellCommand(this.shellVer, "ver", "- Displays the current version data.");
@@ -74,8 +73,18 @@ var TSOS;
             //run
             sc = new TSOS.ShellCommand(this.shellRun, "run", "- Run <PID> program");
             this.commandList[this.commandList.length] = sc;
+            /*
             // ps  - list the running processes and their IDs
+            sc = new ShellCommand(this.shellPS,
+                                  "ps",
+                                  "- display running processes and their IDs");
+            this.commandList[this.commandList.length] = sc;
             // kill <id> - kills the specified process id.
+            sc = new ShellCommand(this.shellKill,
+                                  "kill",
+                                  "- Kill <PID> program");
+            this.commandList[this.commandList.length] = sc;
+            */
             //
             // Display the initial prompt.
             this.putPrompt();
@@ -275,7 +284,7 @@ var TSOS;
             }
             if (success) {
                 //alert(output);
-                if (output.length > 256) {
+                if (output.length >= _Memory.sizeMem) {
                     _StdOut.putText("User code too long for current amount of memory");
                 }
                 else {

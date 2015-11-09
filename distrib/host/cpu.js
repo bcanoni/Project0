@@ -134,22 +134,6 @@ var TSOS;
                         //this.PC=0;
                         break;
                     case "EC":
-                        /*
-                        i = parseInt(_Memory.Data[this.PC+1] + "" + _Memory.Data[this.PC+2]);
-                        alert(i);
-                       // i=_MemManager.toAddress();
-                        //alert(i);
-                        a=this.getConstantNumber(_Memory.Data[i]);
-                        b=this.Xreg;
-                        alert(a + " " + b);
-                        if(a===b){
-                            this.Zflag=0;
-                        }else{
-                            this.Zflag=1;
-                        }
-                        this.PC++;
-                    this.PC++;
-                    */
                         var byteOne = _Memory.Data[this.PC + 1];
                         var byteTwo = _Memory.Data[this.PC + 2];
                         var hexAddress = (byteTwo + byteOne);
@@ -159,7 +143,7 @@ var TSOS;
                         else
                             this.Zflag = 1;
                         this.PC++;
-                        //this.PC++;
+                        //this.PC++;				
                         break;
                     case "D0":
                         //alert("magic");
@@ -170,9 +154,8 @@ var TSOS;
                         if (this.Zflag === 1) {
                             var check = this.PC + parseInt(_Memory.Data[this.PC], 16);
                             this.PC += parseInt(_Memory.Data[this.PC], 16) + 1;
-                            //alert(_ProgramSize + " " + this.PC);
-                            if (check >= 256) {
-                                this.PC -= 256;
+                            if (check >= _Memory.sizeMem) {
+                                this.PC -= _Memory.sizeMem;
                             }
                         }
                         else {
@@ -190,6 +173,7 @@ var TSOS;
                         this.PC++;
                         break;
                     case "FF":
+                        //_StdOut.putPrompt();
                         if (this.Xreg == 1) {
                             _StdOut.putText("" + this.Yreg);
                             _StdOut.advanceLine();
