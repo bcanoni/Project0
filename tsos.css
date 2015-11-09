@@ -59,3 +59,21 @@ display:none;
   font-size: 8pt;
   text-align: center;
 }
+
+
+
+tr:nth-child(even) {
+    background-color: #dfdfdf;
+}
+
+tr:nth-child(33) {
+    background-color: #ff0000;
+}
+
+tr:nth-child(65) {
+    background-color: #ff0000;
+}
+
+tr:nth-child(97) {
+    background-color: #ff0000;
+}
