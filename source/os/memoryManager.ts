@@ -12,9 +12,18 @@ module TSOS {
 
         constructor(){}
 		//load 		
-        public loadProgram(program: string):void {
+        public loadProgram(program: string, curPCB):void {
             
-            var index=0;
+            
+			
+			_PCB = new PCB();
+            
+			
+			// IF 1,2,3 HAVE MEMORY IN THEM
+			// WIPE NEXT IN CHAIN AND LOAD
+			_PCB.setBase(this.firstFreePartition());
+			
+			
 			
 			//wipe memory
 			for (var i = 0; i < _Memory.Data.length; i++) {
@@ -34,9 +43,8 @@ module TSOS {
 
             }
 			
-            _PCB = new PCB();
-            _PCB.init();
-            //_StdOut.putText("new process, pid= " + _PCB.pid);
+            
+            
              
             this.updateMemoryTable();
         }
@@ -50,6 +58,18 @@ module TSOS {
 		public getMemory(x): String
 		{
 			return _Memory.Data[x];
+		}
+		
+		public firstFreePartition(): number
+		{
+			if(_Memory.Data[0] == ("00"))
+				return 1;
+				
+			if(_Memory.Data[256] == ("00"))
+				return 2;
+
+			if(_Memory.Data[513] == ("00"))
+				return 3;
 		}
 		
 		
