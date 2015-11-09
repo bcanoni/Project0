@@ -23,8 +23,19 @@ module TSOS
 		curPCB.limit = curPCB.base + 255;
 		
 		this.residentQueue.enqueue(curPCB);
-		
 	
+	}
+	
+	public runAProgram() 
+	{
+	//relates to single run function
+	
+	}
+	
+	public runAllPrograms()
+	{
+	//relates to new run all method
+	//REM will use some kind of ROUND ROBIN scheduling 
 	
 	
 	}

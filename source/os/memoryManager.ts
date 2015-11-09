@@ -30,12 +30,7 @@ module TSOS {
 				
 			
 				//populate
-				this.populateMem(curPCB, program);
-           
-			
-			
-			
-			
+				this.populateMem(curPCB, program);		
 			
 			
 			}
