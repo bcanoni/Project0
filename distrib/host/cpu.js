@@ -163,13 +163,16 @@ var TSOS;
                         }
                         break;
                     case "EE":
-                        var byteOne = _Memory.Data[this.PC + 1];
-                        var byteTwo = _Memory.Data[this.PC + 2];
+                        //var byteOne = _Memory.Data[this.PC+1];
+                        var byteOne = _MemManager.getMemory(this.PC + 1);
+                        //var byteTwo = _Memory.Data[this.PC+2];
+                        var byteTwo = _MemManager.getMemory(this.PC + 2);
                         var hexAddress = (byteTwo + byteOne);
                         var decAddress = _MemManager.toAddress(hexAddress);
                         a = parseInt(_Memory.Data[decAddress], 16);
                         a = a + 1;
-                        _Memory.Data[decAddress] = a.toString(16);
+                        //_Memory.Data[decAddress]=a.toString(16);
+                        _MemManager.insertMemory(decAddress, a.toString(16));
                         this.PC++;
                         break;
                     case "FF":
@@ -184,11 +187,12 @@ var TSOS;
                             var temp = true;
                             var c = 0;
                             while (temp) {
-                                _StdOut.putText("" + String.fromCharCode(parseInt(_Memory.Data[this.Yreg + c], 16)));
+                                _StdOut.putText("" + String.fromCharCode(parseInt(_MemManager.getMemory(this.Yreg + c), 16)));
                                 c++;
-                                temp = ("00" !== _Memory.Data[this.Yreg + c]);
+                                temp = ("00" !== _MemManager.getMemory(this.Yreg + c));
                             }
                             _StdOut.advanceLine();
+                            _OsShell.putPrompt();
                             this.PC++;
                         }
                         else {
@@ -200,6 +204,7 @@ var TSOS;
                         this.isExecuting = false;
                         _StdOut.putText("missing code : " + _Memory.Data[this.PC]);
                         _StdOut.advanceLine();
+                        _OsShell.putPrompt();
                 }
                 //Update cpu registers 
                 var cell = document.getElementById("pcDisplay");

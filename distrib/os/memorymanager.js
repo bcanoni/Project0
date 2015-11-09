@@ -27,6 +27,12 @@ var TSOS;
             //_StdOut.putText("new process, pid= " + _PCB.pid);
             this.updateMemoryTable();
         };
+        MemoryManager.prototype.insertMemory = function (x, dat) {
+            _Memory.Data[x] = dat;
+        };
+        MemoryManager.prototype.getMemory = function (x) {
+            return _Memory.Data[x];
+        };
         MemoryManager.prototype.toAddress = function () {
             var index;
             _CPU.PC++;
@@ -43,6 +49,7 @@ var TSOS;
             //var colIndex;			
             //EACH ROW HAS AN ID   'row0' row + row num
             //EACH CELL HAS AN ID 'cell00'  cell + row num + cell num 0-7
+            // EVERY 100 (in hex ) IS A PARTITION
             var curRow = 0;
             var curCell = 7;
             for (var z = 0; z < _Memory.sizeMem; z++) {
@@ -66,7 +73,7 @@ var TSOS;
                 var footer = memTable.createTFoot();
                 var row = footer.insertRow(0);
                 row.id = "row" + x;
-                //each of 8 bits
+                //each of 8 bits		
                 for (var y = 0; y < 8; y++) {
                     var cell = row.insertCell(0);
                     cell.innerHTML = "00";
@@ -74,7 +81,7 @@ var TSOS;
                     _Memory.Data[y] = "00";
                 }
                 var cell = row.insertCell(0);
-                cell.innerHTML = "0x" + x.toString(16);
+                cell.innerHTML = ("0x" + x.toString(16));
             }
         };
         return MemoryManager;

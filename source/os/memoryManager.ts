@@ -39,11 +39,22 @@ module TSOS {
             //_StdOut.putText("new process, pid= " + _PCB.pid);
              
             this.updateMemoryTable();
-
-          
-
-
         }
+		
+		
+		public insertMemory(x, dat): void
+		{	
+			_Memory.Data[x] = dat;
+		}
+		
+		public getMemory(x): String
+		{
+			return _Memory.Data[x];
+		}
+		
+		
+		
+		
 
         
         public toAddress(): number
@@ -71,6 +82,8 @@ module TSOS {
 			
 			//EACH ROW HAS AN ID   'row0' row + row num
 			//EACH CELL HAS AN ID 'cell00'  cell + row num + cell num 0-7
+			
+			// EVERY 100 (in hex ) IS A PARTITION
 			
 			var curRow = 0;
 			var curCell = 7;
@@ -112,8 +125,7 @@ module TSOS {
 				var footer = <HTMLTableElement>memTable.createTFoot();
 				var row =  <HTMLTableRowElement> footer.insertRow(0);
 				row.id = "row"+x;
-				//each of 8 bits
-			
+				//each of 8 bits		
 			
 				for(var y = 0; y < 8; y++ ) 
 				{
@@ -123,8 +135,10 @@ module TSOS {
 					_Memory.Data[y] = "00";
 			
 				}			
+				                				
 				var cell = row.insertCell(0);
-				cell.innerHTML = "0x"+x.toString(16);	
+				cell.innerHTML = ("0x"+x.toString(16));	
+				
 					
 			}			
 		}
