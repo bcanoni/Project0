@@ -14,11 +14,7 @@ module TSOS {
                     public base: number=0,
                     public limit: number=0){
 
-        }
-
-		
-		
-        
+        }    
 
 
     }

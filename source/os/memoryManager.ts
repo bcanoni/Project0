@@ -12,36 +12,43 @@ module TSOS {
 
         constructor(){}
 		//load 		
-        public loadProgram(program: string, curPCB):void {
-            
-            
-			
-			_PCB = new PCB();
-            
-			
+        public loadProgram(program: string, curPCB):void 
+		{	
 			// IF 1,2,3 HAVE MEMORY IN THEM
-			// WIPE NEXT IN CHAIN AND LOAD
-			_PCB.setBase(this.firstFreePartition());
+			// TODO WIPE NEXT IN CHAIN AND LOAD
+			//FOR NOW JUST LOAD UNTIL NULL AND THEN THROW ERROR
+			var firstFree = this.firstFreePartition();
+			
+			//IF NULL MEMORY FULL
+			if (firstFree != null)
+			{			
+				curPCB = new PCB();
+				curPCB.setBase(this.firstFreePartition());
+			
+				//wipe memory
+				this.wipeMem(curPCB);
+				
+			
+				//populate
+				this.populateMem(curPCB, program);
+           
 			
 			
 			
-			//wipe memory
-			for (var i = 0; i < _Memory.Data.length; i++) {
-
-
-                _Memory.Data[i] = "00";
-                
-
-            }
 			
-			//populate
-            for (var c = 0; c < program.length; c+=2) 
+			
+			
+			}
+			else
 			{
-
-                _Memory.Data[index] = program.charAt(c)+program.charAt(c+1);
-                index++;
-
-            }
+			//MEMORY FULL?
+			}
+			
+			
+			
+			
+			
+			
 			
             
             
@@ -60,16 +67,37 @@ module TSOS {
 			return _Memory.Data[x];
 		}
 		
+		public wipeMem(curPCB): void
+		{
+			for (var i = curPCB.base; i < curPCB.length ; i++) 
+				{
+					_Memory.Data[i] = "00";                
+				}
+		
+		}
+		
+		public populateMem(curPCB): void
+		{
+		    var index = curPCB.base;
+			for (var c = 0; c < program.length; c+=2) 
+			{
+                _Memory.Data[index] = program.charAt(c)+program.charAt(c+1);
+                index++;
+            }	
+		}
+		
 		public firstFreePartition(): number
 		{
 			if(_Memory.Data[0] == ("00"))
-				return 1;
+				return 0;
 				
-			if(_Memory.Data[256] == ("00"))
-				return 2;
+			else if(_Memory.Data[256] == ("00"))
+				return 1;
 
-			if(_Memory.Data[513] == ("00"))
-				return 3;
+			else if(_Memory.Data[513] == ("00"))
+				return 2;
+				
+		    else null;
 		}
 		
 		
