@@ -88,7 +88,6 @@ var TSOS;
                                   "- Kill <PID> program");
             this.commandList[this.commandList.length] = sc;
             */
-            //
             // Display the initial prompt.
             this.putPrompt();
         };
@@ -132,7 +131,9 @@ var TSOS;
                 else if (this.apologies.indexOf("[" + cmd + "]") >= 0) {
                     this.execute(this.shellApology);
                 }
-                else {
+                else 
+                // It's just a bad command. 
+                {
                     this.execute(this.shellInvalidCommand);
                 }
             }
@@ -260,7 +261,6 @@ var TSOS;
                 //each of 8 bits
                 for (var y = 7; y >= 0; y--) {
                     var cell = document.getElementById("cell" + x + "" + y);
-                    //alert("cell"+x+""+y);
                     cell.innerHTML = "00";
                 }
             }
@@ -273,12 +273,10 @@ var TSOS;
             userCode = userCode.replace(/\s/g, ""); //destroy all spaces
             var output = "";
             _ProgramSize = 0;
-            //alert(userCode);
             //if i see any non hex display a warning message instead otherwise parse by twos
             for (var x = 0; x < userCode.length; x += 2) {
                 //seems a regular expression would help here as well 
                 var temp = userCode.charAt(x) + userCode.charAt(x + 1); //this represents a grouping of hex
-                //alert(temp);
                 var patHex = /[^g-z]/g;
                 var isHex = temp.match(patHex);
                 if (isHex == null || isHex.length < 2) {
@@ -294,13 +292,13 @@ var TSOS;
                 }
             }
             if (success) {
-                //alert(output);
                 if (output.length >= _Memory.sizeMem) {
                     _StdOut.putText("User code too long for current amount of memory");
                 }
                 else {
                     success = false;
-                    _MemManager.loadProgram(output);
+                    //_MemManager.loadProgram(output);
+                    _Scheduler.loadProgMem(output);
                     _StdOut.putText("Program Successfully loaded at PID: " + _PID);
                     _PID++; //increment pid
                 }
@@ -381,6 +379,9 @@ var TSOS;
                         break;
                     case "run":
                         _StdOut.putText("run <pid> runs program at specified location");
+                        break;
+                    case "clearMem":
+                        _StdOut.putText("Clears All Memory");
                         break;
                     default:
                         _StdOut.putText("No manual entry for " + args[0] + ".");

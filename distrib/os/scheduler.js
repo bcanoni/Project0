@@ -5,8 +5,8 @@ Comments
 */
 var TSOS;
 (function (TSOS) {
-    var scheduler = (function () {
-        function scheduler(readyQueue, residentQueue, terminatedQueue, counter) {
+    var Scheduler = (function () {
+        function Scheduler(readyQueue, residentQueue, terminatedQueue, counter) {
             if (readyQueue === void 0) { readyQueue = []; }
             if (residentQueue === void 0) { residentQueue = []; }
             if (terminatedQueue === void 0) { terminatedQueue = []; }
@@ -16,20 +16,22 @@ var TSOS;
             this.terminatedQueue = terminatedQueue;
             this.counter = counter;
         }
-        scheduler.prototype.loadProgMem = function (program) {
+        Scheduler.prototype.loadProgMem = function (program) {
             var curPCB = new TSOS.PCB();
+            curPCB.pid = _PID;
             curPCB.base = _MemManager.firstFreePartition() * 256;
             curPCB.limit = curPCB.base + 255;
             this.residentQueue.push(curPCB);
+            _MemManager.loadProgMem(program, curPCB);
         };
-        scheduler.prototype.runAProgram = function () {
+        Scheduler.prototype.runAProgram = function () {
             //relates to single run function
         };
-        scheduler.prototype.runAllPrograms = function () {
+        Scheduler.prototype.runAllPrograms = function () {
             //relates to new run all method
             //REM will use some kind of ROUND ROBIN scheduling 
         };
-        return scheduler;
+        return Scheduler;
     })();
-    TSOS.scheduler = scheduler;
+    TSOS.Scheduler = Scheduler;
 })(TSOS || (TSOS = {}));

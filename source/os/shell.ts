@@ -179,7 +179,8 @@ module TSOS
 				{
                     found = true;
                     fn = this.commandList[index].func;
-                } else 
+                } 
+				else 
 				{
                     ++index;
                 }
@@ -194,10 +195,13 @@ module TSOS
                 if (this.curses.indexOf("[" + Utils.rot13(cmd) + "]") >= 0) 
 				{     // Check for curses.
                     this.execute(this.shellCurse);
-                } else if (this.apologies.indexOf("[" + cmd + "]") >= 0) 
+                } 
+				else if (this.apologies.indexOf("[" + cmd + "]") >= 0) 
 				{        // Check for apologies.
                     this.execute(this.shellApology);
-                } else { // It's just a bad command. 
+                } 
+				else 
+				// It's just a bad command. 
 				{
                     this.execute(this.shellInvalidCommand);
                 }
@@ -205,7 +209,7 @@ module TSOS
         }
 
         // Note: args is an option parameter, ergo the ? which allows TypeScript to understand that.
-        public execute(fn, args?) 
+        public execute(fn, args?)
 		{
             // We just got a command, so advance the line...
             _StdOut.advanceLine();
@@ -423,7 +427,8 @@ module TSOS
 				else
 				{
 				success=false; 
-				_MemManager.loadProgram(output);
+				//_MemManager.loadProgram(output);
+				_Scheduler.loadProgMem(output);
 				_StdOut.putText("Program Successfully loaded at PID: " + _PID);
 				_PID++; //increment pid
 				}	

@@ -15,51 +15,12 @@ var APP_VERSION = "0.1337"; // 1337
 //var d = new Date();
 //const APP_DATE: string = d.toLocaleDateString() + " " + d.toLocaleTimeString(); 
 var APP_LOC = "A galaxy kind of far away "; //temp location
-/*
-const APP_Pizza: string[] = ["                    ____",
-"               _,--~~    ~~--._",
-"           /' m%%o(_)%%o%%%%o%%m `\\ ",
-"          /' %%@=%o%%%o%%%o%(_)o%%% `\\ ",
-"        /  %o%%%%%=@%%%(_)%%o%%@=%%  \\ ",
-"       |  (_)%(_)%%o%%%o%%%%=@(_)%%%  |",
-"       | %%o%%%%o%%%(_)%%o%%o%%%%o%%% |",
-"       | %%o%(_)%%%%%o%(_)%%%o%%o%o%% |",
-"       |  (_)%%=@%(_)%o%o%%(_)%o(_)%  |",
-"        \\ ~%%o%%%%%o%o%=@%%o%%@%%o%~ /",
-"         \\. ~o%%(_)%%%o%(_)%%(_)o~ ,/",
-"           \\_ ~o%=@%(_)%o%%(_)%~ _/",
-"             `\\_~~o%%%o%%%%%~~_/'",
-"                `--..____,,--'"];
-*/
 var APP_PIZZA = ["   __",
     " // ''--.._",
     "| |  (_)  _ '-._",
     "| |    _ (_)    '-.",
     "| |   (_)   __..-'",
     " \\\\__..--''"];
-/*
-const APP_LUIGI: string[] = ["░░░░░░░░░░░░░░░█",
-"░░███░░░░░░░███░█",
-"░█░░░█░░░░░█░░░█░█",
-"░░░░░░░░░░░░░░░░░█",
-"░░███░░░░░░░███░░█ ",
-"░█░░░█░░░░░█░░░██",
-"█░░░███░░░█░░░███",
-"█░░████░░░█░░████",
-"█░░░███░░░█░░░███",
-"░█░░░█░░░░░█████",
-"░░███░░░░░█░░░░░██",
-"░░░░░░░░░░░░░░░░░█ █",
-"░░██░░░░██░░░░░░░░███",
-"░░░████████░░░░░░░███",
-"░░░░████████░░░░░███",
-"░░░░░░████████████",
-"░░░░░░░░░░░░░░░█",
-"░░░░░░░░░░░████",
-"░░░░░░░░░░░░█",
-"░░░░░░░░░░░█",
-"░░░░░░░"]; //ignore this..
-*/
 var CPU_CLOCK_INTERVAL = 100; // This is in ms (milliseconds) so 1000 = 1 second.
 var TIMER_IRQ = 0; // Pages 23 (timer), 9 (interrupts), and 561 (interrupt priority).
 // NOTE: The timer is different from hardware/host clock pulses. Don't confuse these.
@@ -71,6 +32,7 @@ var KEYBOARD_IRQ = 1;
 var _CPU; // Utilize TypeScript's type annotation system to ensure that _CPU is an instance of the Cpu class.
 var _Memory; //try
 var _PCB; //pcb
+var _Scheduler;
 var _MemManager; // M M
 var _PID = 0;
 var _OSclock = 0; // Page 23.

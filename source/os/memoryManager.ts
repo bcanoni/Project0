@@ -23,7 +23,7 @@ module TSOS
 			
 			
 			
-			var curPCB = _PCB;
+			_PCB = curPCB;
 			
 			
 			//IF NULL MEMORY FULL
@@ -36,15 +36,14 @@ module TSOS
 				this.wipeMem(curPCB);
 				
 			
-				//populate
-				//this.populateMem(curPCB, program);	
+				//populate					
 				this.populateMem(curPCB ,program);
 			
 			
 			}
 			else
 			{
-			//MEMORY FULL?
+				//MEMORY FULL?
 			}
 			
 			

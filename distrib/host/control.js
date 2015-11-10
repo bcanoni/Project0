@@ -79,6 +79,8 @@ var TSOS;
 			
 			_MemManager = new TSOS.MemoryManager();
 			
+			_Scheduler = new TSOS.Scheduler();
+			
             // ... then set the host clock pulse ...
             _hardwareClockID = setInterval(TSOS.Devices.hostClockPulse, CPU_CLOCK_INTERVAL);
             // .. and call the OS Kernel Bootstrap routine.

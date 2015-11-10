@@ -5,7 +5,7 @@ Comments
 */
 module TSOS
 {
-	export class scheduler 
+	export class Scheduler 
 	{
 		constructor(
 					public readyQueue: PCB[] = [] ,
@@ -20,11 +20,13 @@ module TSOS
 	public loadProgMem (program)
 	{
 		var curPCB = new TSOS.PCB();
+		curPCB.pid = _PID; 
 		
 		curPCB.base = _MemManager.firstFreePartition()*256;
 		curPCB.limit = curPCB.base + 255;
 		
-		this.residentQueue.push(curPCB);	
+		this.residentQueue.push(curPCB);
+		_MemManager.loadProgMem(program,curPCB);
 	}
 	
 	public runAProgram() 
