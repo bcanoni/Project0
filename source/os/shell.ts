@@ -336,54 +336,39 @@ module TSOS {
 		
 		
 		
-		public shellLoad(args)		{
-		//CLEAR MEM TABLE FOR NOW
-		    
-		 for(var x =0; x<=_Memory.sizeMem; x+=8)
-		 {
-			
-			
-			//each of 8 bits
-			
-			
-				for(var y = 7; y >=0 ; y-- ) 
-					{
-						
-		    
-						var cell = <HTMLTableDataCellElement>document.getElementById("cell"+x+""+y);
-						//alert("cell"+x+""+y);
-						cell.innerHTML = "00";
-						
-			
-					}
-				
-					
-					
-		 }
-		
-		
-		
-		//take in user data?
-		//taProgramInput
-		//only hex and spaces accept
-		//0-9 A-F and spaces 
-		var success = false;
-		var userCode = (<HTMLInputElement> document.getElementById("taProgramInput")).value;	
-		userCode = userCode.replace(/\s/g, "")  ; //destroy all spaces
-		var output = "";
-		_ProgramSize = 0;
-		//alert(userCode);
-		
-		//if i see any non hex display a warning message instead otherwise parse by twos
-		for(var x = 0; x < userCode.length ; x+=2)
+		public shellLoad(args)		
 		{
+			//CLEAR MEM TABLE FOR NOW
+		    
+			for(var x =0; x<=_Memory.sizeMem; x+=8)
+			{			
+			//each of 8 bits
+				for(var y = 7; y >=0 ; y-- ) 
+				{		    
+					var cell = <HTMLTableDataCellElement>document.getElementById("cell"+x+""+y);
+					cell.innerHTML = "00";			
+				}					
+			}	
 		
-			//seems a regular expression would help here as well 
-			var temp = userCode.charAt(x) + userCode.charAt(x+1); //this represents a grouping of hex
+			//take in user data?
+			//taProgramInput
+			//only hex and spaces accept
+			//0-9 A-F and spaces 
+			var success = false;
+			var userCode = (<HTMLInputElement> document.getElementById("taProgramInput")).value;	
+			userCode = userCode.replace(/\s/g, "")  ; //destroy all spaces
+			var output = "";
+			_ProgramSize = 0;
+			
 		
-			//alert(temp);
-			var patHex = /[^g-z]/g;
-			var isHex = temp.match(patHex);
+			//if i see any non hex display a warning message instead otherwise parse by twos
+			for(var x = 0; x < userCode.length ; x+=2)
+			{		
+				//seems a regular expression would help here as well 
+				var temp = userCode.charAt(x) + userCode.charAt(x+1); //this represents a grouping of hex
+		
+				var patHex = /[^g-z]/g;
+				var isHex = temp.match(patHex);
 		
 				if(isHex == null || isHex.length<2 )
 				{
@@ -401,69 +386,68 @@ module TSOS {
 		
 		
 		
-		}
+			}		
 		
-		
-		if(success)
-		{
-		//alert(output);
-			if(output.length>=_Memory.sizeMem)
+			if(success)
 			{
-			_StdOut.putText("User code too long for current amount of memory");
-			
-		
-			}
-			else
-			{
+				if(output.length>=_Memory.sizeMem)
+				{
+					_StdOut.putText("User code too long for current amount of memory");		
+				}
+				else
+				{
 				success=false; 
 				_MemManager.loadProgram(output);
 				_StdOut.putText("Program Successfully loaded at PID: " + _PID);
 				_PID++; //increment pid
-			}	
-		}
-		else
-		 _StdOut.putText("Invalid Code");	
+				}	
+			}
+			else
+				_StdOut.putText("Invalid Code");	
     		 
 		
-		}
+		}		
 		
-		
-		
-	     public shellRun(args) {
-		 //clear cpu values
-		 _CPU.clearCpu();
-		 
-		 
-		   //dont need to run on pid yet but keep that in mind for later
-	      _CPU.isExecuting =true;
+	    public shellRun(args)
+     	{
+			//clear cpu values
+			_CPU.clearCpu();
+		    //dont need to run on pid yet but keep that in mind for later
+	        _CPU.isExecuting =true;
 		
 		}
 
-        public shellHelp(args) {
+        public shellHelp(args) 
+		{
             _StdOut.putText("Commands:");
-            for (var i in _OsShell.commandList) {
+            for (var i in _OsShell.commandList) 
+			{
                 _StdOut.advanceLine();
                 _StdOut.putText("  " + _OsShell.commandList[i].command + " " + _OsShell.commandList[i].description);
             }
         }
 
-        public shellShutdown(args) {
-		     
-             _StdOut.putText("Shutting down...");
-             // Call Kernel shutdown routine.
+        public shellShutdown(args) 
+		{		     
+            _StdOut.putText("Shutting down...");
+            // Call Kernel shutdown routine.
             _Kernel.krnShutdown();
             // TODO: Stop the final prompt from being displayed.  If possible.  Not a high priority.  (Damn OCD!)
         }
 
-        public shellCls(args) {
+        public shellCls(args)
+		{
             _StdOut.clearScreen();
             _StdOut.resetXY();
         }
 
-        public shellMan(args) {
-            if (args.length > 0) {
+        public shellMan(args) 
+		{
+            if (args.length > 0) 
+			{
                 var topic = args[0];
-                switch (topic) {
+                switch (topic) 
+				{
                     case "help":
                         _StdOut.putText("Help displays a list of (hopefully) valid commands.");
                         break;
@@ -524,23 +508,34 @@ module TSOS {
 					    _StdOut.putText("run <pid> runs program at specified location"); 
 						 break;
 						 
+					case "clearMem":
+					    _StdOut.putText("Clears All Memory"); 
+						 break;	 
+						 
 					
 					default:
                         _StdOut.putText("No manual entry for " + args[0] + ".");
                 }
-            } else {
+            } 
+			else 
+			{
                 _StdOut.putText("Usage: man <topic>  Please supply a topic.");
             }
         }
 
-        public shellTrace(args) {
-            if (args.length > 0) {
+        public shellTrace(args) 
+		{
+            if (args.length > 0) 
+			{
                 var setting = args[0];
-                switch (setting) {
+                switch (setting) 
+				{
                     case "on":
-                        if (_Trace && _SarcasticMode) {
+                        if (_Trace && _SarcasticMode) 
+						{
                             _StdOut.putText("Trace is already on, doofus.");
-                        } else {
+                        } else
+						{
                             _Trace = true;
                             _StdOut.putText("Trace ON");
                         }
@@ -552,24 +547,31 @@ module TSOS {
                     default:
                         _StdOut.putText("Invalid arguement.  Usage: trace <on | off>.");
                 }
-            } else {
+            } else 
+			{
                 _StdOut.putText("Usage: trace <on | off>");
             }
         }
 
-        public shellRot13(args) {
-            if (args.length > 0) {
+        public shellRot13(args)
+		{
+            if (args.length > 0) 
+			{
                 // Requires Utils.ts for rot13() function.
                 _StdOut.putText(args.join(' ') + " = '" + Utils.rot13(args.join(' ')) +"'");
-            } else {
+            } else 
+			{
                 _StdOut.putText("Usage: rot13 <string>  Please supply a string.");
             }
         }
 
-        public shellPrompt(args) {
-            if (args.length > 0) {
+        public shellPrompt(args) 
+		{
+            if (args.length > 0)
+			{
                 _OsShell.promptStr = args[0];
-            } else {
+            } else 
+			{
                 _StdOut.putText("Usage: prompt <string>  Please supply a string.");
             }
         }
