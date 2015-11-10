@@ -22,7 +22,7 @@ var TSOS;
             curPCB.base = _MemManager.firstFreePartition() * 256;
             curPCB.limit = curPCB.base + 255;
             this.residentQueue.push(curPCB);
-            _MemManager.loadProgMem(program, curPCB);
+            _MemManager.loadProgram(program, curPCB);
         };
         Scheduler.prototype.runAProgram = function () {
             //relates to single run function

@@ -66,7 +66,7 @@ module TSOS
 		
 		public getMemory(x): String
 		{
-			return _Memory.Data[x];
+			return _Memory.Data[x+_PCB.base];
 		}
 		
 		//Wipes only a specific partition

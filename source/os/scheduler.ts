@@ -26,7 +26,7 @@ module TSOS
 		curPCB.limit = curPCB.base + 255;
 		
 		this.residentQueue.push(curPCB);
-		_MemManager.loadProgMem(program,curPCB);
+		_MemManager.loadProgram(program,curPCB);
 	}
 	
 	public runAProgram() 
