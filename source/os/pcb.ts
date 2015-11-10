@@ -13,8 +13,12 @@ module TSOS
                     public Zflag: number = 0,
                     public base: number=0,
                     public limit: number=0,
-					public state: number=0){
+					public state: number=0){  // 0 not loaded, 1 ready , 2 running , 3 
 
         }
+		
+		
+		
+		
     }
 }
