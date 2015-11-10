@@ -17,18 +17,22 @@
 
 // TODO: Write a base class / prototype for system services and let Shell inherit from it.
 
-module TSOS {
-    export class Shell {
+module TSOS 
+{
+    export class Shell 
+	{
         // Properties
         public promptStr = ">";
         public commandList = [];
         public curses = "[fuvg],[cvff],[shpx],[phag],[pbpxfhpxre],[zbgureshpxre],[gvgf]";
         public apologies = "[sorry]";    		
 		
-        constructor() {
+        constructor() 
+		{
         }
 
-        public init() {		    
+        public init()
+		{		    
             var sc;
             // Load the command list. 
   
@@ -142,16 +146,17 @@ module TSOS {
                                   "- Kill <PID> program");
             this.commandList[this.commandList.length] = sc;
             */
-            //
             // Display the initial prompt.
             this.putPrompt();
         }
 
-        public putPrompt() {
+        public putPrompt() 
+		{
             _StdOut.putText(this.promptStr);
         }
 
-        public handleInput(buffer) {
+        public handleInput(buffer) 
+		{
             _Kernel.krnTrace("Shell Command~" + buffer);
             //
             // Parse the input...
@@ -168,43 +173,55 @@ module TSOS {
             var index: number = 0;
             var found: boolean = false;
             var fn = undefined;
-            while (!found && index < this.commandList.length) {
-                if (this.commandList[index].command === cmd) {
+            while (!found && index < this.commandList.length) 
+			{
+                if (this.commandList[index].command === cmd) 
+				{
                     found = true;
                     fn = this.commandList[index].func;
-                } else {
+                } else 
+				{
                     ++index;
                 }
             }
-            if (found) {
+            if (found) 
+			{
                 this.execute(fn, args);
-            } else {
+            } 
+			else 
+			{
                 // It's not found, so check for curses and apologies before declaring the command invalid.
-                if (this.curses.indexOf("[" + Utils.rot13(cmd) + "]") >= 0) {     // Check for curses.
+                if (this.curses.indexOf("[" + Utils.rot13(cmd) + "]") >= 0) 
+				{     // Check for curses.
                     this.execute(this.shellCurse);
-                } else if (this.apologies.indexOf("[" + cmd + "]") >= 0) {        // Check for apologies.
+                } else if (this.apologies.indexOf("[" + cmd + "]") >= 0) 
+				{        // Check for apologies.
                     this.execute(this.shellApology);
-                } else { // It's just a bad command. {
+                } else { // It's just a bad command. 
+				{
                     this.execute(this.shellInvalidCommand);
                 }
             }
         }
 
         // Note: args is an option parameter, ergo the ? which allows TypeScript to understand that.
-        public execute(fn, args?) {
+        public execute(fn, args?) 
+		{
             // We just got a command, so advance the line...
             _StdOut.advanceLine();
             // ... call the command function passing in the args with some über-cool functional programming ...
             fn(args);
             // Check to see if we need to advance the line again
-            if (_StdOut.currentXPosition > 0) {
+            if (_StdOut.currentXPosition > 0)
+			{
                 _StdOut.advanceLine();
             }
             // ... and finally write the prompt again.
             this.putPrompt();
         }
 
-        public parseInput(buffer): UserCommand {
+        public parseInput(buffer): UserCommand
+		{
             var retVal = new UserCommand();
 
             // 1. Remove leading and trailing spaces.
@@ -224,9 +241,11 @@ module TSOS {
             retVal.command = cmd;
 
             // 5. Now create the args array from what's left.
-            for (var i in tempList) {
+            for (var i in tempList)
+			{
                 var arg = Utils.trim(tempList[i]);
-                if (arg != "") {
+                if (arg != "") 
+				{
                     retVal.args[retVal.args.length] = tempList[i];
                 }
             }
@@ -237,31 +256,38 @@ module TSOS {
         // Shell Command Functions.  Kinda not part of Shell() class exactly, but
         // called from here, so kept here to avoid violating the law of least astonishment.
         //
-        public shellInvalidCommand() {
+        public shellInvalidCommand()
+		{
             _StdOut.putText("Invalid Command. ");
-            if (_SarcasticMode) {
+            if (_SarcasticMode) 
+			{
                 _StdOut.putText("Unbelievable. You, [subject name here],");
                 _StdOut.advanceLine();
                 _StdOut.putText("must be the pride of [subject hometown here].");
-            } else {
+            } else 
+			{
                 _StdOut.putText("Type 'help' for, well... help.");
             }
         }
 
-        public shellCurse() {
+        public shellCurse() 
+		{
             _StdOut.putText("Oh, so that's how it's going to be, eh? Fine.");
             _StdOut.advanceLine();
             _StdOut.putText("Bitch.");
             _SarcasticMode = true;
         }
 
-        public shellApology() {
-           if (_SarcasticMode) {
+        public shellApology() 
+		{
+           if (_SarcasticMode) 
+		   {
               _StdOut.putText("I think we can put our differences behind us.");
               _StdOut.advanceLine();
               _StdOut.putText("For science . . . You monster.");
               _SarcasticMode = false;
-           } else {
+           } else 
+		   {
               _StdOut.putText("For what?");
            }
         }

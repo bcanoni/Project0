@@ -1,10 +1,10 @@
 ///<reference path="../globals.ts" />
 
 //changed pcb to an object instead using code from cpu for constructor and init 
-module TSOS {
-
-    export class PCB {
-
+module TSOS 
+{
+    export class PCB 
+	{
         constructor(public pid:number=0,
                     public PC: number = 0,
                     public Acc: number = 0,
@@ -16,11 +16,5 @@ module TSOS {
 					public state: number=0){
 
         }
-
-		
-		
-        
-
-
     }
 }

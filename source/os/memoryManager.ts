@@ -5,8 +5,8 @@
 Brian Canoni
 MemoryManager
 */
-module TSOS {
-
+module TSOS 
+{
     export class MemoryManager 
 	{
 
@@ -14,7 +14,7 @@ module TSOS {
         constructor(){}
 		
 		//load 		
-        public loadProgram(program ):void   //, curPCB): void 
+        public loadProgram(program, curPCB ):void   //, curPCB): void 
 		{	
 			// IF 1,2,3 HAVE MEMORY IN THEM
 			// TODO WIPE NEXT IN CHAIN AND LOAD
