@@ -20,8 +20,7 @@ var TSOS;
             //IF NULL MEMORY FULL
             if (firstFree != null) {
                 curPCB = new TSOS.PCB();
-                curPCB.base = this.firstFreePartition() * 256;
-                alert(curPCB.base);
+                curPCB.base = this.firstFreePartition() * 256 + 1;
                 //wipe memory
                 this.wipeMem(curPCB);
                 //populate					
@@ -32,7 +31,7 @@ var TSOS;
             this.updateMemoryTable();
         };
         MemoryManager.prototype.insertMemory = function (x, dat) {
-            _Memory.Data[x] = dat;
+            _Memory.Data[x + _PCB.base] = dat;
         };
         MemoryManager.prototype.getMemory = function (x) {
             return _Memory.Data[x + _PCB.base];

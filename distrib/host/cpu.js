@@ -61,7 +61,7 @@ var TSOS;
             if (this.isExecuting) {
                 //ir = _Memory.Data[this.PC];
                 ir = _MemManager.getMemory(_PCB.PC);
-                alert(ir + "@" + this.PC);
+                //alert(ir + "@" + this.PC);
                 //step by step loool
                 switch (ir) {
                     case "A9":
@@ -146,7 +146,7 @@ var TSOS;
                             //this.PC += parseInt(_Memory.Data[this.PC],16)+1;
                             this.PC += parseInt(_MemManager.getMemory(this.PC), 16) + 1;
                             if (check >= _PCB.limit) {
-                                this.PC -= _PCB.limit + 1;
+                                this.PC -= 256 + 1;
                             }
                         }
                         else {
@@ -158,7 +158,7 @@ var TSOS;
                         var byteTwo = _MemManager.getMemory(this.PC + 2);
                         var hexAddress = (byteTwo + byteOne);
                         var decAddress = _MemManager.toAddress(hexAddress);
-                        a = parseInt(_Memory.Data[decAddress], 16);
+                        a = parseInt(_MemManager.getMemory(decAddress), 16);
                         a = a + 1;
                         _MemManager.insertMemory(decAddress, a.toString(16));
                         this.PC++;

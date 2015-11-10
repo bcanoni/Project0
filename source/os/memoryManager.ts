@@ -27,8 +27,8 @@ module TSOS
 			if (firstFree != null)
 			{			
 				curPCB = new PCB();
-				curPCB.base = this.firstFreePartition()*256;
-				alert(curPCB.base);
+				curPCB.base = this.firstFreePartition()*256+1;
+				
 			
 				//wipe memory
 				this.wipeMem(curPCB);
@@ -42,6 +42,7 @@ module TSOS
 			else
 			{
 				//MEMORY FULL?
+				
 			}          
              
             this.updateMemoryTable();
@@ -50,7 +51,7 @@ module TSOS
 		
 		public insertMemory(x, dat): void
 		{	
-			_Memory.Data[x] = dat;
+			_Memory.Data[x+_PCB.base] = dat;
 		}
 		
 		public getMemory(x): String
