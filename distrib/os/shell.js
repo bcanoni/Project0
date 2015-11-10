@@ -73,6 +73,9 @@ var TSOS;
             //run
             sc = new TSOS.ShellCommand(this.shellRun, "run", "- Run <PID> program");
             this.commandList[this.commandList.length] = sc;
+            //
+            sc = new TSOS.ShellCommand(this.shellClearMem, "clearmem", "- Clear all Mem");
+            this.commandList[this.commandList.length] = sc;
             /*
             // ps  - list the running processes and their IDs
             sc = new ShellCommand(this.shellPS,
@@ -237,11 +240,19 @@ var TSOS;
                 _StdOut.putText("Usage: Status <status>  Please supply a status.");
             }
         };
+        //display bsod
         Shell.prototype.shellBsod = function (args) {
             var img = document.getElementById("bsod");
             document.getElementById("Status").value = "Status: dead";
             _DrawingContext.drawImage(img, 0, 0);
             _Kernel.krnShutdown();
+        };
+        //clear memory all 3 partitions
+        Shell.prototype.shellClearMem = function (args) {
+            _StdOut.putText("Clearing Memory..");
+            _StdOut.advanceLine();
+            _MemManager.clearMem();
+            _StdOut.putText("Memory Clear.");
         };
         Shell.prototype.shellLoad = function (args) {
             //CLEAR MEM TABLE FOR NOW

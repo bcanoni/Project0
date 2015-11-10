@@ -7,30 +7,38 @@ MemoryManager
 */
 module TSOS {
 
-    export class MemoryManager {
+    export class MemoryManager 
+	{
 
 
         constructor(){}
+		
 		//load 		
-        public loadProgram(program: string, curPCB):void 
+        public loadProgram(program ):void   //, curPCB): void 
 		{	
 			// IF 1,2,3 HAVE MEMORY IN THEM
 			// TODO WIPE NEXT IN CHAIN AND LOAD
 			//FOR NOW JUST LOAD UNTIL NULL AND THEN THROW ERROR
 			var firstFree = this.firstFreePartition();
 			
+			
+			
+			var curPCB = _PCB;
+			
+			
 			//IF NULL MEMORY FULL
 			if (firstFree != null)
 			{			
 				curPCB = new PCB();
-				curPCB.setBase(this.firstFreePartition());
+				curPCB.base = this.firstFreePartition();
 			
 				//wipe memory
 				this.wipeMem(curPCB);
 				
 			
 				//populate
-				this.populateMem(curPCB, program);		
+				//this.populateMem(curPCB, program);	
+				this.populateMem(curPCB ,program);
 			
 			
 			}
@@ -62,6 +70,7 @@ module TSOS {
 			return _Memory.Data[x];
 		}
 		
+		//Wipes only a specific partition
 		public wipeMem(curPCB): void
 		{
 			for (var i = curPCB.base; i < curPCB.length ; i++) 
@@ -71,7 +80,18 @@ module TSOS {
 		
 		}
 		
-		public populateMem(curPCB): void
+		//clears all mem 
+		public clearMem(): void
+		{
+			for(var x = 0; x < _Memory.sizeMem; x++)
+			{
+				_Memory.Data[x] = "00"; 			
+			}
+			this.updateMemoryTable();
+		
+		}
+		
+		public populateMem(curPCB, program): void
 		{
 		    var index = curPCB.base;
 			for (var c = 0; c < program.length; c+=2) 

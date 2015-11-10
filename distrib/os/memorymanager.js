@@ -12,19 +12,23 @@ var TSOS;
         }
         //load 		
         MemoryManager.prototype.loadProgram = function (program) {
-            var index = 0;
-            //wipe memory
-            for (var i = 0; i < _Memory.Data.length; i++) {
-                _Memory.Data[i] = "00";
+            // IF 1,2,3 HAVE MEMORY IN THEM
+            // TODO WIPE NEXT IN CHAIN AND LOAD
+            //FOR NOW JUST LOAD UNTIL NULL AND THEN THROW ERROR
+            var firstFree = this.firstFreePartition();
+            var curPCB = _PCB;
+            //IF NULL MEMORY FULL
+            if (firstFree != null) {
+                curPCB = new TSOS.PCB();
+                curPCB.base = this.firstFreePartition();
+                //wipe memory
+                this.wipeMem(curPCB);
+                //populate
+                //this.populateMem(curPCB, program);	
+                this.populateMem(curPCB, program);
             }
-            //populate
-            for (var c = 0; c < program.length; c += 2) {
-                _Memory.Data[index] = program.charAt(c) + program.charAt(c + 1);
-                index++;
+            else {
             }
-            _PCB = new TSOS.PCB();
-            _PCB.init();
-            //_StdOut.putText("new process, pid= " + _PCB.pid);
             this.updateMemoryTable();
         };
         MemoryManager.prototype.insertMemory = function (x, dat) {
@@ -32,6 +36,36 @@ var TSOS;
         };
         MemoryManager.prototype.getMemory = function (x) {
             return _Memory.Data[x];
+        };
+        //Wipes only a specific partition
+        MemoryManager.prototype.wipeMem = function (curPCB) {
+            for (var i = curPCB.base; i < curPCB.length; i++) {
+                _Memory.Data[i] = "00";
+            }
+        };
+        //clears all mem 
+        MemoryManager.prototype.clearMem = function () {
+            for (var x = 0; x < _Memory.sizeMem; x++) {
+                _Memory.Data[x] = "00";
+            }
+            this.updateMemoryTable();
+        };
+        MemoryManager.prototype.populateMem = function (curPCB, program) {
+            var index = curPCB.base;
+            for (var c = 0; c < program.length; c += 2) {
+                _Memory.Data[index] = program.charAt(c) + program.charAt(c + 1);
+                index++;
+            }
+        };
+        MemoryManager.prototype.firstFreePartition = function () {
+            if (_Memory.Data[0] == ("00"))
+                return 0;
+            else if (_Memory.Data[256] == ("00"))
+                return 1;
+            else if (_Memory.Data[513] == ("00"))
+                return 2;
+            else
+                null;
         };
         MemoryManager.prototype.toAddress = function () {
             var index;

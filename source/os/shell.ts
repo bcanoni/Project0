@@ -123,6 +123,13 @@ module TSOS {
                                   "- Run <PID> program");
             this.commandList[this.commandList.length] = sc;
 			
+			//
+			 sc = new ShellCommand(this.shellClearMem,
+                                  "clearmem",
+                                  "- Clear all Mem");
+            this.commandList[this.commandList.length] = sc;
+			
+			
 			/*
             // ps  - list the running processes and their IDs
 			sc = new ShellCommand(this.shellPS,
@@ -259,63 +266,71 @@ module TSOS {
            }
         }
 
-        public shellVer(args) {
+        public shellVer(args) 
+		{
             _StdOut.putText(APP_NAME + " version " + APP_VERSION);
         }
 		
-		public shellDate(args) {
-		var d = new Date();
-
-        var dat = d.toLocaleDateString() + " " + d.toLocaleTimeString(); 
-		 
+		public shellDate(args) 
+		{
+			var d = new Date();
+			var dat = d.toLocaleDateString() + " " + d.toLocaleTimeString(); 		 
 		    _StdOut.putText(dat);
 		}
 		
-		public shellWhereAmI(args) {
+		public shellWhereAmI(args) 
+		{
 		    _StdOut.putText(APP_LOC);
 		}
 		
-		public shellPizza(args) {
-		   _StdOut.putText("Here it comes..");
-		  
+		public shellPizza(args) 
+		{
+		   _StdOut.putText("Here it comes..");		  
 		   _StdOut.advanceLine();
 		   //TODO fix this 
-		for (var x in APP_PIZZA){
-		    _StdOut.advanceLine();
-		    _StdOut.putText("" + APP_PIZZA[x]);
-			
-			
+			for (var x in APP_PIZZA)
+			{
+				_StdOut.advanceLine();
+				_StdOut.putText("" + APP_PIZZA[x]);			
 			}
 			_StdOut.advanceLine();
 			_StdOut.putText("What a delicious pizza.");
 		}
 		
-		public shellStatus(args) {
-		     if (args.length > 0)
-			 {
-			 var str = args[0];
-			 for( var x = 1; x<args.length ; x++)
-			 {
-			   str += " " + args[x];
-			 }
-			 var status = args[0];
-		     (<HTMLInputElement> document.getElementById("Status")).value = "Status: " + str;
-			
-		     } 
-			 else
-			 {
-			 _StdOut.putText("Usage: Status <status>  Please supply a status.");
-			 
-			 }
-		
+		public shellStatus(args)
+		{
+		    if (args.length > 0)
+			{
+				var str = args[0];
+				for( var x = 1; x<args.length ; x++)
+				{
+					str += " " + args[x];
+				}
+				var status = args[0];
+				(<HTMLInputElement> document.getElementById("Status")).value = "Status: " + str;
+			} 
+			else
+			{
+				_StdOut.putText("Usage: Status <status>  Please supply a status.");
+			}		
 		}
 		
-		public shellBsod(args) {
+		//display bsod
+		public shellBsod(args) 
+		{		
+			var img = document.getElementById("bsod");
+			(<HTMLInputElement> document.getElementById("Status")).value = "Status: dead";
+			_DrawingContext.drawImage(img,0,0);
+			_Kernel.krnShutdown();		
+		}
 		
-		var img = document.getElementById("bsod");
-		 (<HTMLInputElement> document.getElementById("Status")).value = "Status: dead";
-		_DrawingContext.drawImage(img,0,0);
-		_Kernel.krnShutdown();
+		//clear memory all 3 partitions
+	    public shellClearMem(args) 
+		{		
+			_StdOut.putText("Clearing Memory..");
+			_StdOut.advanceLine();
+			_MemManager.clearMem();
+			_StdOut.putText("Memory Clear.");
 		
 		}
 		
