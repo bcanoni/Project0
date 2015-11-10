@@ -14,7 +14,7 @@ module TSOS
         constructor(){}
 		
 		//load 		
-        public loadProgram(program, curPCB ):void   //, curPCB): void 
+        public loadProgram(program, curPCB ):boolean
 		{	
 			// IF 1,2,3 HAVE MEMORY IN THEM
 			// TODO WIPE NEXT IN CHAIN AND LOAD
@@ -36,16 +36,23 @@ module TSOS
 			
 				//populate					
 				this.populateMem(curPCB ,program);
+				
+				
+				this.updateMemoryTable();
+				
+				return true;
 			
 			
 			}
 			else
 			{
 				//MEMORY FULL?
+				_StdOut.putText("Memory full. Please clear memory.");
+				return false;
 				
 			}          
              
-            this.updateMemoryTable();
+            
         }
 		
 		
@@ -99,9 +106,9 @@ module TSOS
 				return 256;
 
 			else if(_Memory.Data[513] == ("00"))
-				return 513;
+				return 512;
 				
-		    else null;
+		    return null;
 		}
 		
 		

@@ -428,9 +428,13 @@ module TSOS
 				{
 				success=false; 
 				//_MemManager.loadProgram(output);
-				_Scheduler.loadProgMem(output);
+				
+				if(_Scheduler.loadProgMem(output))
+				{
 				_StdOut.putText("Program Successfully loaded at PID: " + _PID);
 				_PID++; //increment pid
+				}
+				
 				}	
 			}
 			else

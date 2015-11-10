@@ -25,10 +25,14 @@ var TSOS;
                 this.wipeMem(curPCB);
                 //populate					
                 this.populateMem(curPCB, program);
+                this.updateMemoryTable();
+                return true;
             }
             else {
+                //MEMORY FULL?
+                _StdOut.putText("Memory full. Please clear memory.");
+                return false;
             }
-            this.updateMemoryTable();
         };
         MemoryManager.prototype.insertMemory = function (x, dat) {
             _Memory.Data[x + _PCB.base] = dat;
@@ -62,9 +66,8 @@ var TSOS;
             else if (_Memory.Data[256] == ("00"))
                 return 256;
             else if (_Memory.Data[513] == ("00"))
-                return 513;
-            else
-                null;
+                return 512;
+            return null;
         };
         MemoryManager.prototype.toAddress = function () {
             var index;
