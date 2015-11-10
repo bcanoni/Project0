@@ -11,20 +11,19 @@ var TSOS;
         function MemoryManager() {
         }
         //load 		
-        MemoryManager.prototype.loadProgram = function (program) {
+        MemoryManager.prototype.loadProgram = function (program, curPCB) {
             // IF 1,2,3 HAVE MEMORY IN THEM
             // TODO WIPE NEXT IN CHAIN AND LOAD
             //FOR NOW JUST LOAD UNTIL NULL AND THEN THROW ERROR
             var firstFree = this.firstFreePartition();
-            var curPCB = _PCB;
+            _PCB = curPCB;
             //IF NULL MEMORY FULL
             if (firstFree != null) {
                 curPCB = new TSOS.PCB();
                 curPCB.base = this.firstFreePartition();
                 //wipe memory
                 this.wipeMem(curPCB);
-                //populate
-                //this.populateMem(curPCB, program);	
+                //populate					
                 this.populateMem(curPCB, program);
             }
             else {
@@ -35,7 +34,7 @@ var TSOS;
             _Memory.Data[x] = dat;
         };
         MemoryManager.prototype.getMemory = function (x) {
-            return _Memory.Data[x];
+            return _Memory.Data[x + _PCB.base];
         };
         //Wipes only a specific partition
         MemoryManager.prototype.wipeMem = function (curPCB) {

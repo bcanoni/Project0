@@ -52,78 +52,72 @@ var TSOS;
             //D0 BNE branch n bytes if z flag is 0-470-12872-5
             //EE INC increment the value of a byte
             //FF SYS system call
+            //IR means 
             var ir;
             var i;
             var a;
             var b;
             _Kernel.krnTrace('CPU cycle');
             if (this.isExecuting) {
-                ir = _Memory.Data[this.PC];
+                //ir = _Memory.Data[this.PC];
+                ir = _MemManager.getMemory(_PCB.PC);
                 //alert(ir + "@" + this.PC);
                 //step by step loool
                 switch (ir) {
                     case "A9":
                         this.PC++;
-                        this.Acc = parseInt(_Memory.Data[this.PC], 16);
+                        this.Acc = parseInt(_MemManager.getMemory(this.PC), 16);
                         this.PC++;
                         break;
                     case "AD":
-                        var byteOne = _Memory.Data[this.PC + 1];
-                        var byteTwo = _Memory.Data[this.PC + 2];
+                        var byteOne = _MemManager.getMemory(this.PC + 1);
+                        var byteTwo = _MemManager.getMemory(this.PC + 2);
                         var hexAddress = (byteTwo + byteOne);
                         var decAddress = _MemManager.toAddress(hexAddress);
                         //i=_MemManager.toAddress();
-                        this.Acc = parseInt(_Memory.Data[decAddress], 16);
+                        this.Acc = parseInt(_MemManager.getMemory(decAddress), 16);
                         this.PC++;
-                        //this.PC++;
-                        //this.PC++;
                         break;
                     case "8D":
-                        var byteOne = _Memory.Data[this.PC + 1];
-                        var byteTwo = _Memory.Data[this.PC + 2];
+                        var byteOne = _MemManager.getMemory(this.PC + 1);
+                        var byteTwo = _MemManager.getMemory(this.PC + 2);
                         var hexAddress = (byteTwo + byteOne);
                         var decAddress = _MemManager.toAddress(hexAddress);
                         _Memory.Data[decAddress] = this.Acc.toString(16);
                         this.PC++;
-                        // this.PC++;
-                        //this.PC++;
                         break;
                     case "6D":
-                        var byteOne = _Memory.Data[this.PC + 1];
-                        var byteTwo = _Memory.Data[this.PC + 2];
+                        var byteOne = _MemManager.getMemory(this.PC + 1);
+                        var byteTwo = _MemManager.getMemory(this.PC + 2);
                         var hexAddress = (byteTwo + byteOne);
                         var decAddress = _MemManager.toAddress(hexAddress);
-                        this.Acc += parseInt(_Memory.Data[decAddress], 16);
+                        this.Acc += parseInt(_MemManager.getMemory(decAddress), 16);
                         this.PC++;
-                        //this.PC++;
-                        //this.PC++;
                         break;
                     case "A2":
                         this.PC++;
-                        this.Xreg = parseInt(_Memory.Data[this.PC], 16);
+                        this.Xreg = parseInt(_MemManager.getMemory(this.PC), 16);
                         this.PC++;
                         break;
                     case "AE":
-                        var byteOne = _Memory.Data[this.PC + 1];
-                        var byteTwo = _Memory.Data[this.PC + 2];
+                        var byteOne = _MemManager.getMemory(this.PC + 1);
+                        var byteTwo = _MemManager.getMemory(this.PC + 2);
                         var hexAddress = (byteTwo + byteOne);
                         var decAddress = _MemManager.toAddress(hexAddress);
-                        this.Xreg = parseInt(_Memory.Data[decAddress], 16);
+                        this.Xreg = parseInt(_MemManager.getMemory(decAddress), 16);
                         this.PC++;
-                        //this.PC++;
-                        //this.PC++;
                         break;
                     case "A0":
                         this.PC++;
-                        this.Yreg = parseInt(_Memory.Data[this.PC], 16);
+                        this.Yreg = parseInt(_MemManager.getMemory(this.PC), 16);
                         this.PC++;
                         break;
                     case "AC":
-                        var byteOne = _Memory.Data[this.PC + 1];
-                        var byteTwo = _Memory.Data[this.PC + 2];
+                        var byteOne = _MemManager.getMemory(this.PC + 1);
+                        var byteTwo = _MemManager.getMemory(this.PC + 2);
                         var hexAddress = (byteTwo + byteOne);
                         var decAddress = _MemManager.toAddress(hexAddress);
-                        this.Yreg = parseInt(_Memory.Data[decAddress], 16);
+                        this.Yreg = parseInt(_MemManager.getMemory(decAddress), 16);
                         this.PC++;
                         break;
                     case "EA":
@@ -134,28 +128,25 @@ var TSOS;
                         //this.PC=0;
                         break;
                     case "EC":
-                        var byteOne = _Memory.Data[this.PC + 1];
-                        var byteTwo = _Memory.Data[this.PC + 2];
+                        var byteOne = _MemManager.getMemory(this.PC + 1);
+                        var byteTwo = _MemManager.getMemory(this.PC + 2);
                         var hexAddress = (byteTwo + byteOne);
                         var decAddress = _MemManager.toAddress(hexAddress);
-                        if (this.Xreg === parseInt(_Memory.Data[decAddress]))
+                        if (this.Xreg === parseInt(_MemManager.getMemory(decAddress)))
                             this.Zflag = 0;
                         else
                             this.Zflag = 1;
                         this.PC++;
-                        //this.PC++;				
                         break;
                     case "D0":
-                        //alert("magic");
                         this.PC++;
-                        // i=parseInt(_Memory.Data[this.PC],16);
-                        //i._MemManager.toAddress()
-                        //alert(i);
                         if (this.Zflag === 1) {
-                            var check = this.PC + parseInt(_Memory.Data[this.PC], 16);
-                            this.PC += parseInt(_Memory.Data[this.PC], 16) + 1;
-                            if (check >= _Memory.sizeMem) {
-                                this.PC -= _Memory.sizeMem;
+                            //var check =  this.PC + parseInt(_Memory.Data[this.PC],16);
+                            var check = this.PC + parseInt(_MemManager.getMemory(this.PC), 16);
+                            //this.PC += parseInt(_Memory.Data[this.PC],16)+1;
+                            this.PC += parseInt(_MemManager.getMemory(this.PC), 16) + 1;
+                            if (check >= _PCB.limit) {
+                                this.PC -= _PCB.limit + 1;
                             }
                         }
                         else {
@@ -163,15 +154,12 @@ var TSOS;
                         }
                         break;
                     case "EE":
-                        //var byteOne = _Memory.Data[this.PC+1];
                         var byteOne = _MemManager.getMemory(this.PC + 1);
-                        //var byteTwo = _Memory.Data[this.PC+2];
                         var byteTwo = _MemManager.getMemory(this.PC + 2);
                         var hexAddress = (byteTwo + byteOne);
                         var decAddress = _MemManager.toAddress(hexAddress);
                         a = parseInt(_Memory.Data[decAddress], 16);
                         a = a + 1;
-                        //_Memory.Data[decAddress]=a.toString(16);
                         _MemManager.insertMemory(decAddress, a.toString(16));
                         this.PC++;
                         break;
@@ -180,6 +168,7 @@ var TSOS;
                         if (this.Xreg == 1) {
                             _StdOut.putText("" + this.Yreg);
                             _StdOut.advanceLine();
+                            _OsShell.putPrompt();
                             this.PC++;
                         }
                         else if (this.Xreg == 2) {
@@ -198,6 +187,7 @@ var TSOS;
                         else {
                             _StdOut.putText("Value in Xreg must be 1 or 0");
                             this.isExecuting = false;
+                            _OsShell.putPrompt();
                         }
                         break;
                     default:
@@ -217,6 +207,13 @@ var TSOS;
                 cell.innerHTML = "" + this.Yreg;
                 cell = document.getElementById("zRegDisplay");
                 cell.innerHTML = "" + this.Zflag;
+                //UPDATE PCB REGISTERS
+                _PCB.PC = this.PC;
+                _PCB.Acc = this.Acc;
+                _PCB.Xreg = this.Xreg;
+                _PCB.Yreg = this.Yreg;
+                _PCB.Zflag = this.Zflag;
+                _PCB.updatePCBTable();
                 _MemManager.updateMemoryTable();
             }
         };

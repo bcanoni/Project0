@@ -90,8 +90,7 @@ module TSOS
 					//i=_MemManager.toAddress();
                     this.Acc=parseInt(_MemManager.getMemory(decAddress),16);
                     this.PC++;
-					//this.PC++;
-					//this.PC++;
+					
                     		
 				break;
 				
@@ -104,8 +103,7 @@ module TSOS
 					var decAddress = _MemManager.toAddress(hexAddress);
                     _Memory.Data[decAddress]=this.Acc.toString(16);
                     this.PC++;
-					// this.PC++;
-					  //this.PC++;
+					
                 break;
 				
 				case "6D": //6D ADC Add with Carry
@@ -117,8 +115,7 @@ module TSOS
 					var decAddress = _MemManager.toAddress(hexAddress);
                     this.Acc+= parseInt(_MemManager.getMemory(decAddress),16);
                     this.PC++;
-					//this.PC++;
-					//this.PC++;
+					
                 break;				
 				
 				case "A2": //A2 LDX loads x register with a constant
@@ -137,16 +134,14 @@ module TSOS
 					
 					
                         
-                        this.Xreg=parseInt(_MemManager.getMemory(decAddress), 16);
-                        this.PC++;
-						//this.PC++;
-						//this.PC++;
-                break;
+                    this.Xreg=parseInt(_MemManager.getMemory(decAddress), 16);
+                    this.PC++;
+				break;
 				
 				case "A0": //A0 LDY loads y register with a constant 
                     this.PC++;
-                        this.Yreg=parseInt_MemManager.getMemory(this.PC),16);
-                        this.PC++;
+                    this.Yreg=parseInt(_MemManager.getMemory(this.PC),16);
+                    this.PC++;
                 break;
 				
 				case "AC"://AC loads the y register from memory
@@ -190,17 +185,15 @@ module TSOS
 					this.Zflag = 1;
 					
 					this.PC++;
-					//this.PC++;				
+									
 					
                 break;
 				
 				case "D0": //D0 BNE branch n bytes if z flag is 1 NOT EQUAL
-                    //alert("magic");
+                    
                    
                     this.PC++;
-					// i=parseInt(_Memory.Data[this.PC],16);
-					//i._MemManager.toAddress()
-					//alert(i);
+					
 					if(this.Zflag === 1 )
 					{					
 						//var check =  this.PC + parseInt(_Memory.Data[this.PC],16);
@@ -208,9 +201,9 @@ module TSOS
 						//this.PC += parseInt(_Memory.Data[this.PC],16)+1;
 						this.PC += parseInt(_MemManager.getMemory(this.PC),16)+1;
 						
-						if (check>= _Memory.sizeMem ) 
+						if (check>= _PCB.limit ) 
 						{                    
-							this.PC -= _Memory.sizeMem;
+							this.PC -= _PCB.limit+1;
 					    }				
 					}
 					else
@@ -246,6 +239,7 @@ module TSOS
 						{
                             _StdOut.putText(""+this.Yreg);
 							_StdOut.advanceLine();
+							_OsShell.putPrompt();
                             this.PC++;
 
 
@@ -273,6 +267,7 @@ module TSOS
 						{
                             _StdOut.putText("Value in Xreg must be 1 or 0");
                             this.isExecuting=false;
+							_OsShell.putPrompt();
                         }
                 break;
 				
