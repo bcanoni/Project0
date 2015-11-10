@@ -69,7 +69,7 @@ module TSOS
 			{
 			//ir = _Memory.Data[this.PC];
 			ir = _MemManager.getMemory(_PCB.PC);
-			//alert(ir + "@" + this.PC);
+			alert(ir + "@" + this.PC);
 			//step by step loool
 			switch(ir)
 			{

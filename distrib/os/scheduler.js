@@ -24,8 +24,18 @@ var TSOS;
             this.residentQueue.push(curPCB);
             _MemManager.loadProgram(program, curPCB);
         };
-        Scheduler.prototype.runAProgram = function () {
+        Scheduler.prototype.runAProgram = function (pid) {
             //relates to single run function
+            _PCB = this.residentQueue[pid];
+            //clear cpu values
+            _CPU.clearCpu();
+            //dont need to run on pid yet but keep that in mind for later
+            _CPU.isExecuting = true;
+        };
+        Scheduler.prototype.validPID = function (pid) {
+            if (this.residentQueue[pid] != null)
+                return true;
+            return false;
         };
         Scheduler.prototype.runAllPrograms = function () {
             //relates to new run all method

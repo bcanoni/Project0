@@ -307,10 +307,11 @@ var TSOS;
                 _StdOut.putText("Invalid Code");
         };
         Shell.prototype.shellRun = function (args) {
-            //clear cpu values
-            _CPU.clearCpu();
-            //dont need to run on pid yet but keep that in mind for later
-            _CPU.isExecuting = true;
+            if (_Scheduler.validPID(args)) {
+                _Scheduler.runAProgram(args);
+            }
+            else
+                _StdOut.putText("Invalid PID");
         };
         Shell.prototype.shellHelp = function (args) {
             _StdOut.putText("Commands:");

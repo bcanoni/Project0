@@ -440,12 +440,13 @@ module TSOS
 		}		
 		
 	    public shellRun(args)
-     	{
-			//clear cpu values
-			_CPU.clearCpu();
-		    //dont need to run on pid yet but keep that in mind for later
-	        _CPU.isExecuting =true;
-		
+     	{			
+			if(_Scheduler.validPID(args))
+			{
+			_Scheduler.runAProgram(args);		
+			}
+			else
+			_StdOut.putText("Invalid PID");	
 		}
 
         public shellHelp(args) 
