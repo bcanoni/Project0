@@ -33,7 +33,10 @@ module TSOS
 		{
 			//relates to single run function
 		    _PCB = this.residentQueue[pid];
+			_PCB.state = 2; //running
 			
+			//ADD to readyQueue;
+			this.readyQueue.push(_PCB);			
 			//clear cpu values
 			_CPU.clearCpu();
 		    //dont need to run on pid yet but keep that in mind for later
@@ -55,15 +58,43 @@ module TSOS
 		{
 			//relates to new run all method
 			//REM will use some kind of ROUND ROBIN scheduling 
+			
+		    //ALL PROGRAMS IN RESIDENT QUEUE ACTIVATE AND PUT IN READY QUEUE
+			for(PCB : this.residentQueue)
+			{
+			this.readyQueue.push(this.residentQueue.pop);			
+			}
+			
+			//TODO FLESH OUT SWITCHER PROGRAM TO SWITCH BASED ON SET QUANTUM 
+			
+			
+			_CPU.clearCpu();
+		    
+			_CPU.isExecuting = true;		
+			
 		}
 		
-		public updatePCBTable():void
-		{	
+		public switcher()
+		{
+		//inc 1 until reach quantum 
+		counter ++;
 		
+		if(counter >= 
+		
+		
+		
+		}
+		
+		
+		
+		
+		public updatePCBTable():void
+		{		
 			//3 FUNCT
 			
-			//CHECK STATES OF ALL PCB IN RESIDENT 
-			//POSSIBLE SUB FUNCTION
+			//CHECK STATES OF ALL PCB IN RESIDENT if 2 add to ready queue and display
+			//if 1 remain in resident 
+			//if 0 put in terminated.
 			
 			//IF PCB IS STATE READY MOVE TO READYQUEUE
 			
