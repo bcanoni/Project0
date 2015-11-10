@@ -25,8 +25,7 @@ var TSOS;
         }
         Shell.prototype.init = function () {
             var sc;
-            //
-            // Load the command list.
+            // Load the command list. 
             document.getElementById("Status").value = "Status: Running";
             // ver
             sc = new TSOS.ShellCommand(this.shellVer, "ver", "- Displays the current version data.");
@@ -74,9 +73,21 @@ var TSOS;
             //run
             sc = new TSOS.ShellCommand(this.shellRun, "run", "- Run <PID> program");
             this.commandList[this.commandList.length] = sc;
-            // ps  - list the running processes and their IDs
-            // kill <id> - kills the specified process id.
             //
+            sc = new TSOS.ShellCommand(this.shellClearMem, "clearmem", "- Clear all Mem");
+            this.commandList[this.commandList.length] = sc;
+            /*
+            // ps  - list the running processes and their IDs
+            sc = new ShellCommand(this.shellPS,
+                                  "ps",
+                                  "- display running processes and their IDs");
+            this.commandList[this.commandList.length] = sc;
+            // kill <id> - kills the specified process id.
+            sc = new ShellCommand(this.shellKill,
+                                  "kill",
+                                  "- Kill <PID> program");
+            this.commandList[this.commandList.length] = sc;
+            */
             // Display the initial prompt.
             this.putPrompt();
         };
@@ -120,7 +131,9 @@ var TSOS;
                 else if (this.apologies.indexOf("[" + cmd + "]") >= 0) {
                     this.execute(this.shellApology);
                 }
-                else {
+                else 
+                // It's just a bad command. 
+                {
                     this.execute(this.shellInvalidCommand);
                 }
             }
@@ -228,11 +241,19 @@ var TSOS;
                 _StdOut.putText("Usage: Status <status>  Please supply a status.");
             }
         };
+        //display bsod
         Shell.prototype.shellBsod = function (args) {
             var img = document.getElementById("bsod");
             document.getElementById("Status").value = "Status: dead";
             _DrawingContext.drawImage(img, 0, 0);
             _Kernel.krnShutdown();
+        };
+        //clear memory all 3 partitions
+        Shell.prototype.shellClearMem = function (args) {
+            _StdOut.putText("Clearing Memory..");
+            _StdOut.advanceLine();
+            _MemManager.clearMem();
+            _StdOut.putText("Memory Clear.");
         };
         Shell.prototype.shellLoad = function (args) {
             //CLEAR MEM TABLE FOR NOW
@@ -240,7 +261,6 @@ var TSOS;
                 //each of 8 bits
                 for (var y = 7; y >= 0; y--) {
                     var cell = document.getElementById("cell" + x + "" + y);
-                    //alert("cell"+x+""+y);
                     cell.innerHTML = "00";
                 }
             }
@@ -253,12 +273,10 @@ var TSOS;
             userCode = userCode.replace(/\s/g, ""); //destroy all spaces
             var output = "";
             _ProgramSize = 0;
-            //alert(userCode);
             //if i see any non hex display a warning message instead otherwise parse by twos
             for (var x = 0; x < userCode.length; x += 2) {
                 //seems a regular expression would help here as well 
                 var temp = userCode.charAt(x) + userCode.charAt(x + 1); //this represents a grouping of hex
-                //alert(temp);
                 var patHex = /[^g-z]/g;
                 var isHex = temp.match(patHex);
                 if (isHex == null || isHex.length < 2) {
@@ -274,25 +292,27 @@ var TSOS;
                 }
             }
             if (success) {
-                //alert(output);
-                if (output.length > 256) {
+                if (output.length >= _Memory.sizeMem) {
                     _StdOut.putText("User code too long for current amount of memory");
                 }
                 else {
                     success = false;
-                    _MemManager.loadProgram(output);
-                    _StdOut.putText("Program Successfully loaded at PID: " + _PID);
-                    _PID++; //increment pid
+                    //_MemManager.loadProgram(output);
+                    if (_Scheduler.loadProgMem(output)) {
+                        _StdOut.putText("Program Successfully loaded at PID: " + _PID);
+                        _PID++; //increment pid
+                    }
                 }
             }
             else
                 _StdOut.putText("Invalid Code");
         };
         Shell.prototype.shellRun = function (args) {
-            //clear cpu values
-            _CPU.clearCpu();
-            //dont need to run on pid yet but keep that in mind for later
-            _CPU.isExecuting = true;
+            if (_Scheduler.validPID(args)) {
+                _Scheduler.runAProgram(args);
+            }
+            else
+                _StdOut.putText("Invalid PID");
         };
         Shell.prototype.shellHelp = function (args) {
             _StdOut.putText("Commands:");
@@ -361,6 +381,9 @@ var TSOS;
                         break;
                     case "run":
                         _StdOut.putText("run <pid> runs program at specified location");
+                        break;
+                    case "clearMem":
+                        _StdOut.putText("Clears All Memory");
                         break;
                     default:
                         _StdOut.putText("No manual entry for " + args[0] + ".");

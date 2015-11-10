@@ -15,9 +15,11 @@
      Operating System Concepts 8th edition by Silberschatz, Galvin, and Gagne.  ISBN 978-0-470-12872-5
      ------------ */
 
-module TSOS {
+module TSOS 
+{
 
-    export class Cpu {
+    export class Cpu 
+	{
 
         constructor(public PC: number = 0,
                     public Acc: number = 0,
@@ -28,7 +30,8 @@ module TSOS {
 
         }
 
-        public init(): void {
+        public init(): void 
+		{
             this.PC = 0;
             this.Acc = 0;
             this.Xreg = 0;
@@ -37,8 +40,8 @@ module TSOS {
             this.isExecuting = false;
         }
 
-        public cycle(): void {
-           
+        public cycle(): void 
+		{           
             // TODO: Accumulate CPU usage and profiling statistics here.
             // Do the real work here. Be sure to set this.isExecuting appropriately.
 			
@@ -54,6 +57,7 @@ module TSOS {
 		    //EE INC increment the value of a byte
 		    //FF SYS system call
 			
+			//IR means 
 			var ir;
 			
 			var i; 
@@ -63,67 +67,66 @@ module TSOS {
 			 _Kernel.krnTrace('CPU cycle');
 			if(this.isExecuting)
 			{
-			 ir = _Memory.Data[this.PC];
-			 //alert(ir + "@" + this.PC);
-			 //step by step loool
-			 switch(ir)
-			 {
+			//ir = _Memory.Data[this.PC];
+			ir = _MemManager.getMemory(_PCB.PC);
+			//alert(ir + "@" + this.PC);
+			//step by step loool
+			switch(ir)
+			{
 			    case "A9":  //A9 LDA  load acc with constant
                     this.PC++;
-                    this.Acc =parseInt(_Memory.Data[this.PC], 16);
+                    this.Acc =parseInt(_MemManager.getMemory(this.PC), 16);
                     this.PC++;
                 break;			
 				
 				case "AD": //AD LDA  load acc from memory
-					var byteOne = _Memory.Data[this.PC+1];
-					var byteTwo = _Memory.Data[this.PC+2];
+					
+					var byteOne = _MemManager.getMemory(this.PC+1);					
+					var byteTwo = _MemManager.getMemory(this.PC+2);
 					
 					var hexAddress = (byteTwo + byteOne);
 					
 					var decAddress = _MemManager.toAddress(hexAddress);
 					//i=_MemManager.toAddress();
-                    this.Acc=parseInt(_Memory.Data[decAddress],16);
+                    this.Acc=parseInt(_MemManager.getMemory(decAddress),16);
                     this.PC++;
-					//this.PC++;
-					//this.PC++;
+					
                     		
 				break;
 				
 				case "8D": //8D STA store acc in memory
-                     var byteOne = _Memory.Data[this.PC+1];
-					var byteTwo = _Memory.Data[this.PC+2];
+                    var byteOne = _MemManager.getMemory(this.PC+1);					
+					var byteTwo = _MemManager.getMemory(this.PC+2);
 					
 					var hexAddress = (byteTwo + byteOne);
 					
 					var decAddress = _MemManager.toAddress(hexAddress);
                     _Memory.Data[decAddress]=this.Acc.toString(16);
                     this.PC++;
-					// this.PC++;
-					  //this.PC++;
+					
                 break;
 				
 				case "6D": //6D ADC Add with Carry
-                     var byteOne = _Memory.Data[this.PC+1];
-					var byteTwo = _Memory.Data[this.PC+2];
+                    var byteOne = _MemManager.getMemory(this.PC+1);					
+					var byteTwo = _MemManager.getMemory(this.PC+2);
 					
 					var hexAddress = (byteTwo + byteOne);
 					
 					var decAddress = _MemManager.toAddress(hexAddress);
-                    this.Acc+= parseInt(_Memory.Data[decAddress],16);
+                    this.Acc+= parseInt(_MemManager.getMemory(decAddress),16);
                     this.PC++;
-					//this.PC++;
-					//this.PC++;
+					
                 break;				
 				
 				case "A2": //A2 LDX loads x register with a constant
                         this.PC++;
-                        this.Xreg=parseInt(_Memory.Data[this.PC],16);
+                        this.Xreg=parseInt(_MemManager.getMemory(this.PC),16);
                         this.PC++;
                 break;
 				
 				case "AE": //AE LDX loads the X register from memory
-                    var byteOne = _Memory.Data[this.PC+1];
-					var byteTwo = _Memory.Data[this.PC+2];
+                    var byteOne = _MemManager.getMemory(this.PC+1);					
+					var byteTwo = _MemManager.getMemory(this.PC+2);
 					
 					var hexAddress = (byteTwo + byteOne);
 					
@@ -131,27 +134,25 @@ module TSOS {
 					
 					
                         
-                        this.Xreg=parseInt(_Memory.Data[decAddress], 16);
-                        this.PC++;
-						//this.PC++;
-						//this.PC++;
-                break;
+                    this.Xreg=parseInt(_MemManager.getMemory(decAddress), 16);
+                    this.PC++;
+				break;
 				
 				case "A0": //A0 LDY loads y register with a constant 
                     this.PC++;
-                        this.Yreg=parseInt(_Memory.Data[this.PC],16);
-                        this.PC++;
+                    this.Yreg=parseInt(_MemManager.getMemory(this.PC),16);
+                    this.PC++;
                 break;
 				
 				case "AC"://AC loads the y register from memory
-                     var byteOne = _Memory.Data[this.PC+1];
-					var byteTwo = _Memory.Data[this.PC+2];
+                    var byteOne = _MemManager.getMemory(this.PC+1);					
+					var byteTwo = _MemManager.getMemory(this.PC+2);
 					
 					var hexAddress = (byteTwo + byteOne);
 					
 					var decAddress = _MemManager.toAddress(hexAddress);
-                        this.Yreg=parseInt(_Memory.Data[decAddress],16);
-                        this.PC++;
+                    this.Yreg=parseInt(_MemManager.getMemory(decAddress),16);
+                    this.PC++;
 						
                 break;
 				
@@ -167,26 +168,9 @@ module TSOS {
                 break;
 				
 				case "EC": //EC CPX compare a byte in memory to x regi sets the z zero flag if equal 
-                        /*
-						i = parseInt(_Memory.Data[this.PC+1] + "" + _Memory.Data[this.PC+2]); 
-						alert(i);
-                       // i=_MemManager.toAddress();
-						//alert(i);
-                        a=this.getConstantNumber(_Memory.Data[i]);
-                        b=this.Xreg;
-						alert(a + " " + b);
-                        if(a===b){
-                            this.Zflag=0;
-                        }else{
-                            this.Zflag=1;
-                        }
-                        this.PC++;
-                    this.PC++;
-					*/
-					
-					
-					var byteOne = _Memory.Data[this.PC+1];
-					var byteTwo = _Memory.Data[this.PC+2];
+                    				
+					var byteOne = _MemManager.getMemory(this.PC+1);					
+					var byteTwo = _MemManager.getMemory(this.PC+2);
 					
 					var hexAddress = (byteTwo + byteOne);
 					
@@ -195,51 +179,36 @@ module TSOS {
 					
 					
 					
-					if(this.Xreg === parseInt(_Memory.Data[decAddress]))
+					if(this.Xreg === parseInt(_MemManager.getMemory(decAddress)))
 					this.Zflag = 0;
 					else
 					this.Zflag = 1;
 					
 					this.PC++;
-					//this.PC++;
-					
-					
+									
 					
                 break;
 				
 				case "D0": //D0 BNE branch n bytes if z flag is 1 NOT EQUAL
-                    //alert("magic");
+                    
                    
                     this.PC++;
-					// i=parseInt(_Memory.Data[this.PC],16);
-					//i._MemManager.toAddress()
-					//alert(i);
+					
 					if(this.Zflag === 1 )
-					{
-					   
-					
-                var check =  this.PC + parseInt(_Memory.Data[this.PC],16);
-                this.PC += parseInt(_Memory.Data[this.PC],16)+1;
-                
-				
-				//alert(_ProgramSize + " " + this.PC);
-                if (check>= 256 ) 
-				{
-                    
-                    this.PC -= 256;
-					
-					//_Memory.Data[0]="A9";//wtf
-					//alert(this.PC);
-                }
-             
-					
-					
+					{					
+						//var check =  this.PC + parseInt(_Memory.Data[this.PC],16);
+						var check =  this.PC + parseInt(_MemManager.getMemory(this.PC),16);
+						//this.PC += parseInt(_Memory.Data[this.PC],16)+1;
+						this.PC += parseInt(_MemManager.getMemory(this.PC),16)+1;
+						
+						if (check>= _PCB.limit ) 
+						{                    
+							this.PC -= 256;
+					    }				
 					}
 					else
 					{
-					this.PC++;
-					
-					
+					this.PC++;					
 					}
                   
             
@@ -247,49 +216,58 @@ module TSOS {
                 break;
 				
 				case "EE": //EE INC increment the value of a byte
-                   var byteOne = _Memory.Data[this.PC+1];
-					var byteTwo = _Memory.Data[this.PC+2];
+                   
+					var byteOne = _MemManager.getMemory(this.PC+1);					
+					var byteTwo = _MemManager.getMemory(this.PC+2);
 					
 					var hexAddress = (byteTwo + byteOne);
 					
 					var decAddress = _MemManager.toAddress(hexAddress);
-                        a=parseInt(_Memory.Data[decAddress],16);
+                        a=parseInt(_MemManager.getMemory(decAddress),16);
                         a=a+1;
-                        _Memory.Data[decAddress]=a.toString(16);
+                        
+						_MemManager.insertMemory(decAddress, a.toString(16));
                         this.PC++;
                 break;
 				
 				case "FF": //FF SYS system call
+				    
+					//_StdOut.putPrompt();
                     
 
-                        if(this.Xreg==1){
+                        if(this.Xreg==1)
+						{
                             _StdOut.putText(""+this.Yreg);
 							_StdOut.advanceLine();
+							_OsShell.putPrompt();
                             this.PC++;
 
 
-                        }else if(this.Xreg==2){
+                        }
+						else if(this.Xreg==2)
+						{
                             //00 terminated
 							var temp = true;
-							var c = 0;
-							
-							
-							
-							
+							var c = 0;							
 							
 							while(temp)
 							{
-							_StdOut.putText(""+String.fromCharCode(parseInt(_Memory.Data[this.Yreg+c],16)));
-							c++;
-							temp = ("00" !== _Memory.Data[this.Yreg+c]);
+								_StdOut.putText(""+String.fromCharCode(parseInt(_MemManager.getMemory(this.Yreg+c),16)));
+								c++;
+								temp = ("00" !== _MemManager.getMemory(this.Yreg+c));
 							
 							}
+							
 							_StdOut.advanceLine();
+							_OsShell.putPrompt();
                             this.PC++;
 
-                        }else{
+                        }
+						else
+						{
                             _StdOut.putText("Value in Xreg must be 1 or 0");
                             this.isExecuting=false;
+							_OsShell.putPrompt();
                         }
                 break;
 				
@@ -298,28 +276,15 @@ module TSOS {
                         this.isExecuting=false;
                         _StdOut.putText("missing code : " + _Memory.Data[this.PC]);
 						_StdOut.advanceLine();
+						_OsShell.putPrompt();
 						
-						//  alert(this.PC + " " + this.Zflag);
-                    //i=parseInt(_Memory.Data[this.PC],16);
-                    //this.PC++;
 					
-					//i=_MemManager.toAddress()
-					
-					//if(this.Zflag === 0 )
-					//{
-					//this.PC = i;
-					
-					//}
-					//else
-					//{
-					//this.PC++;
-					//}
                   
 			 
-			 }
+			}
 			 
 			 
-			 //Update cpu registers 
+		    //Update cpu registers 
 			var cell = <HTMLTableDataCellElement>document.getElementById("pcDisplay");
 			cell.innerHTML = ""+this.PC;
 			cell = <HTMLTableDataCellElement>document.getElementById("accDisplay");
@@ -331,7 +296,16 @@ module TSOS {
 			cell = <HTMLTableDataCellElement>document.getElementById("zRegDisplay");
 			cell.innerHTML = ""+this.Zflag;
 			
-			_MemManager.updateTable();
+			//UPDATE PCB REGISTERS
+			_PCB.PC = this.PC;
+			_PCB.Acc = this.Acc;
+			_PCB.Xreg = this.Xreg;
+			_PCB.Yreg = this.Yreg;
+			_PCB.Zflag = this.Zflag;
+			
+			_PCB.updatePCBTable();
+			
+			_MemManager.updateMemoryTable();
 			
 			
 			
@@ -340,14 +314,15 @@ module TSOS {
 			
 			
         }
-		public getConstantNumber(num:string):number {
+		
+		public getConstantNumber(num:string):number 
+		{		
             var v = parseInt(num, 16);
             return v;
-
-
         }
 		
-		public clearCpu(): void {
+		public clearCpu(): void 
+		{
             this.PC = 0;
             this.Acc = 0;
             this.Xreg = 0;
@@ -355,55 +330,8 @@ module TSOS {
             this.Zflag = 0;
             this.isExecuting = false;
 
-
         }
 		
-		/*
 		
-		
-		//public execute(input) : void 
-		//{
-		var IR = input;
-		switch(ir) {
-		//A9 LDA  load acc with constant
-		case "A9": 
-		{
-		
-		
-		break;
-		}
-		
-		
-		
-		
-		//AD LDA  load acc from memory
-		case "AD":
-		{
-		
-		break;
-		}
-		
-		
-		//8D STA store acc in memory
-		
-			case "8D":
-		{
-		
-		break;
-		}
-		
-		//6D ADC add with carry adds constants of address to the contents of accumulator and puts results in accumulator
-		//A2 LDX loads x register with a constant
-		//AE LDX loads the X register from memory
-		//A0 LDY loads y register with a constant 
-		//ACloads the y register from memory
-		//EA NOP no operation
-		//00 Break (really a system call)
-		//EC CPX compare a byte in memory to x regi sets the z zero flag if equal 
-		//D0 BNE branch n bytes if z flag is 0-470-12872-5
-		//EE INC increment the value of a byte
-		//FF SYS system call
-		
-		*/
     }
 }

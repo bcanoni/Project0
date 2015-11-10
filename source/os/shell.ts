@@ -17,30 +17,24 @@
 
 // TODO: Write a base class / prototype for system services and let Shell inherit from it.
 
-
-
-module TSOS {
-    export class Shell {
+module TSOS 
+{
+    export class Shell 
+	{
         // Properties
         public promptStr = ">";
         public commandList = [];
         public curses = "[fuvg],[cvff],[shpx],[phag],[pbpxfhpxre],[zbgureshpxre],[gvgf]";
-        public apologies = "[sorry]";
+        public apologies = "[sorry]";    		
 		
-		
-        
-		
-		
-        constructor() {
+        constructor() 
+		{
         }
 
-        public init() {
-		
-		    
+        public init()
+		{		    
             var sc;
-            //
-            // Load the command list.
-  
+            // Load the command list. 
   
 			(<HTMLInputElement> document.getElementById("Status")).value = "Status: Running";
             // ver
@@ -133,20 +127,36 @@ module TSOS {
                                   "- Run <PID> program");
             this.commandList[this.commandList.length] = sc;
 			
+			//
+			 sc = new ShellCommand(this.shellClearMem,
+                                  "clearmem",
+                                  "- Clear all Mem");
+            this.commandList[this.commandList.length] = sc;
 			
+			
+			/*
             // ps  - list the running processes and their IDs
+			sc = new ShellCommand(this.shellPS,
+                                  "ps",
+                                  "- display running processes and their IDs");
+            this.commandList[this.commandList.length] = sc;
             // kill <id> - kills the specified process id.
-
-            //
+			sc = new ShellCommand(this.shellKill,
+                                  "kill",
+                                  "- Kill <PID> program");
+            this.commandList[this.commandList.length] = sc;
+            */
             // Display the initial prompt.
             this.putPrompt();
         }
 
-        public putPrompt() {
+        public putPrompt() 
+		{
             _StdOut.putText(this.promptStr);
         }
 
-        public handleInput(buffer) {
+        public handleInput(buffer) 
+		{
             _Kernel.krnTrace("Shell Command~" + buffer);
             //
             // Parse the input...
@@ -163,43 +173,59 @@ module TSOS {
             var index: number = 0;
             var found: boolean = false;
             var fn = undefined;
-            while (!found && index < this.commandList.length) {
-                if (this.commandList[index].command === cmd) {
+            while (!found && index < this.commandList.length) 
+			{
+                if (this.commandList[index].command === cmd) 
+				{
                     found = true;
                     fn = this.commandList[index].func;
-                } else {
+                } 
+				else 
+				{
                     ++index;
                 }
             }
-            if (found) {
+            if (found) 
+			{
                 this.execute(fn, args);
-            } else {
+            } 
+			else 
+			{
                 // It's not found, so check for curses and apologies before declaring the command invalid.
-                if (this.curses.indexOf("[" + Utils.rot13(cmd) + "]") >= 0) {     // Check for curses.
+                if (this.curses.indexOf("[" + Utils.rot13(cmd) + "]") >= 0) 
+				{     // Check for curses.
                     this.execute(this.shellCurse);
-                } else if (this.apologies.indexOf("[" + cmd + "]") >= 0) {        // Check for apologies.
+                } 
+				else if (this.apologies.indexOf("[" + cmd + "]") >= 0) 
+				{        // Check for apologies.
                     this.execute(this.shellApology);
-                } else { // It's just a bad command. {
+                } 
+				else 
+				// It's just a bad command. 
+				{
                     this.execute(this.shellInvalidCommand);
                 }
             }
         }
 
         // Note: args is an option parameter, ergo the ? which allows TypeScript to understand that.
-        public execute(fn, args?) {
+        public execute(fn, args?)
+		{
             // We just got a command, so advance the line...
             _StdOut.advanceLine();
             // ... call the command function passing in the args with some über-cool functional programming ...
             fn(args);
             // Check to see if we need to advance the line again
-            if (_StdOut.currentXPosition > 0) {
+            if (_StdOut.currentXPosition > 0)
+			{
                 _StdOut.advanceLine();
             }
             // ... and finally write the prompt again.
             this.putPrompt();
         }
 
-        public parseInput(buffer): UserCommand {
+        public parseInput(buffer): UserCommand
+		{
             var retVal = new UserCommand();
 
             // 1. Remove leading and trailing spaces.
@@ -219,9 +245,11 @@ module TSOS {
             retVal.command = cmd;
 
             // 5. Now create the args array from what's left.
-            for (var i in tempList) {
+            for (var i in tempList)
+			{
                 var arg = Utils.trim(tempList[i]);
-                if (arg != "") {
+                if (arg != "") 
+				{
                     retVal.args[retVal.args.length] = tempList[i];
                 }
             }
@@ -232,145 +260,145 @@ module TSOS {
         // Shell Command Functions.  Kinda not part of Shell() class exactly, but
         // called from here, so kept here to avoid violating the law of least astonishment.
         //
-        public shellInvalidCommand() {
+        public shellInvalidCommand()
+		{
             _StdOut.putText("Invalid Command. ");
-            if (_SarcasticMode) {
+            if (_SarcasticMode) 
+			{
                 _StdOut.putText("Unbelievable. You, [subject name here],");
                 _StdOut.advanceLine();
                 _StdOut.putText("must be the pride of [subject hometown here].");
-            } else {
+            } else 
+			{
                 _StdOut.putText("Type 'help' for, well... help.");
             }
         }
 
-        public shellCurse() {
+        public shellCurse() 
+		{
             _StdOut.putText("Oh, so that's how it's going to be, eh? Fine.");
             _StdOut.advanceLine();
             _StdOut.putText("Bitch.");
             _SarcasticMode = true;
         }
 
-        public shellApology() {
-           if (_SarcasticMode) {
+        public shellApology() 
+		{
+           if (_SarcasticMode) 
+		   {
               _StdOut.putText("I think we can put our differences behind us.");
               _StdOut.advanceLine();
               _StdOut.putText("For science . . . You monster.");
               _SarcasticMode = false;
-           } else {
+           } else 
+		   {
               _StdOut.putText("For what?");
            }
         }
 
-        public shellVer(args) {
+        public shellVer(args) 
+		{
             _StdOut.putText(APP_NAME + " version " + APP_VERSION);
         }
 		
-		public shellDate(args) {
-		var d = new Date();
-
-        var dat = d.toLocaleDateString() + " " + d.toLocaleTimeString(); 
-		 
+		public shellDate(args) 
+		{
+			var d = new Date();
+			var dat = d.toLocaleDateString() + " " + d.toLocaleTimeString(); 		 
 		    _StdOut.putText(dat);
 		}
 		
-		public shellWhereAmI(args) {
+		public shellWhereAmI(args) 
+		{
 		    _StdOut.putText(APP_LOC);
 		}
 		
-		public shellPizza(args) {
-		   _StdOut.putText("Here it comes..");
-		  
+		public shellPizza(args) 
+		{
+		   _StdOut.putText("Here it comes..");		  
 		   _StdOut.advanceLine();
 		   //TODO fix this 
-		for (var x in APP_PIZZA){
-		    _StdOut.advanceLine();
-		    _StdOut.putText("" + APP_PIZZA[x]);
-			
-			
+			for (var x in APP_PIZZA)
+			{
+				_StdOut.advanceLine();
+				_StdOut.putText("" + APP_PIZZA[x]);			
 			}
 			_StdOut.advanceLine();
 			_StdOut.putText("What a delicious pizza.");
 		}
 		
-		public shellStatus(args) {
-		     if (args.length > 0)
-			 {
-			 var str = args[0];
-			 for( var x = 1; x<args.length ; x++)
-			 {
-			   str += " " + args[x];
-			 }
-			 var status = args[0];
-		     (<HTMLInputElement> document.getElementById("Status")).value = "Status: " + str;
-			
-		     } 
-			 else
-			 {
-			 _StdOut.putText("Usage: Status <status>  Please supply a status.");
-			 
-			 }
-		
-		}
-		
-		public shellBsod(args) {
-		
-		var img = document.getElementById("bsod");
-		 (<HTMLInputElement> document.getElementById("Status")).value = "Status: dead";
-		_DrawingContext.drawImage(img,0,0);
-		_Kernel.krnShutdown();
-		
-		}
-		
-		
-		
-		public shellLoad(args)		{
-		//CLEAR MEM TABLE FOR NOW
-		    
-		 for(var x =0; x<=_Memory.sizeMem; x+=8)
-		 {
-			
-			
-			//each of 8 bits
-			
-			
-				for(var y = 7; y >=0 ; y-- ) 
-					{
-						
-		    
-						var cell = <HTMLTableDataCellElement>document.getElementById("cell"+x+""+y);
-						//alert("cell"+x+""+y);
-						cell.innerHTML = "00";
-						
-			
-					}
-				
-					
-					
-		 }
-		
-		
-		
-		//take in user data?
-		//taProgramInput
-		//only hex and spaces accept
-		//0-9 A-F and spaces 
-		var success = false;
-		var userCode = (<HTMLInputElement> document.getElementById("taProgramInput")).value;	
-		userCode = userCode.replace(/\s/g, "")  ; //destroy all spaces
-		var output = "";
-		_ProgramSize = 0;
-		//alert(userCode);
-		
-		//if i see any non hex display a warning message instead otherwise parse by twos
-		for(var x = 0; x < userCode.length ; x+=2)
+		public shellStatus(args)
 		{
+		    if (args.length > 0)
+			{
+				var str = args[0];
+				for( var x = 1; x<args.length ; x++)
+				{
+					str += " " + args[x];
+				}
+				var status = args[0];
+				(<HTMLInputElement> document.getElementById("Status")).value = "Status: " + str;
+			} 
+			else
+			{
+				_StdOut.putText("Usage: Status <status>  Please supply a status.");
+			}		
+		}
 		
-			//seems a regular expression would help here as well 
-			var temp = userCode.charAt(x) + userCode.charAt(x+1); //this represents a grouping of hex
+		//display bsod
+		public shellBsod(args) 
+		{		
+			var img = document.getElementById("bsod");
+			(<HTMLInputElement> document.getElementById("Status")).value = "Status: dead";
+			_DrawingContext.drawImage(img,0,0);
+			_Kernel.krnShutdown();		
+		}
 		
-			//alert(temp);
-			var patHex = /[^g-z]/g;
-			var isHex = temp.match(patHex);
+		//clear memory all 3 partitions
+	    public shellClearMem(args) 
+		{		
+			_StdOut.putText("Clearing Memory..");
+			_StdOut.advanceLine();
+			_MemManager.clearMem();
+			_StdOut.putText("Memory Clear.");
+		
+		}
+		
+		
+		
+		public shellLoad(args)		
+		{
+			//CLEAR MEM TABLE FOR NOW
+		    
+			for(var x =0; x<=_Memory.sizeMem; x+=8)
+			{			
+			//each of 8 bits
+				for(var y = 7; y >=0 ; y-- ) 
+				{		    
+					var cell = <HTMLTableDataCellElement>document.getElementById("cell"+x+""+y);
+					cell.innerHTML = "00";			
+				}					
+			}	
+		
+			//take in user data?
+			//taProgramInput
+			//only hex and spaces accept
+			//0-9 A-F and spaces 
+			var success = false;
+			var userCode = (<HTMLInputElement> document.getElementById("taProgramInput")).value;	
+			userCode = userCode.replace(/\s/g, "")  ; //destroy all spaces
+			var output = "";
+			_ProgramSize = 0;
+			
+		
+			//if i see any non hex display a warning message instead otherwise parse by twos
+			for(var x = 0; x < userCode.length ; x+=2)
+			{		
+				//seems a regular expression would help here as well 
+				var temp = userCode.charAt(x) + userCode.charAt(x+1); //this represents a grouping of hex
+		
+				var patHex = /[^g-z]/g;
+				var isHex = temp.match(patHex);
 		
 				if(isHex == null || isHex.length<2 )
 				{
@@ -388,69 +416,74 @@ module TSOS {
 		
 		
 		
-		}
+			}		
 		
-		
-		if(success)
-		{
-		//alert(output);
-			if(output.length>256)
+			if(success)
 			{
-			_StdOut.putText("User code too long for current amount of memory");
-			
-		
-			}
-			else
-			{
+				if(output.length>=_Memory.sizeMem)
+				{
+					_StdOut.putText("User code too long for current amount of memory");		
+				}
+				else
+				{
 				success=false; 
-				_MemManager.loadProgram(output);
+				//_MemManager.loadProgram(output);
+				
+				if(_Scheduler.loadProgMem(output))
+				{
 				_StdOut.putText("Program Successfully loaded at PID: " + _PID);
 				_PID++; //increment pid
-			}	
-		}
-		else
-		 _StdOut.putText("Invalid Code");	
+				}
+				
+				}	
+			}
+			else
+				_StdOut.putText("Invalid Code");	
     		 
 		
-		}
+		}		
 		
-		
-		
-	     public shellRun(args) {
-		 //clear cpu values
-		 _CPU.clearCpu();
-		 
-		 
-		   //dont need to run on pid yet but keep that in mind for later
-	      _CPU.isExecuting =true;
-		
+	    public shellRun(args)
+     	{			
+			if(_Scheduler.validPID(args))
+			{
+			_Scheduler.runAProgram(args);		
+			}
+			else
+			_StdOut.putText("Invalid PID");	
 		}
 
-        public shellHelp(args) {
+        public shellHelp(args) 
+		{
             _StdOut.putText("Commands:");
-            for (var i in _OsShell.commandList) {
+            for (var i in _OsShell.commandList) 
+			{
                 _StdOut.advanceLine();
                 _StdOut.putText("  " + _OsShell.commandList[i].command + " " + _OsShell.commandList[i].description);
             }
         }
 
-        public shellShutdown(args) {
-		     
-             _StdOut.putText("Shutting down...");
-             // Call Kernel shutdown routine.
+        public shellShutdown(args) 
+		{		     
+            _StdOut.putText("Shutting down...");
+            // Call Kernel shutdown routine.
             _Kernel.krnShutdown();
             // TODO: Stop the final prompt from being displayed.  If possible.  Not a high priority.  (Damn OCD!)
         }
 
-        public shellCls(args) {
+        public shellCls(args)
+		{
             _StdOut.clearScreen();
             _StdOut.resetXY();
         }
 
-        public shellMan(args) {
-            if (args.length > 0) {
+        public shellMan(args) 
+		{
+            if (args.length > 0) 
+			{
                 var topic = args[0];
-                switch (topic) {
+                switch (topic) 
+				{
                     case "help":
                         _StdOut.putText("Help displays a list of (hopefully) valid commands.");
                         break;
@@ -511,23 +544,34 @@ module TSOS {
 					    _StdOut.putText("run <pid> runs program at specified location"); 
 						 break;
 						 
+					case "clearMem":
+					    _StdOut.putText("Clears All Memory"); 
+						 break;	 
+						 
 					
 					default:
                         _StdOut.putText("No manual entry for " + args[0] + ".");
                 }
-            } else {
+            } 
+			else 
+			{
                 _StdOut.putText("Usage: man <topic>  Please supply a topic.");
             }
         }
 
-        public shellTrace(args) {
-            if (args.length > 0) {
+        public shellTrace(args) 
+		{
+            if (args.length > 0) 
+			{
                 var setting = args[0];
-                switch (setting) {
+                switch (setting) 
+				{
                     case "on":
-                        if (_Trace && _SarcasticMode) {
+                        if (_Trace && _SarcasticMode) 
+						{
                             _StdOut.putText("Trace is already on, doofus.");
-                        } else {
+                        } else
+						{
                             _Trace = true;
                             _StdOut.putText("Trace ON");
                         }
@@ -539,24 +583,31 @@ module TSOS {
                     default:
                         _StdOut.putText("Invalid arguement.  Usage: trace <on | off>.");
                 }
-            } else {
+            } else 
+			{
                 _StdOut.putText("Usage: trace <on | off>");
             }
         }
 
-        public shellRot13(args) {
-            if (args.length > 0) {
+        public shellRot13(args)
+		{
+            if (args.length > 0) 
+			{
                 // Requires Utils.ts for rot13() function.
                 _StdOut.putText(args.join(' ') + " = '" + Utils.rot13(args.join(' ')) +"'");
-            } else {
+            } else 
+			{
                 _StdOut.putText("Usage: rot13 <string>  Please supply a string.");
             }
         }
 
-        public shellPrompt(args) {
-            if (args.length > 0) {
+        public shellPrompt(args) 
+		{
+            if (args.length > 0)
+			{
                 _OsShell.promptStr = args[0];
-            } else {
+            } else 
+			{
                 _StdOut.putText("Usage: prompt <string>  Please supply a string.");
             }
         }

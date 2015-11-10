@@ -167,7 +167,6 @@ var TSOS;
                 var diff = _DefaultFontSize +
                     _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) +
                     _FontHeightMargin; //just using the same formula as the current y position above 
-                //alert(diff); ///just testing
                 var img = _DrawingContext.getImageData(0, diff, _Canvas.width, _Canvas.height);
                 _DrawingContext.clearRect(0, 0, _Canvas.width, _Canvas.height);
                 _DrawingContext.putImageData(img, 0, 0);
