@@ -27,7 +27,7 @@ module TSOS
 			if (firstFree != null)
 			{			
 				curPCB = new PCB();
-				curPCB.base = this.firstFreePartition()*256+1;
+				curPCB.base = this.firstFreePartition();
 				
 			
 				//wipe memory
@@ -96,10 +96,10 @@ module TSOS
 				return 0;
 				
 			else if(_Memory.Data[256] == ("00"))
-				return 1;
+				return 256;
 
 			else if(_Memory.Data[513] == ("00"))
-				return 2;
+				return 513;
 				
 		    else null;
 		}

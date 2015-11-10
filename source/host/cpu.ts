@@ -203,7 +203,7 @@ module TSOS
 						
 						if (check>= _PCB.limit ) 
 						{                    
-							this.PC -= 256+1;
+							this.PC -= 256;
 					    }				
 					}
 					else
