@@ -166,40 +166,32 @@ module TSOS
 				}
 						
 			
-			}            
-                    
-                
-
-
-
-        }
+			} 
+		}
 		
 		public initMemoryTable(): void
 		{
-		var memTable: HTMLTableElement = (<HTMLTableElement> document.getElementById("memTable"));
+			var memTable: HTMLTableElement = (<HTMLTableElement> document.getElementById("memTable"));
 		 
-			//row name
-			for(var x = _Memory.sizeMem; x>= 0; x-=8)
-			{
-				var footer = <HTMLTableElement>memTable.createTFoot();
-				var row =  <HTMLTableRowElement> footer.insertRow(0);
-				row.id = "row"+x;
-				//each of 8 bits		
-			
-				for(var y = 0; y < 8; y++ ) 
+				//row name
+				for(var x = _Memory.sizeMem; x>= 0; x-=8)
 				{
-					var cell = row.insertCell(0);
-					cell.innerHTML = "00";
-					cell.id="cell"+x +""+ y;
-					_Memory.Data[y] = "00";
-			
-				}			
-				                				
-				var cell = row.insertCell(0);
-				cell.innerHTML = ("0x"+x.toString(16));	
+					var footer = <HTMLTableElement>memTable.createTFoot();
+					var row =  <HTMLTableRowElement> footer.insertRow(0);
+					row.id = "row"+x;
+					//each of 8 bits		
 				
-					
-			}			
+					for(var y = 0; y < 8; y++ ) 
+					{
+						var cell = row.insertCell(0);
+						cell.innerHTML = "00";
+						cell.id="cell"+x +""+ y;
+						_Memory.Data[y] = "00";			
+					}					                				
+					var cell = row.insertCell(0);
+					cell.innerHTML = ("0x"+x.toString(16));					
+						
+				}			
 		}
 
 
