@@ -18,7 +18,7 @@ module TSOS
 		{	
 			// IF 1,2,3 HAVE MEMORY IN THEM
 			// TODO WIPE NEXT IN CHAIN AND LOAD
-			//FOR NOW JUST LOAD UNTIL NULL AND THEN THROW ERROR
+			// FOR NOW JUST LOAD UNTIL NULL AND THEN THROW ERROR
 			var firstFree = this.firstFreePartition();
 			
 			_PCB = curPCB;			
@@ -28,11 +28,9 @@ module TSOS
 			{			
 				curPCB = new PCB();
 				curPCB.base = this.firstFreePartition();
-				
-			
+					
 				//wipe memory
-				this.wipeMem(curPCB);
-				
+				this.wipeMem(curPCB);				
 			
 				//populate					
 				this.populateMem(curPCB ,program);
