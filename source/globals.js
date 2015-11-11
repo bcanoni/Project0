@@ -37,6 +37,7 @@ var _MemManager; // M M
 var _PID = 0;
 var _OSclock = 0; // Page 23.
 var _Mode = 0; // (currently unused)  0 = Kernel Mode, 1 = User Mode.  See page 21.
+var _Quantum = 6; //default quantum 6
 var _CommandHistory = [""];
 var _DownCommands = [];
 var _Canvas; // Initialized in Control.hostInit().

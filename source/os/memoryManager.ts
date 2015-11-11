@@ -18,7 +18,7 @@ module TSOS
 		{	
 			// IF 1,2,3 HAVE MEMORY IN THEM
 			// TODO WIPE NEXT IN CHAIN AND LOAD
-			//FOR NOW JUST LOAD UNTIL NULL AND THEN THROW ERROR
+			// FOR NOW JUST LOAD UNTIL NULL AND THEN THROW ERROR
 			var firstFree = this.firstFreePartition();
 			
 			_PCB = curPCB;			
@@ -28,11 +28,9 @@ module TSOS
 			{			
 				curPCB = new PCB();
 				curPCB.base = this.firstFreePartition();
-				
-			
+					
 				//wipe memory
-				this.wipeMem(curPCB);
-				
+				this.wipeMem(curPCB);				
 			
 				//populate					
 				this.populateMem(curPCB ,program);
@@ -166,40 +164,32 @@ module TSOS
 				}
 						
 			
-			}            
-                    
-                
-
-
-
-        }
+			} 
+		}
 		
 		public initMemoryTable(): void
 		{
-		var memTable: HTMLTableElement = (<HTMLTableElement> document.getElementById("memTable"));
+			var memTable: HTMLTableElement = (<HTMLTableElement> document.getElementById("memTable"));
 		 
-			//row name
-			for(var x = _Memory.sizeMem; x>= 0; x-=8)
-			{
-				var footer = <HTMLTableElement>memTable.createTFoot();
-				var row =  <HTMLTableRowElement> footer.insertRow(0);
-				row.id = "row"+x;
-				//each of 8 bits		
-			
-				for(var y = 0; y < 8; y++ ) 
+				//row name
+				for(var x = _Memory.sizeMem; x>= 0; x-=8)
 				{
-					var cell = row.insertCell(0);
-					cell.innerHTML = "00";
-					cell.id="cell"+x +""+ y;
-					_Memory.Data[y] = "00";
-			
-				}			
-				                				
-				var cell = row.insertCell(0);
-				cell.innerHTML = ("0x"+x.toString(16));	
+					var footer = <HTMLTableElement>memTable.createTFoot();
+					var row =  <HTMLTableRowElement> footer.insertRow(0);
+					row.id = "row"+x;
+					//each of 8 bits		
 				
-					
-			}			
+					for(var y = 0; y < 8; y++ ) 
+					{
+						var cell = row.insertCell(0);
+						cell.innerHTML = "00";
+						cell.id="cell"+x +""+ y;
+						_Memory.Data[y] = "00";			
+					}					                				
+					var cell = row.insertCell(0);
+					cell.innerHTML = ("0x"+x.toString(16));					
+						
+				}			
 		}
 
 

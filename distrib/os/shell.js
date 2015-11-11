@@ -298,14 +298,14 @@ var TSOS;
                 else {
                     success = false;
                     //_MemManager.loadProgram(output);
-                    if (_Scheduler.loadProgMem(output)) {
-                        _StdOut.putText("Program Successfully loaded at PID: " + _PID);
-                        _PID++; //increment pid
-                    }
+                    _Scheduler.loadProgMem(output);
+                    _StdOut.putText("Program Successfully loaded at PID: " + _PID);
+                    _PID++; //increment pid
                 }
             }
-            else
+            else {
                 _StdOut.putText("Invalid Code");
+            }
         };
         Shell.prototype.shellRun = function (args) {
             if (_Scheduler.validPID(args)) {

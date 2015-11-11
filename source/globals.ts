@@ -55,6 +55,8 @@ var _OSclock: number = 0;  // Page 23.
 
 var _Mode: number = 0;     // (currently unused)  0 = Kernel Mode, 1 = User Mode.  See page 21.
 
+var _Quantum: number = 6; //default quantum 6
+
 
 var _CommandHistory: string[] = [""];
 var _DownCommands: string[]  = [] ;

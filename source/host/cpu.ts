@@ -302,8 +302,9 @@ module TSOS
 			_PCB.Xreg = this.Xreg;
 			_PCB.Yreg = this.Yreg;
 			_PCB.Zflag = this.Zflag;
+			_PCB.state = 2; // RUNNING
 			
-			_PCB.updatePCBTable();
+			_Scheduler.updatePCBTable();
 			
 			_MemManager.updateMemoryTable();
 			
