@@ -213,7 +213,8 @@ var TSOS;
                 _PCB.Xreg = this.Xreg;
                 _PCB.Yreg = this.Yreg;
                 _PCB.Zflag = this.Zflag;
-                _PCB.updatePCBTable();
+                _PCB.state = 2; // RUNNING
+                _Scheduler.updatePCBTable();
                 _MemManager.updateMemoryTable();
             }
         };

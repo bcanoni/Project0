@@ -61,9 +61,11 @@ module TSOS
 			//REM will use some kind of ROUND ROBIN scheduling 
 			
 		    //ALL PROGRAMS IN RESIDENT QUEUE ACTIVATE AND PUT IN READY QUEUE
-			for(PCB : this.residentQueue)
+			for(var a = 0; a<this.residentQueue.length ; a++)
 			{
-			this.readyQueue.push(this.residentQueue.pop);			
+			var temp: PCB = this.residentQueue[this.residentQueue.length-1];
+			this.residentQueue.pop();
+			this.readyQueue.push(temp);			
 			}
 			
 			//TODO FLESH OUT SWITCHER PROGRAM TO SWITCH BASED ON SET QUANTUM 
@@ -78,9 +80,9 @@ module TSOS
 		public switcher()
 		{
 		//inc 1 until reach quantum 
-		counter ++;
+		this.counter ++;
 		
-		if(counter >= 
+		//if(counter >= 
 		
 		
 		
@@ -105,7 +107,8 @@ module TSOS
 			    //NO ACTION REQUIRED			   
 			    }
 				//mMOVE TO READY
-				else if(temp.state == 2)
+				
+				else if(this.residentQueue[x].state == 2)
 				{
 					this.readyQueue.push(this.residentQueue[x]);
 					//Remove this from resident
@@ -113,7 +116,7 @@ module TSOS
                     //ADD ROW 
 					this.addRow();
 				}
-					else if(temp.state == 3)
+					else if(this.residentQueue[x].state == 3)
 				{
 					this.terminatedQueue.push(this.residentQueue[x]);
 					//Remove this from resident
@@ -127,8 +130,8 @@ module TSOS
 			
 			//ONCE THERE IT IS UPDATED TO TABLE AND HAS ITS OWN HTML ID's FOR REFERENCE 
 			//THE CODE I WILL USE FOR THIS IS
-			//   PID + (column name) 
-			//EX     PID+PID , PID+PC , + PID+ACC
+			//   pid + (column name) 
+			//EX     pid+pid , pid+PC , + pid+ACC
 			
 			
 			
@@ -140,32 +143,32 @@ module TSOS
 			for(var x = 0; x< this.readyQueue.length ; x++)
 			{
 			
-			var cell = <HTMLTableDataCellElement>document.getElementById(""+this.readyQueue[x].PID+"PID");
-			cell.innerHTML = this.readyQueue[x].state;
+			var cell = <HTMLTableDataCellElement>document.getElementById(""+this.readyQueue[x].pid+"pid");
+			cell.innerHTML = ""+this.readyQueue[x].state;
 			
-			cell = <HTMLTableDataCellElement>document.getElementById(""+this.readyQueue[x].PID+"PC");
-			cell.innerHTML = this.readyQueue[x].state;
+			cell = <HTMLTableDataCellElement>document.getElementById(""+this.readyQueue[x].pid+"PC");
+			cell.innerHTML = ""+this.readyQueue[x].state;
 			
-			cell = <HTMLTableDataCellElement>document.getElementById(""+this.readyQueue[x].PID+"Acc");
-			cell.innerHTML = this.readyQueue[x].state;
+			cell = <HTMLTableDataCellElement>document.getElementById(""+this.readyQueue[x].pid+"Acc");
+			cell.innerHTML = ""+this.readyQueue[x].state;
 			
-			cell = <HTMLTableDataCellElement>document.getElementById(""+this.readyQueue[x].PID+"Xreg");
-			cell.innerHTML = this.readyQueue[x].state;
+			cell = <HTMLTableDataCellElement>document.getElementById(""+this.readyQueue[x].pid+"Xreg");
+			cell.innerHTML = ""+this.readyQueue[x].state;
 			
-			cell = <HTMLTableDataCellElement>document.getElementById(""+this.readyQueue[x].PID+"Yreg");
-			cell.innerHTML = this.readyQueue[x].state;
+			cell = <HTMLTableDataCellElement>document.getElementById(""+this.readyQueue[x].pid+"Yreg");
+			cell.innerHTML = ""+this.readyQueue[x].state;
 			
-			cell = <HTMLTableDataCellElement>document.getElementById(""+this.readyQueue[x].PID+"Zflag");
-			cell.innerHTML = this.readyQueue[x].state;
+			cell = <HTMLTableDataCellElement>document.getElementById(""+this.readyQueue[x].pid+"Zflag");
+			cell.innerHTML = ""+this.readyQueue[x].state;
 			
-			cell = <HTMLTableDataCellElement>document.getElementById(""+this.readyQueue[x].PID+"base");
-			cell.innerHTML = this.readyQueue[x].state;
+			cell = <HTMLTableDataCellElement>document.getElementById(""+this.readyQueue[x].pid+"base");
+			cell.innerHTML = ""+this.readyQueue[x].state;
 			
-			cell = <HTMLTableDataCellElement>document.getElementById(""+this.readyQueue[x].PID+"limit");
-			cell.innerHTML = this.readyQueue[x].state;
+			cell = <HTMLTableDataCellElement>document.getElementById(""+this.readyQueue[x].pid+"limit");
+			cell.innerHTML = ""+this.readyQueue[x].state;
 			
-			cell = <HTMLTableDataCellElement>document.getElementById(""+this.readyQueue[x].PID+"state");
-			cell.innerHTML = this.readyQueue[x].state;
+			cell = <HTMLTableDataCellElement>document.getElementById(""+this.readyQueue[x].pid+"state");
+			cell.innerHTML = ""+this.readyQueue[x].state;
 
 			
 			
@@ -182,52 +185,54 @@ module TSOS
 			//need to give it html tag to refer to and add it to table 
 			
 			//this.readyQueue[this.readyQueue.length-1];
-			var tempPid = this.readyQueue[this.readyQueue.length-1].PID;
+			var temppid = this.readyQueue[this.readyQueue.length-1].pid;
 			var thePcb = this.readyQueue[this.readyQueue.length-1];
 			
 			
-			var footer = <HTMLTableElement>ReadyQueueTable.createTFoot();
+			var readyTable: HTMLTableElement = (<HTMLTableElement> document.getElementById("readyQueueTable"));
+			
+			var footer = <HTMLTableElement>readyTable.createTFoot();
 			var row =  <HTMLTableRowElement> footer.insertRow(0);
-			row.id = "PCB"+tempPid;			
+			row.id = "PCB"+temppid;			
 		
 			
 			var cell = row.insertCell(0);			
-			cell.id= tempPid + "PID";
-			cell.innerHTML = thePcb.PID;
+			cell.id= temppid + "pid";
+			cell.innerHTML = ""+thePcb.pid;
 			
 			
 			
 			cell = row.insertCell(1);
-			cell.id= tempPid + "PC";
-			cell.innerHTML = thePcb.PC;
+			cell.id= temppid + "PC";
+			cell.innerHTML = ""+thePcb.PC;
 			
 			cell = row.insertCell(2);
-			cell.id= tempPid + "Acc";
-			cell.innerHTML = thePcb.Acc;
+			cell.id= temppid + "Acc";
+			cell.innerHTML = ""+thePcb.Acc;
 			
 			cell = row.insertCell(3);
-			cell.id= tempPid + "Xreg";
-			cell.innerHTML = thePcb.Xreg;
+			cell.id= temppid + "Xreg";
+			cell.innerHTML = ""+thePcb.Xreg;
 			
 			cell = row.insertCell(4);
-			cell.id= tempPid + "Yreg";
-			cell.innerHTML = thePcb.Yreg;
+			cell.id= temppid + "Yreg";
+			cell.innerHTML = ""+thePcb.Yreg;
 			
 			cell = row.insertCell(5);
-			cell.id= tempPid + "Zflag";
-			cell.innerHTML = thePcb.Zflag;
+			cell.id= temppid + "Zflag";
+			cell.innerHTML = ""+thePcb.Zflag;
 			
 			cell = row.insertCell(6);
-			cell.id= tempPid + "base";
-			cell.innerHTML = thePcb.base;
+			cell.id= temppid + "base";
+			cell.innerHTML = ""+thePcb.base;
 			
 			cell = row.insertCell(7);
-			cell.id= tempPid + "limit";
-			cell.innerHTML = thePcb.limit;
+			cell.id= temppid + "limit";
+			cell.innerHTML = ""+thePcb.limit;
 			
 			cell = row.insertCell(8);
-			cell.id= tempPid + "state";
-			cell.innerHTML = thePcb.state;
+			cell.id= temppid + "state";
+			cell.innerHTML = ""+thePcb.state;
 				
 		
 		}
