@@ -19,16 +19,19 @@ module TSOS
 	
 		public loadProgMem (program)
 		{
+		   
 			var curPCB = new TSOS.PCB();
 			curPCB.pid = _PID; 
+			
 			
 			curPCB.base = _MemManager.firstFreePartition()*256;
 			curPCB.limit = curPCB.base + 255;
 			curPCB.state = 1; //RESIDENT 
-			
+		
 			this.residentQueue.push(curPCB);
 			_MemManager.loadProgram(program,curPCB);
-		}
+			
+	}
 	
 		public runAProgram(pid) 
 		{

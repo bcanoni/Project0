@@ -431,6 +431,7 @@ module TSOS
 				
 					_Scheduler.loadProgMem(output);
 					
+					
 					_StdOut.putText("Program Successfully loaded at PID: " + _PID);
 					_PID++; //increment pid
 					

@@ -27,7 +27,11 @@ module TSOS
 			if (firstFree != null)
 			{			
 				curPCB = new PCB();
-				curPCB.base = this.firstFreePartition();
+				curPCB.base = _MemManager.firstFreePartition()*3;
+			    curPCB.limit = curPCB.base + 255;
+			    curPCB.state = 1; //RESIDENT 
+				
+				
 					
 				//wipe memory
 				this.wipeMem(curPCB);				
@@ -67,7 +71,7 @@ module TSOS
 		//Wipes only a specific partition
 		public wipeMem(curPCB): void
 		{
-			for (var i = curPCB.base; i < curPCB.length ; i++) 
+			for (var i = curPCB.base; i < curPCB.limit ; i++) 
 				{
 					_Memory.Data[i] = "00";                
 				}

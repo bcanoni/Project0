@@ -14,13 +14,15 @@ var TSOS;
         MemoryManager.prototype.loadProgram = function (program, curPCB) {
             // IF 1,2,3 HAVE MEMORY IN THEM
             // TODO WIPE NEXT IN CHAIN AND LOAD
-            //FOR NOW JUST LOAD UNTIL NULL AND THEN THROW ERROR
+            // FOR NOW JUST LOAD UNTIL NULL AND THEN THROW ERROR
             var firstFree = this.firstFreePartition();
             _PCB = curPCB;
             //IF NULL MEMORY FULL
             if (firstFree != null) {
                 curPCB = new TSOS.PCB();
-                curPCB.base = this.firstFreePartition();
+                curPCB.base = _MemManager.firstFreePartition() * 3;
+                curPCB.limit = curPCB.base + 255;
+                curPCB.state = 1; //RESIDENT 
                 //wipe memory
                 this.wipeMem(curPCB);
                 //populate					
@@ -42,7 +44,7 @@ var TSOS;
         };
         //Wipes only a specific partition
         MemoryManager.prototype.wipeMem = function (curPCB) {
-            for (var i = curPCB.base; i < curPCB.length; i++) {
+            for (var i = curPCB.base; i < curPCB.limit; i++) {
                 _Memory.Data[i] = "00";
             }
         };
