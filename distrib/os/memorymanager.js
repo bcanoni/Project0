@@ -18,9 +18,9 @@ var TSOS;
             var firstFree = this.firstFreePartition();
             _PCB = curPCB;
             //IF NULL MEMORY FULL
-            if (firstFree != null) {
+            if (firstFree != 6969) {
                 curPCB = new TSOS.PCB();
-                curPCB.base = _MemManager.firstFreePartition() * 3;
+                curPCB.base = _MemManager.firstFreePartition();
                 curPCB.limit = curPCB.base + 255;
                 curPCB.state = 1; //RESIDENT 
                 //wipe memory
@@ -69,7 +69,7 @@ var TSOS;
                 return 256;
             else if (_Memory.Data[513] == ("00"))
                 return 512;
-            return null;
+            return 6969;
         };
         MemoryManager.prototype.toAddress = function () {
             var index;

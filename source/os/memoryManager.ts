@@ -24,10 +24,10 @@ module TSOS
 			_PCB = curPCB;			
 			
 			//IF NULL MEMORY FULL
-			if (firstFree != null)
+			if (firstFree != 6969)
 			{			
 				curPCB = new PCB();
-				curPCB.base = _MemManager.firstFreePartition()*3;
+				curPCB.base = _MemManager.firstFreePartition();
 			    curPCB.limit = curPCB.base + 255;
 			    curPCB.state = 1; //RESIDENT 
 				
@@ -110,7 +110,7 @@ module TSOS
 			else if(_Memory.Data[513] == ("00"))
 				return 512;
 				
-		    return null;
+		    return 6969;
 		}
 		
 		
