@@ -291,7 +291,7 @@ var TSOS;
                     output += temp; //String.fromCharCode(parseInt(temp , 16));
                 }
             }
-            alert(_MemManager.firstFreePartition() != 6969);
+            alert(_MemManager.firstFreePartition());
             if (success && _MemManager.firstFreePartition() != 6969) {
                 if (output.length > 512) {
                     _StdOut.putText("User code too long for current amount of memory");

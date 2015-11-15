@@ -107,7 +107,7 @@ module TSOS
 			else if(_Memory.Data[256] == ("00"))
 				return 256;
 
-			else if(_Memory.Data[513] == ("00"))
+			else if(_Memory.Data[512] == ("00"))
 				return 512;
 				
 		    return 6969;
