@@ -69,8 +69,8 @@ module TSOS
 			{
 			ir = _Memory.Data[this.PC];
 			//ir = _MemManager.getMemory(_PCB.PC);
-			alert(ir + "@" + this.PC);
-			alert(_PCB.base + " " + _PCB.limit);
+			//alert(ir + "@" + this.PC);
+			
 			//step by step loool
 			switch(ir)
 			{
@@ -201,11 +201,16 @@ module TSOS
 						var check =  _PCB.base + parseInt(_MemManager.getMemory(this.PC+1),16);
 						//this.PC += parseInt(_Memory.Data[this.PC],16)+1;
 						//this.PC += parseInt(_MemManager.getMemory(this.PC),16)+1;
-						alert(this.PC + " :: " + check + " :: " + _PCB.limit);
+						//alert(this.PC + " :: " + check + " :: " + _PCB.limit);
 						if (check>= _PCB.limit ) 
 						{                    
 							this.PC -= 256;
-					    }				
+					    }
+						else
+						{
+						  this.PC = parseInt(_MemManager.getMemory(this.PC+1),16)+1;
+						}
+						
 					}
 					else
 					{

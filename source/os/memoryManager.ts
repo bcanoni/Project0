@@ -21,8 +21,7 @@ module TSOS
 			// FOR NOW JUST LOAD UNTIL NULL AND THEN THROW ERROR
 			var firstFree = this.firstFreePartition();
 			
-			_PCB = curPCB;			
-			
+				
 			//IF NULL MEMORY FULL
 			if (firstFree != 6969)
 			{			
@@ -41,9 +40,11 @@ module TSOS
 				
 				
 				this.updateMemoryTable();
-				_PCB=curPCB;
+				
 				
 				//alert(_PCB.base + " " + _PCB.limit);
+				_PCB = curPCB;
+				_Scheduler.residentQueue.push(_PCB);
 				return true;
 			
 			
