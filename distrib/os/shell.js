@@ -291,20 +291,23 @@ var TSOS;
                     output += temp; //String.fromCharCode(parseInt(temp , 16));
                 }
             }
-            if (success) {
-                if (output.length >= _Memory.sizeMem) {
+            alert(_MemManager.firstFreePartition() != 6969);
+            if (success && _MemManager.firstFreePartition() != 6969) {
+                if (output.length > 512) {
                     _StdOut.putText("User code too long for current amount of memory");
                 }
                 else {
-                    success = false;
-                    //_MemManager.loadProgram(output);
                     _Scheduler.loadProgMem(output);
                     _StdOut.putText("Program Successfully loaded at PID: " + _PID);
                     _PID++; //increment pid
+                    success = false;
                 }
             }
             else {
-                _StdOut.putText("Invalid Code");
+                if (_MemManager.firstFreePartition() == 6969)
+                    _StdOut.putText("Memory is full!");
+                else
+                    _StdOut.putText("Invalid Code");
             }
         };
         Shell.prototype.shellRun = function (args) {

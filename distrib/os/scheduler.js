@@ -21,7 +21,7 @@ var TSOS;
             curPCB.pid = _PID;
             //curPCB.base = _MemManager.firstFreePartition()*256;
             //curPCB.limit = curPCB.base + 255;
-            //curPCB.state = 1; //RESIDENT 
+            //curPCB.state = 1; //RESIDENT 			
             if (_MemManager.loadProgram(program, curPCB))
                 this.residentQueue.push(curPCB);
         };

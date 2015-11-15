@@ -417,30 +417,30 @@ module TSOS
 		
 		
 			}		
+			alert (_MemManager.firstFreePartition()!=6969);
 		
-			if(success)
+			if(success&&_MemManager.firstFreePartition()!=6969)
 			{
-				if(output.length>=_Memory.sizeMem)
+				
+				if(output.length>512) //256*2 
 				{
 					_StdOut.putText("User code too long for current amount of memory");		
 				}
 				else
-				{
-					success=false; 
-					//_MemManager.loadProgram(output);
-				
-					_Scheduler.loadProgMem(output);
-					
-					
+				{			
+					_Scheduler.loadProgMem(output);					
 					_StdOut.putText("Program Successfully loaded at PID: " + _PID);
 					_PID++; //increment pid
-					
+					success=false; 
 								
 				}	
 			}
 			else
 			{
-				_StdOut.putText("Invalid Code");
+				if(_MemManager.firstFreePartition()==6969)
+					_StdOut.putText("Memory is full!");
+				else
+					_StdOut.putText("Invalid Code");
 			}				
     		 
 		
