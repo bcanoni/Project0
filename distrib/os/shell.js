@@ -257,13 +257,17 @@ var TSOS;
         };
         Shell.prototype.shellLoad = function (args) {
             //CLEAR MEM TABLE FOR NOW
-            for (var x = 0; x <= _Memory.sizeMem; x += 8) {
-                //each of 8 bits
-                for (var y = 7; y >= 0; y--) {
-                    var cell = document.getElementById("cell" + x + "" + y);
+            /*
+            for(var x =0; x<=_Memory.sizeMem; x+=8)
+            {
+            //each of 8 bits
+                for(var y = 7; y >=0 ; y-- )
+                {
+                    var cell = <HTMLTableDataCellElement>document.getElementById("cell"+x+""+y);
                     cell.innerHTML = "00";
                 }
             }
+            */
             //take in user data?
             //taProgramInput
             //only hex and spaces accept

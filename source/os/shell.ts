@@ -369,7 +369,7 @@ module TSOS
 		public shellLoad(args)		
 		{
 			//CLEAR MEM TABLE FOR NOW
-		    
+		    /*
 			for(var x =0; x<=_Memory.sizeMem; x+=8)
 			{			
 			//each of 8 bits
@@ -378,7 +378,8 @@ module TSOS
 					var cell = <HTMLTableDataCellElement>document.getElementById("cell"+x+""+y);
 					cell.innerHTML = "00";			
 				}					
-			}	
+			}
+			*/
 		
 			//take in user data?
 			//taProgramInput
