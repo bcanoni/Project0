@@ -145,7 +145,7 @@ var TSOS;
                             var check = _PCB.base + parseInt(_MemManager.getMemory(this.PC + 1), 16);
                             //this.PC += parseInt(_Memory.Data[this.PC],16)+1;
                             this.PC += parseInt(_MemManager.getMemory(this.PC), 16) + 1;
-                            alert(this.PC);
+                            alert(this.PC + " :: " + check);
                             if (check >= _PCB.limit) {
                                 this.PC -= 256;
                             }

@@ -418,8 +418,7 @@ module TSOS
 		
 		
 			}		
-			alert (_MemManager.firstFreePartition());
-		
+					
 			if(success&&_MemManager.firstFreePartition()!=6969)
 			{
 				
