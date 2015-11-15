@@ -28,6 +28,8 @@ var TSOS;
                 //populate					
                 this.populateMem(curPCB, program);
                 this.updateMemoryTable();
+                _PCB = curPCB;
+                //alert(_PCB.base + " " + _PCB.limit);
                 return true;
             }
             else {

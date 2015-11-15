@@ -19,16 +19,16 @@ var TSOS;
         Scheduler.prototype.loadProgMem = function (program) {
             var curPCB = new TSOS.PCB();
             curPCB.pid = _PID;
-            //curPCB.base = _MemManager.firstFreePartition()*256;
-            //curPCB.limit = curPCB.base + 255;
-            //curPCB.state = 1; //RESIDENT 			
-            if (_MemManager.loadProgram(program, curPCB))
+            if (_MemManager.loadProgram(program, curPCB)) {
                 this.residentQueue.push(curPCB);
+            }
         };
         Scheduler.prototype.runAProgram = function (pid) {
             //relates to single run function
             _PCB = this.residentQueue[pid];
+            alert(this.residentQueue[pid].base + " " + this.residentQueue[pid].limit);
             _PCB.state = 2; //running
+            alert(_PCB.base + " " + _PCB.limit);
             //ADD to readyQueue;
             this.readyQueue.push(_PCB);
             //clear cpu values

@@ -41,7 +41,9 @@ module TSOS
 				
 				
 				this.updateMemoryTable();
+				_PCB=curPCB;
 				
+				//alert(_PCB.base + " " + _PCB.limit);
 				return true;
 			
 			
