@@ -82,6 +82,8 @@ var TSOS;
             // kill <id> - kills the specified process id.
             sc = new TSOS.ShellCommand(this.shellKill, "kill", "- Kill <PID> program");
             this.commandList[this.commandList.length] = sc;
+            sc = new TSOS.ShellCommand(this.shellRunAll, "runall", "- Runs All Loaded Programs");
+            this.commandList[this.commandList.length] = sc;
             // Display the initial prompt.
             this.putPrompt();
         };
@@ -314,6 +316,13 @@ var TSOS;
             else
                 _StdOut.putText("Invalid PID");
         };
+        Shell.prototype.shellRunAll = function (args) {
+            if (_Scheduler.residentQueue.length !== 0) {
+                _Scheduler.runAllPrograms(args);
+            }
+            else
+                _StdOut.putText("Load some programs first!");
+        };
         Shell.prototype.shellHelp = function (args) {
             _StdOut.putText("Commands:");
             for (var i in _OsShell.commandList) {
@@ -322,14 +331,19 @@ var TSOS;
             }
         };
         Shell.prototype.shellKill = function (args) {
-            _StdOut.putText("IMPLEMENT");
+            //
+            if (_Scheduler.readyQueue[args] !== null) {
+                _Scheduler.readyQueue[args].state = 3; //terminated 
+            }
+            else {
+                _StdOut.putText("Invalid PID/ Process isn't running.");
+            }
         };
         Shell.prototype.shellPS = function (args) {
             for (var x = 0; x < _Scheduler.readyQueue.length; x++) {
                 _StdOut.advanceLine();
-                _StdOut.putText("" + _Scheduler.readyQueue[x].pid);
+                _StdOut.putText("PID: " + _Scheduler.readyQueue[x].pid + " running.");
             }
-            _StdOut.putText("IMPLEMENT");
         };
         Shell.prototype.shellShutdown = function (args) {
             _StdOut.putText("Shutting down...");

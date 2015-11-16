@@ -145,6 +145,12 @@ module TSOS
                                   "kill",
                                   "- Kill <PID> program");
             this.commandList[this.commandList.length] = sc;
+			
+			sc = new ShellCommand(this.shellRunAll,
+                                  "runall",
+                                  "- Runs All Loaded Programs");
+            this.commandList[this.commandList.length] = sc;
+			
             
             // Display the initial prompt.
             this.putPrompt();
@@ -455,6 +461,16 @@ module TSOS
 			else
 				_StdOut.putText("Invalid PID");	
 		}
+		
+		public shellRunAll(args)
+     	{			
+			if(_Scheduler.residentQueue.length !== 0) //There are programs to run
+			{
+				_Scheduler.runAllPrograms(args);		
+			}
+			else
+				_StdOut.putText("Load some programs first!");	
+		}
 
         public shellHelp(args) 
 		{
@@ -468,7 +484,17 @@ module TSOS
 		
 		 public shellKill(args) 
 		{
-            _StdOut.putText("IMPLEMENT");
+            //
+			if (_Scheduler.readyQueue[args] !== null)
+			{
+				_Scheduler.readyQueue[args].state = 3; //terminated 
+				//move from ready queue to terminated queue
+				
+			}
+			else
+			{
+				_StdOut.putText("Invalid PID/ Process isn't running.");
+			}
          
         }
 		
