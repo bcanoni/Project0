@@ -76,18 +76,16 @@ var TSOS;
             //
             sc = new TSOS.ShellCommand(this.shellClearMem, "clearmem", "- Clear all Mem");
             this.commandList[this.commandList.length] = sc;
-            /*
             // ps  - list the running processes and their IDs
-            sc = new ShellCommand(this.shellPS,
-                                  "ps",
-                                  "- display running processes and their IDs");
+            sc = new TSOS.ShellCommand(this.shellPS, "ps", "- display running processes and their IDs");
             this.commandList[this.commandList.length] = sc;
             // kill <id> - kills the specified process id.
-            sc = new ShellCommand(this.shellKill,
-                                  "kill",
-                                  "- Kill <PID> program");
+            sc = new TSOS.ShellCommand(this.shellKill, "kill", "- Kill <PID> program");
             this.commandList[this.commandList.length] = sc;
-            */
+            sc = new TSOS.ShellCommand(this.shellRunAll, "runall", "- Runs All Loaded Programs");
+            this.commandList[this.commandList.length] = sc;
+            sc = new TSOS.ShellCommand(this.shellQuantum, "quantum", "- Change Scheduling quantum. RR ");
+            this.commandList[this.commandList.length] = sc;
             // Display the initial prompt.
             this.putPrompt();
         };
@@ -255,15 +253,28 @@ var TSOS;
             _MemManager.clearMem();
             _StdOut.putText("Memory Clear.");
         };
+        Shell.prototype.shellQuantum = function (args) {
+            //isNAN wow I learned something new !
+            if (args > 0) {
+                _Scheduler.quantum = args;
+                _StdOut.putText("Quantum Updated!");
+            }
+            else
+                _StdOut.putText("valid <quantum> required.");
+        };
         Shell.prototype.shellLoad = function (args) {
             //CLEAR MEM TABLE FOR NOW
-            for (var x = 0; x <= _Memory.sizeMem; x += 8) {
-                //each of 8 bits
-                for (var y = 7; y >= 0; y--) {
-                    var cell = document.getElementById("cell" + x + "" + y);
+            /*
+            for(var x =0; x<=_Memory.sizeMem; x+=8)
+            {
+            //each of 8 bits
+                for(var y = 7; y >=0 ; y-- )
+                {
+                    var cell = <HTMLTableDataCellElement>document.getElementById("cell"+x+""+y);
                     cell.innerHTML = "00";
                 }
             }
+            */
             //take in user data?
             //taProgramInput
             //only hex and spaces accept
@@ -291,20 +302,22 @@ var TSOS;
                     output += temp; //String.fromCharCode(parseInt(temp , 16));
                 }
             }
-            if (success) {
-                if (output.length >= _Memory.sizeMem) {
+            if (success && _MemManager.firstFreePartition() != 6969) {
+                if (output.length > 512) {
                     _StdOut.putText("User code too long for current amount of memory");
                 }
                 else {
-                    success = false;
-                    //_MemManager.loadProgram(output);
                     _Scheduler.loadProgMem(output);
                     _StdOut.putText("Program Successfully loaded at PID: " + _PID);
                     _PID++; //increment pid
+                    success = false;
                 }
             }
             else {
-                _StdOut.putText("Invalid Code");
+                if (_MemManager.firstFreePartition() == 6969)
+                    _StdOut.putText("Memory is full!");
+                else
+                    _StdOut.putText("Invalid Code");
             }
         };
         Shell.prototype.shellRun = function (args) {
@@ -314,11 +327,33 @@ var TSOS;
             else
                 _StdOut.putText("Invalid PID");
         };
+        Shell.prototype.shellRunAll = function (args) {
+            if (_Scheduler.residentQueue.length !== 0) {
+                _Scheduler.runAllPrograms(args);
+            }
+            else
+                _StdOut.putText("Load some programs first!");
+        };
         Shell.prototype.shellHelp = function (args) {
             _StdOut.putText("Commands:");
             for (var i in _OsShell.commandList) {
                 _StdOut.advanceLine();
                 _StdOut.putText("  " + _OsShell.commandList[i].command + " " + _OsShell.commandList[i].description);
+            }
+        };
+        Shell.prototype.shellKill = function (args) {
+            //
+            if (_Scheduler.readyQueue[args] == null) {
+                _StdOut.putText("Invalid PID/ Process isn't running.");
+            }
+            else {
+                _Scheduler.readyQueue[args].state = 3; //terminated 
+            }
+        };
+        Shell.prototype.shellPS = function (args) {
+            for (var x = 0; x < _Scheduler.readyQueue.length; x++) {
+                _StdOut.advanceLine();
+                _StdOut.putText("PID: " + _Scheduler.readyQueue[x].pid + " running.");
             }
         };
         Shell.prototype.shellShutdown = function (args) {

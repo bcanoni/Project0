@@ -14,18 +14,23 @@ var TSOS;
         MemoryManager.prototype.loadProgram = function (program, curPCB) {
             // IF 1,2,3 HAVE MEMORY IN THEM
             // TODO WIPE NEXT IN CHAIN AND LOAD
-            //FOR NOW JUST LOAD UNTIL NULL AND THEN THROW ERROR
+            // FOR NOW JUST LOAD UNTIL NULL AND THEN THROW ERROR
             var firstFree = this.firstFreePartition();
-            _PCB = curPCB;
             //IF NULL MEMORY FULL
-            if (firstFree != null) {
+            if (firstFree != 6969) {
                 curPCB = new TSOS.PCB();
-                curPCB.base = this.firstFreePartition();
+                curPCB.pid = _PID;
+                curPCB.base = _MemManager.firstFreePartition();
+                curPCB.limit = curPCB.base + 255;
+                curPCB.state = 1; //RESIDENT 
                 //wipe memory
                 this.wipeMem(curPCB);
                 //populate					
                 this.populateMem(curPCB, program);
                 this.updateMemoryTable();
+                //alert(_PCB.base + " " + _PCB.limit);
+                _PCB = curPCB;
+                _Scheduler.residentQueue.push(_PCB);
                 return true;
             }
             else {
@@ -35,14 +40,19 @@ var TSOS;
             }
         };
         MemoryManager.prototype.insertMemory = function (x, dat) {
-            _Memory.Data[x + _PCB.base] = dat;
+            if ((x + _PCB.base) <= _PCB.limit)
+                _Memory.Data[x + _PCB.base] = dat;
+            else {
+                _CPU.isExecuting = false; //CRASH OH NO
+                _OsShell.shellBsod("");
+            }
         };
         MemoryManager.prototype.getMemory = function (x) {
             return _Memory.Data[x + _PCB.base];
         };
         //Wipes only a specific partition
         MemoryManager.prototype.wipeMem = function (curPCB) {
-            for (var i = curPCB.base; i < curPCB.length; i++) {
+            for (var i = curPCB.base; i < curPCB.limit; i++) {
                 _Memory.Data[i] = "00";
             }
         };
@@ -65,9 +75,9 @@ var TSOS;
                 return 0;
             else if (_Memory.Data[256] == ("00"))
                 return 256;
-            else if (_Memory.Data[513] == ("00"))
+            else if (_Memory.Data[512] == ("00"))
                 return 512;
-            return null;
+            return 6969;
         };
         MemoryManager.prototype.toAddress = function () {
             var index;

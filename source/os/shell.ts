@@ -134,7 +134,7 @@ module TSOS
             this.commandList[this.commandList.length] = sc;
 			
 			
-			/*
+			
             // ps  - list the running processes and their IDs
 			sc = new ShellCommand(this.shellPS,
                                   "ps",
@@ -145,7 +145,18 @@ module TSOS
                                   "kill",
                                   "- Kill <PID> program");
             this.commandList[this.commandList.length] = sc;
-            */
+			
+			sc = new ShellCommand(this.shellRunAll,
+                                  "runall",
+                                  "- Runs All Loaded Programs");
+            this.commandList[this.commandList.length] = sc;
+			
+			sc = new ShellCommand(this.shellQuantum,
+                                  "quantum",
+                                  "- Change Scheduling quantum. RR ");
+            this.commandList[this.commandList.length] = sc;
+			
+            
             // Display the initial prompt.
             this.putPrompt();
         }
@@ -364,12 +375,26 @@ module TSOS
 		
 		}
 		
+		public shellQuantum(args)
+		{
+			//isNAN wow I learned something new !
+			if (args>0) //IS NUMBER & POSITIVE
+			{
+				_Scheduler.quantum = args;
+				_StdOut.putText("Quantum Updated!");				
+			}
+			else
+			_StdOut.putText("valid <quantum> required.");
+		
+		
+		}
+		
 		
 		
 		public shellLoad(args)		
 		{
 			//CLEAR MEM TABLE FOR NOW
-		    
+		    /*
 			for(var x =0; x<=_Memory.sizeMem; x+=8)
 			{			
 			//each of 8 bits
@@ -378,7 +403,8 @@ module TSOS
 					var cell = <HTMLTableDataCellElement>document.getElementById("cell"+x+""+y);
 					cell.innerHTML = "00";			
 				}					
-			}	
+			}
+			*/
 		
 			//take in user data?
 			//taProgramInput
@@ -417,29 +443,29 @@ module TSOS
 		
 		
 			}		
-		
-			if(success)
+					
+			if(success&&_MemManager.firstFreePartition()!=6969)
 			{
-				if(output.length>=_Memory.sizeMem)
+				
+				if(output.length>512) //256*2 
 				{
 					_StdOut.putText("User code too long for current amount of memory");		
 				}
 				else
-				{
-					success=false; 
-					//_MemManager.loadProgram(output);
-				
-					_Scheduler.loadProgMem(output);
-					
+				{			
+					_Scheduler.loadProgMem(output);					
 					_StdOut.putText("Program Successfully loaded at PID: " + _PID);
 					_PID++; //increment pid
-					
+					success=false; 
 								
 				}	
 			}
 			else
 			{
-				_StdOut.putText("Invalid Code");
+				if(_MemManager.firstFreePartition()==6969)
+					_StdOut.putText("Memory is full!");
+				else
+					_StdOut.putText("Invalid Code");
 			}				
     		 
 		
@@ -454,6 +480,16 @@ module TSOS
 			else
 				_StdOut.putText("Invalid PID");	
 		}
+		
+		public shellRunAll(args)
+     	{			
+			if(_Scheduler.residentQueue.length !== 0) //There are programs to run
+			{
+				_Scheduler.runAllPrograms(args);		
+			}
+			else
+				_StdOut.putText("Load some programs first!");	
+		}
 
         public shellHelp(args) 
 		{
@@ -464,6 +500,33 @@ module TSOS
                 _StdOut.putText("  " + _OsShell.commandList[i].command + " " + _OsShell.commandList[i].description);
             }
         }
+		
+		 public shellKill(args) 
+		{
+            //
+			if (_Scheduler.readyQueue[args] == null)
+			{
+				_StdOut.putText("Invalid PID/ Process isn't running.");
+				
+			}
+			else
+			{
+				_Scheduler.readyQueue[args].state = 3; //terminated 
+				//TODO move from ready queue to terminated queue
+				
+			}
+         
+        }
+		
+		public shellPS(args)
+		{
+			for (var x = 0 ; x < _Scheduler.readyQueue.length; x++ )
+			{
+				_StdOut.advanceLine();
+				_StdOut.putText("PID: " + _Scheduler.readyQueue[x].pid + " running.");			
+			}
+			
+		}
 
         public shellShutdown(args) 
 		{		     

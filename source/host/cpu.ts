@@ -32,6 +32,7 @@ module TSOS
 
         public init(): void 
 		{
+			_CPU = this;
             this.PC = 0;
             this.Acc = 0;
             this.Xreg = 0;
@@ -49,7 +50,7 @@ module TSOS
 		    //A2 LDX loads x register with a constant
 		    //AE LDX loads the X register from memory
 		    //A0 LDY loads y register with a constant 
-		    //ACloads the y register from memory
+		    //AC loads the y register from memory
 		    //EA NOP no operation
 		    //00 Break (really a system call)
 		    //EC CPX compare a byte in memory to x regi sets the z zero flag if equal 
@@ -62,14 +63,19 @@ module TSOS
 			
 			var i; 
 			var a;
-			var b
+			var b;
 			
-			 _Kernel.krnTrace('CPU cycle');
+			
+			
+			_Kernel.krnTrace('CPU cycle');
 			if(this.isExecuting)
 			{
-			//ir = _Memory.Data[this.PC];
-			ir = _MemManager.getMemory(_PCB.PC);
+			
+			
+			ir = _Memory.Data[this.PC];
+			//ir = _MemManager.getMemory(_PCB.PC);
 			//alert(ir + "@" + this.PC);
+			
 			//step by step loool
 			switch(ir)
 			{
@@ -101,7 +107,7 @@ module TSOS
 					var hexAddress = (byteTwo + byteOne);
 					
 					var decAddress = _MemManager.toAddress(hexAddress);
-                    _Memory.Data[decAddress]=this.Acc.toString(16);
+                    _MemManager.insertMemory(decAddress,this.Acc.toString(16));
                     this.PC++;
 					
                 break;
@@ -164,6 +170,8 @@ module TSOS
 				case "00": //end
                         
                         this.isExecuting = false;
+						_PCB.state=3; //terminated
+						_Scheduler.removeRow(1);
                         //this.PC=0;
                 break;
 				
@@ -192,23 +200,26 @@ module TSOS
 				case "D0": //D0 BNE branch n bytes if z flag is 1 NOT EQUAL
                     
                    
-                    this.PC++;
+                    //this.PC++;
 					
 					if(this.Zflag === 1 )
-					{					
-						//var check =  this.PC + parseInt(_Memory.Data[this.PC],16);
-						var check =  this.PC + parseInt(_MemManager.getMemory(this.PC),16);
-						//this.PC += parseInt(_Memory.Data[this.PC],16)+1;
-						this.PC += parseInt(_MemManager.getMemory(this.PC),16)+1;
+					{	
+						//alert(parseInt(_MemManager.getMemory(this.PC+1),16)+1);
+						this.PC += parseInt(_MemManager.getMemory(this.PC+1),16)+2;
+						var check = this.PC + _PCB.base;
 						
-						if (check>= _PCB.limit ) 
+						if (check >= _PCB.limit ) 
 						{                    
 							this.PC -= 256;
-					    }				
+					    }
+						
+						
 					}
 					else
 					{
+					this.PC++;	
 					this.PC++;					
+											
 					}
                   
             
@@ -274,7 +285,7 @@ module TSOS
 				
 				default:
                         this.isExecuting=false;
-                        _StdOut.putText("missing code : " + _Memory.Data[this.PC]);
+                        _StdOut.putText("missing code : " + _MemManager.getMemory(this.PC));
 						_StdOut.advanceLine();
 						_OsShell.putPrompt();
 						
@@ -301,14 +312,15 @@ module TSOS
 			_PCB.Acc = this.Acc;
 			_PCB.Xreg = this.Xreg;
 			_PCB.Yreg = this.Yreg;
-			_PCB.Zflag = this.Zflag;
+			_PCB.Zflag = this.Zflag;			
 			_PCB.state = 2; // RUNNING
-			
 			_Scheduler.updatePCBTable();
+			
+			
 			
 			_MemManager.updateMemoryTable();
 			
-			
+			_Scheduler.switcher();
 			
 			}
 			
@@ -332,6 +344,17 @@ module TSOS
             this.isExecuting = false;
 
         }
+		
+		public switchTo(newpcb) : void
+		{
+			_PCB = newpcb;
+			this.PC = newpcb.PC;
+            this.Acc = newpcb.Acc;
+            this.Xreg = newpcb.Xreg;
+            this.Yreg = newpcb.Yreg;
+            this.Zflag = newpcb.Zflag;		
+		
+		}
 		
 		
     }

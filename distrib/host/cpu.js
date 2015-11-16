@@ -31,6 +31,7 @@ var TSOS;
             this.isExecuting = isExecuting;
         }
         Cpu.prototype.init = function () {
+            _CPU = this;
             this.PC = 0;
             this.Acc = 0;
             this.Xreg = 0;
@@ -45,7 +46,7 @@ var TSOS;
             //A2 LDX loads x register with a constant
             //AE LDX loads the X register from memory
             //A0 LDY loads y register with a constant 
-            //ACloads the y register from memory
+            //AC loads the y register from memory
             //EA NOP no operation
             //00 Break (really a system call)
             //EC CPX compare a byte in memory to x regi sets the z zero flag if equal 
@@ -59,8 +60,8 @@ var TSOS;
             var b;
             _Kernel.krnTrace('CPU cycle');
             if (this.isExecuting) {
-                //ir = _Memory.Data[this.PC];
-                ir = _MemManager.getMemory(_PCB.PC);
+                ir = _Memory.Data[this.PC];
+                //ir = _MemManager.getMemory(_PCB.PC);
                 //alert(ir + "@" + this.PC);
                 //step by step loool
                 switch (ir) {
@@ -83,7 +84,7 @@ var TSOS;
                         var byteTwo = _MemManager.getMemory(this.PC + 2);
                         var hexAddress = (byteTwo + byteOne);
                         var decAddress = _MemManager.toAddress(hexAddress);
-                        _Memory.Data[decAddress] = this.Acc.toString(16);
+                        _MemManager.insertMemory(decAddress, this.Acc.toString(16));
                         this.PC++;
                         break;
                     case "6D":
@@ -125,6 +126,8 @@ var TSOS;
                         break;
                     case "00":
                         this.isExecuting = false;
+                        _PCB.state = 3; //terminated
+                        _Scheduler.removeRow(1);
                         //this.PC=0;
                         break;
                     case "EC":
@@ -139,17 +142,17 @@ var TSOS;
                         this.PC++;
                         break;
                     case "D0":
-                        this.PC++;
+                        //this.PC++;
                         if (this.Zflag === 1) {
-                            //var check =  this.PC + parseInt(_Memory.Data[this.PC],16);
-                            var check = this.PC + parseInt(_MemManager.getMemory(this.PC), 16);
-                            //this.PC += parseInt(_Memory.Data[this.PC],16)+1;
-                            this.PC += parseInt(_MemManager.getMemory(this.PC), 16) + 1;
+                            //alert(parseInt(_MemManager.getMemory(this.PC+1),16)+1);
+                            this.PC += parseInt(_MemManager.getMemory(this.PC + 1), 16) + 2;
+                            var check = this.PC + _PCB.base;
                             if (check >= _PCB.limit) {
                                 this.PC -= 256;
                             }
                         }
                         else {
+                            this.PC++;
                             this.PC++;
                         }
                         break;
@@ -192,7 +195,7 @@ var TSOS;
                         break;
                     default:
                         this.isExecuting = false;
-                        _StdOut.putText("missing code : " + _Memory.Data[this.PC]);
+                        _StdOut.putText("missing code : " + _MemManager.getMemory(this.PC));
                         _StdOut.advanceLine();
                         _OsShell.putPrompt();
                 }
@@ -216,6 +219,7 @@ var TSOS;
                 _PCB.state = 2; // RUNNING
                 _Scheduler.updatePCBTable();
                 _MemManager.updateMemoryTable();
+                _Scheduler.switcher();
             }
         };
         Cpu.prototype.getConstantNumber = function (num) {
@@ -229,6 +233,14 @@ var TSOS;
             this.Yreg = 0;
             this.Zflag = 0;
             this.isExecuting = false;
+        };
+        Cpu.prototype.switchTo = function (newpcb) {
+            _PCB = newpcb;
+            this.PC = newpcb.PC;
+            this.Acc = newpcb.Acc;
+            this.Xreg = newpcb.Xreg;
+            this.Yreg = newpcb.Yreg;
+            this.Zflag = newpcb.Zflag;
         };
         return Cpu;
     })();
