@@ -61,7 +61,7 @@ var TSOS;
             if (this.isExecuting) {
                 ir = _Memory.Data[this.PC];
                 //ir = _MemManager.getMemory(_PCB.PC);
-                //alert(ir + "@" + this.PC);
+                alert(ir + "@" + this.PC);
                 //step by step loool
                 switch (ir) {
                     case "A9":
@@ -139,21 +139,17 @@ var TSOS;
                         this.PC++;
                         break;
                     case "D0":
-                        this.PC++;
-                        if (this.Zflag === 1) {
-                            //var check =  this.PC + parseInt(_Memory.Data[this.PC],16);
-                            var check = _PCB.base + parseInt(_MemManager.getMemory(this.PC + 1), 16);
-                            //this.PC += parseInt(_Memory.Data[this.PC],16)+1;
-                            //this.PC += parseInt(_MemManager.getMemory(this.PC),16)+1;
-                            //alert(this.PC + " :: " + check + " :: " + _PCB.limit);
+                        //this.PC++;
+                        if (this.Zflag === 0) {
+                            alert(parseInt(_MemManager.getMemory(this.PC + 1), 16) + 1);
+                            this.PC += parseInt(_MemManager.getMemory(this.PC + 1), 16) + 2;
+                            var check = this.PC + _PCB.base;
                             if (check >= _PCB.limit) {
                                 this.PC -= 256;
                             }
-                            else {
-                                this.PC = parseInt(_MemManager.getMemory(this.PC + 1), 16) + 1;
-                            }
                         }
                         else {
+                            this.PC++;
                             this.PC++;
                         }
                         break;

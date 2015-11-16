@@ -69,7 +69,7 @@ module TSOS
 			{
 			ir = _Memory.Data[this.PC];
 			//ir = _MemManager.getMemory(_PCB.PC);
-			//alert(ir + "@" + this.PC);
+			alert(ir + "@" + this.PC);
 			
 			//step by step loool
 			switch(ir)
@@ -193,11 +193,12 @@ module TSOS
 				case "D0": //D0 BNE branch n bytes if z flag is 1 NOT EQUAL
                     
                    
-                    this.PC++;
+                    //this.PC++;
 					
 					if(this.Zflag === 0 )
 					{	
-						this.PC += parseInt(_MemoryManager.getMemory(this.PC+1);
+						alert(parseInt(_MemManager.getMemory(this.PC+1),16)+1);
+						this.PC += parseInt(_MemManager.getMemory(this.PC+1),16)+2;
 						var check = this.PC + _PCB.base;
 						
 						if (check >= _PCB.limit ) 
@@ -209,7 +210,9 @@ module TSOS
 					}
 					else
 					{
+					this.PC++;	
 					this.PC++;					
+											
 					}
                   
             
