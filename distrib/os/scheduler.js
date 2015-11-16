@@ -24,14 +24,14 @@ var TSOS;
         Scheduler.prototype.runAProgram = function (pid) {
             //relates to single run function
             _PCB = this.residentQueue[pid];
-            _PCB.state = 2; //running
-            //alert(_PCB.base + " " + _PCB.limit);
+            _PCB.state = 2; //running	
             //ADD to readyQueue;
             this.readyQueue.push(_PCB);
             //clear cpu values
             _CPU.clearCpu();
             //dont need to run on pid yet but keep that in mind for later
             _CPU.isExecuting = true;
+            this.addRow();
         };
         Scheduler.prototype.validPID = function (pid) {
             if (this.residentQueue[pid] != null)
@@ -61,23 +61,32 @@ var TSOS;
             //CHECK STATES OF ALL PCB IN RESIDENT if 2 add to ready queue and display
             //if 1 remain in resident 
             //if 3 put in terminated.
-            for (var x = 0; x < this.residentQueue.length; x++) {
-                //stay in resident 
-                if (this.residentQueue[x].state == 1) {
+            /*
+            for(var x = 0; x< this.residentQueue.length; x++)
+            {
+                //stay in resident
+                if(this.residentQueue[x].state == 1)
+                {
+                //NO ACTION REQUIRED
                 }
-                else if (this.residentQueue[x].state == 2) {
+                //mMOVE TO READY
+                
+                else if(this.residentQueue[x].state == 2)
+                {
                     this.readyQueue.push(this.residentQueue[x]);
                     //Remove this from resident
-                    this.residentQueue.splice(1, x);
-                    //ADD ROW 
+                    this.residentQueue[x]=null; //.splice(1,x);
+                    //ADD ROW
                     this.addRow();
                 }
-                else if (this.residentQueue[x].state == 3) {
+                    else if(this.residentQueue[x].state == 3)
+                {
                     this.terminatedQueue.push(this.residentQueue[x]);
                     //Remove this from resident
-                    this.residentQueue.splice(1, x);
+                    this.residentQueue.splice(1,x);
                 }
             }
+            */
             //IF PCB IS STATE READY MOVE TO READYQUEUE
             //ONCE THERE IT IS UPDATED TO TABLE AND HAS ITS OWN HTML ID's FOR REFERENCE 
             //THE CODE I WILL USE FOR THIS IS
@@ -88,21 +97,21 @@ var TSOS;
             //row name
             for (var x = 0; x < this.readyQueue.length; x++) {
                 var cell = document.getElementById("" + this.readyQueue[x].pid + "pid");
-                cell.innerHTML = "" + this.readyQueue[x].state;
+                cell.innerHTML = "" + this.readyQueue[x].pid;
                 cell = document.getElementById("" + this.readyQueue[x].pid + "PC");
-                cell.innerHTML = "" + this.readyQueue[x].state;
+                cell.innerHTML = "" + this.readyQueue[x].PC;
                 cell = document.getElementById("" + this.readyQueue[x].pid + "Acc");
-                cell.innerHTML = "" + this.readyQueue[x].state;
+                cell.innerHTML = "" + this.readyQueue[x].Acc;
                 cell = document.getElementById("" + this.readyQueue[x].pid + "Xreg");
-                cell.innerHTML = "" + this.readyQueue[x].state;
+                cell.innerHTML = "" + this.readyQueue[x].Xreg;
                 cell = document.getElementById("" + this.readyQueue[x].pid + "Yreg");
-                cell.innerHTML = "" + this.readyQueue[x].state;
+                cell.innerHTML = "" + this.readyQueue[x].Yreg;
                 cell = document.getElementById("" + this.readyQueue[x].pid + "Zflag");
-                cell.innerHTML = "" + this.readyQueue[x].state;
+                cell.innerHTML = "" + this.readyQueue[x].Zflag;
                 cell = document.getElementById("" + this.readyQueue[x].pid + "base");
-                cell.innerHTML = "" + this.readyQueue[x].state;
+                cell.innerHTML = "" + this.readyQueue[x].base;
                 cell = document.getElementById("" + this.readyQueue[x].pid + "limit");
-                cell.innerHTML = "" + this.readyQueue[x].state;
+                cell.innerHTML = "" + this.readyQueue[x].limit;
                 cell = document.getElementById("" + this.readyQueue[x].pid + "state");
                 cell.innerHTML = "" + this.readyQueue[x].state;
             }
@@ -144,6 +153,10 @@ var TSOS;
             cell = row.insertCell(8);
             cell.id = temppid + "state";
             cell.innerHTML = "" + thePcb.state;
+        };
+        Scheduler.prototype.removeRow = function (x) {
+            var readyTable = document.getElementById("readyQueueTable");
+            readyTable.deleteRow(x);
         };
         return Scheduler;
     })();

@@ -26,6 +26,7 @@ module TSOS
 			if (firstFree != 6969)
 			{			
 				curPCB = new PCB();
+				curPCB.pid = _PID;
 				curPCB.base = _MemManager.firstFreePartition();
 			    curPCB.limit = curPCB.base + 255;
 			    curPCB.state = 1; //RESIDENT 

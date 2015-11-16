@@ -30,17 +30,15 @@ module TSOS
 			//relates to single run function
 		    _PCB = this.residentQueue[pid];
 			
-			_PCB.state = 2; //running
+			_PCB.state = 2; //running	
 			
-		
-		
-			//alert(_PCB.base + " " + _PCB.limit);
 			//ADD to readyQueue;
 			this.readyQueue.push(_PCB);			
 			//clear cpu values
 			_CPU.clearCpu();
 		    //dont need to run on pid yet but keep that in mind for later
 			_CPU.isExecuting = true;
+			this.addRow();
 		}
 		
 		public validPID(pid) : boolean
@@ -97,7 +95,7 @@ module TSOS
 			//CHECK STATES OF ALL PCB IN RESIDENT if 2 add to ready queue and display
 			//if 1 remain in resident 
 			//if 3 put in terminated.
-			
+			/*
 			for(var x = 0; x< this.residentQueue.length; x++)
 			{
 				//stay in resident 
@@ -111,7 +109,7 @@ module TSOS
 				{
 					this.readyQueue.push(this.residentQueue[x]);
 					//Remove this from resident
-					this.residentQueue.splice(1,x);
+					this.residentQueue[x]=null; //.splice(1,x);
                     //ADD ROW 
 					this.addRow();
 				}
@@ -122,7 +120,7 @@ module TSOS
 					this.residentQueue.splice(1,x);				
 				}			
 			}
-			
+			*/
 			
 			
 			//IF PCB IS STATE READY MOVE TO READYQUEUE
@@ -143,28 +141,28 @@ module TSOS
 			{
 			
 			var cell = <HTMLTableDataCellElement>document.getElementById(""+this.readyQueue[x].pid+"pid");
-			cell.innerHTML = ""+this.readyQueue[x].state;
+			cell.innerHTML = ""+this.readyQueue[x].pid;
 			
 			cell = <HTMLTableDataCellElement>document.getElementById(""+this.readyQueue[x].pid+"PC");
-			cell.innerHTML = ""+this.readyQueue[x].state;
+			cell.innerHTML = ""+this.readyQueue[x].PC;
 			
 			cell = <HTMLTableDataCellElement>document.getElementById(""+this.readyQueue[x].pid+"Acc");
-			cell.innerHTML = ""+this.readyQueue[x].state;
+			cell.innerHTML = ""+this.readyQueue[x].Acc;
 			
 			cell = <HTMLTableDataCellElement>document.getElementById(""+this.readyQueue[x].pid+"Xreg");
-			cell.innerHTML = ""+this.readyQueue[x].state;
+			cell.innerHTML = ""+this.readyQueue[x].Xreg;
 			
 			cell = <HTMLTableDataCellElement>document.getElementById(""+this.readyQueue[x].pid+"Yreg");
-			cell.innerHTML = ""+this.readyQueue[x].state;
+			cell.innerHTML = ""+this.readyQueue[x].Yreg;
 			
 			cell = <HTMLTableDataCellElement>document.getElementById(""+this.readyQueue[x].pid+"Zflag");
-			cell.innerHTML = ""+this.readyQueue[x].state;
+			cell.innerHTML = ""+this.readyQueue[x].Zflag;
 			
 			cell = <HTMLTableDataCellElement>document.getElementById(""+this.readyQueue[x].pid+"base");
-			cell.innerHTML = ""+this.readyQueue[x].state;
+			cell.innerHTML = ""+this.readyQueue[x].base;
 			
 			cell = <HTMLTableDataCellElement>document.getElementById(""+this.readyQueue[x].pid+"limit");
-			cell.innerHTML = ""+this.readyQueue[x].state;
+			cell.innerHTML = ""+this.readyQueue[x].limit;
 			
 			cell = <HTMLTableDataCellElement>document.getElementById(""+this.readyQueue[x].pid+"state");
 			cell.innerHTML = ""+this.readyQueue[x].state;
@@ -234,6 +232,12 @@ module TSOS
 			cell.innerHTML = ""+thePcb.state;
 				
 		
+		}
+		
+		public removeRow(x)
+		{
+			var readyTable: HTMLTableElement = (<HTMLTableElement> document.getElementById("readyQueueTable"));
+			readyTable.deleteRow(x);
 		}
 		
 		
