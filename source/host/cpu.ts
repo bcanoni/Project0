@@ -102,7 +102,7 @@ module TSOS
 					var hexAddress = (byteTwo + byteOne);
 					
 					var decAddress = _MemManager.toAddress(hexAddress);
-                    _Memory.Data[decAddress]=this.Acc.toString(16);
+                    _MemManager.insertMemory(decAddress,this.Acc.toString(16));
                     this.PC++;
 					
                 break;
@@ -278,7 +278,7 @@ module TSOS
 				
 				default:
                         this.isExecuting=false;
-                        _StdOut.putText("missing code : " + _Memory.Data[this.PC]);
+                        _StdOut.putText("missing code : " + _MemManager.getMemory(this.PC));
 						_StdOut.advanceLine();
 						_OsShell.putPrompt();
 						
