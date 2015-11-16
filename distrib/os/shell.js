@@ -332,11 +332,11 @@ var TSOS;
         };
         Shell.prototype.shellKill = function (args) {
             //
-            if (_Scheduler.readyQueue[args] !== null) {
-                _Scheduler.readyQueue[args].state = 3; //terminated 
+            if (_Scheduler.readyQueue[args] == null) {
+                _StdOut.putText("Invalid PID/ Process isn't running.");
             }
             else {
-                _StdOut.putText("Invalid PID/ Process isn't running.");
+                _Scheduler.readyQueue[args].state = 3; //terminated 
             }
         };
         Shell.prototype.shellPS = function (args) {

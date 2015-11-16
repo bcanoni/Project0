@@ -485,15 +485,16 @@ module TSOS
 		 public shellKill(args) 
 		{
             //
-			if (_Scheduler.readyQueue[args] !== null)
+			if (_Scheduler.readyQueue[args] == null)
 			{
-				_Scheduler.readyQueue[args].state = 3; //terminated 
-				//move from ready queue to terminated queue
+				_StdOut.putText("Invalid PID/ Process isn't running.");
 				
 			}
 			else
 			{
-				_StdOut.putText("Invalid PID/ Process isn't running.");
+				_Scheduler.readyQueue[args].state = 3; //terminated 
+				//TODO move from ready queue to terminated queue
+				
 			}
          
         }
