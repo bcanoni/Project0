@@ -69,7 +69,7 @@ module TSOS
 			{
 			ir = _Memory.Data[this.PC];
 			//ir = _MemManager.getMemory(_PCB.PC);
-			alert(ir + "@" + this.PC);
+			//alert(ir + "@" + this.PC);
 			
 			//step by step loool
 			switch(ir)
@@ -195,9 +195,9 @@ module TSOS
                    
                     //this.PC++;
 					
-					if(this.Zflag === 0 )
+					if(this.Zflag === 1 )
 					{	
-						alert(parseInt(_MemManager.getMemory(this.PC+1),16)+1);
+						//alert(parseInt(_MemManager.getMemory(this.PC+1),16)+1);
 						this.PC += parseInt(_MemManager.getMemory(this.PC+1),16)+2;
 						var check = this.PC + _PCB.base;
 						
