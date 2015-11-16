@@ -64,7 +64,13 @@ module TSOS
 		
 		public insertMemory(x, dat): void
 		{	
-			_Memory.Data[x+_PCB.base] = dat;
+			if((x+_PCB.base) <= _PCB.limit)
+				_Memory.Data[x+_PCB.base] = dat;
+			else
+			{
+				_CPU.isExecuting = false; //CRASH OH NO
+				_OsShell.shellBsod("");
+			}
 		}
 		
 		public getMemory(x): String

@@ -36,7 +36,7 @@ module TSOS
 			this.readyQueue.push(_PCB);			
 			//clear cpu values
 			_CPU.clearCpu();
-		    //dont need to run on pid yet but keep that in mind for later
+		    
 			_CPU.isExecuting = true;
 			this.addRow();
 		}

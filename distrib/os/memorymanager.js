@@ -40,7 +40,12 @@ var TSOS;
             }
         };
         MemoryManager.prototype.insertMemory = function (x, dat) {
-            _Memory.Data[x + _PCB.base] = dat;
+            if ((x + _PCB.base) <= _PCB.limit)
+                _Memory.Data[x + _PCB.base] = dat;
+            else {
+                _CPU.isExecuting = false; //CRASH OH NO
+                _OsShell.shellBsod("");
+            }
         };
         MemoryManager.prototype.getMemory = function (x) {
             return _Memory.Data[x + _PCB.base];
