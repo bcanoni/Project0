@@ -62,9 +62,11 @@ module TSOS
 			
 			var i; 
 			var a;
-			var b
+			var b;
 			
-			 _Kernel.krnTrace('CPU cycle');
+			
+			
+			_Kernel.krnTrace('CPU cycle');
 			if(this.isExecuting)
 			{
 			ir = _Memory.Data[this.PC];
@@ -309,8 +311,8 @@ module TSOS
 			_PCB.Yreg = this.Yreg;
 			_PCB.Zflag = this.Zflag;
 			_PCB.state = 2; // RUNNING
-			
 			_Scheduler.updatePCBTable();
+			
 			
 			_MemManager.updateMemoryTable();
 			
