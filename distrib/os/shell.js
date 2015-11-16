@@ -76,18 +76,12 @@ var TSOS;
             //
             sc = new TSOS.ShellCommand(this.shellClearMem, "clearmem", "- Clear all Mem");
             this.commandList[this.commandList.length] = sc;
-            /*
             // ps  - list the running processes and their IDs
-            sc = new ShellCommand(this.shellPS,
-                                  "ps",
-                                  "- display running processes and their IDs");
+            sc = new TSOS.ShellCommand(this.shellPS, "ps", "- display running processes and their IDs");
             this.commandList[this.commandList.length] = sc;
             // kill <id> - kills the specified process id.
-            sc = new ShellCommand(this.shellKill,
-                                  "kill",
-                                  "- Kill <PID> program");
+            sc = new TSOS.ShellCommand(this.shellKill, "kill", "- Kill <PID> program");
             this.commandList[this.commandList.length] = sc;
-            */
             // Display the initial prompt.
             this.putPrompt();
         };
@@ -326,6 +320,16 @@ var TSOS;
                 _StdOut.advanceLine();
                 _StdOut.putText("  " + _OsShell.commandList[i].command + " " + _OsShell.commandList[i].description);
             }
+        };
+        Shell.prototype.shellKill = function (args) {
+            _StdOut.putText("IMPLEMENT");
+        };
+        Shell.prototype.shellPS = function (args) {
+            for (var x = 0; x < _Scheduler.readyQueue.length; x++) {
+                _StdOut.advanceLine();
+                _StdOut.putText("" + _Scheduler.readyQueue[x].pid);
+            }
+            _StdOut.putText("IMPLEMENT");
         };
         Shell.prototype.shellShutdown = function (args) {
             _StdOut.putText("Shutting down...");

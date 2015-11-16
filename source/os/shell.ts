@@ -134,7 +134,7 @@ module TSOS
             this.commandList[this.commandList.length] = sc;
 			
 			
-			/*
+			
             // ps  - list the running processes and their IDs
 			sc = new ShellCommand(this.shellPS,
                                   "ps",
@@ -145,7 +145,7 @@ module TSOS
                                   "kill",
                                   "- Kill <PID> program");
             this.commandList[this.commandList.length] = sc;
-            */
+            
             // Display the initial prompt.
             this.putPrompt();
         }
@@ -465,6 +465,22 @@ module TSOS
                 _StdOut.putText("  " + _OsShell.commandList[i].command + " " + _OsShell.commandList[i].description);
             }
         }
+		
+		 public shellKill(args) 
+		{
+            _StdOut.putText("IMPLEMENT");
+         
+        }
+		
+		public shellPS(args)
+		{
+			for (var x = 0 ; x < _Scheduler.readyQueue.length; x++ )
+			{
+				_StdOut.advanceLine();
+				_StdOut.putText("PID: " + _Scheduler.readyQueue[x].pid + " running.");			
+			}
+			
+		}
 
         public shellShutdown(args) 
 		{		     
