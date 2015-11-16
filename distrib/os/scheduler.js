@@ -44,27 +44,38 @@ var TSOS;
             //REM will use some kind of ROUND ROBIN scheduling 
             //ALL PROGRAMS IN RESIDENT QUEUE ACTIVATE AND PUT IN READY QUEUE
             for (var a = 0; a < this.residentQueue.length; a++) {
-                var temp = this.residentQueue[this.residentQueue.length - 1];
+                var temp = this.residentQueue[a];
                 this.residentQueue.pop();
                 this.readyQueue.push(temp);
             }
+            this.readyQueue.push(temp);
             //TODO FLESH OUT SWITCHER PROGRAM TO SWITCH BASED ON SET QUANTUM 
+            _PCB = temp;
             _CPU.clearCpu();
             _CPU.isExecuting = true;
         };
         Scheduler.prototype.switcher = function () {
             //EACH CPU CYCLE
             this.counter++;
+            //alert (this.readyQueue);
             if (this.counter >= this.quantum) {
+                //get index by finding index of pcb in ready queue
+                var curIndex = this.readyQueue.indexOf(_PCB);
+                //alert(curIndex);
                 var nextPCB;
                 //get next pcb in list				
                 //go to start of list if reached end
-                if (this.readyQueue[_PCB.pid + 1] == null) {
-                    nextPCB = this.readyQueue[0];
+                if (curIndex == 0) {
+                    curIndex = 1;
                 }
-                else {
-                    nextPCB = this.readyQueue[_PCB.pid + 1];
+                else if (curIndex == 1) {
+                    curIndex = 2;
                 }
+                else if (curIndex == 2) {
+                    curIndex = 0;
+                }
+                nextPCB = this.readyQueue[curIndex];
+                _PCB = nextPCB;
                 _CPU.switchTo(nextPCB);
                 this.counter = 0;
             }

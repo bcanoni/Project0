@@ -14,7 +14,7 @@ module TSOS
 					public residentQueue: PCB[] = [],
 					public terminatedQueue: PCB[] = [],
                     public counter :number =0,
-					public quantum : number = 6
+					public quantum : number = 6					
                     ) {}
 					
 					
@@ -63,13 +63,14 @@ module TSOS
 		    //ALL PROGRAMS IN RESIDENT QUEUE ACTIVATE AND PUT IN READY QUEUE
 			for(var a = 0; a<this.residentQueue.length ; a++)
 			{
-			var temp: PCB = this.residentQueue[this.residentQueue.length-1];
-			this.residentQueue.pop();
-			this.readyQueue.push(temp);			
+				var temp: PCB = this.residentQueue[a];
+				this.residentQueue.pop();
+				this.readyQueue.push(temp);	
+				
 			}
-			
+			this.readyQueue.push(temp);	
 			//TODO FLESH OUT SWITCHER PROGRAM TO SWITCH BASED ON SET QUANTUM 
-			
+			_PCB = temp;
 			
 			_CPU.clearCpu();
 		    
@@ -77,35 +78,48 @@ module TSOS
 			
 		}
 		
-		public switcher()
-		{
-		
-		
+		public switcher(): void
+		{	
 			//EACH CPU CYCLE
 			this.counter++;
 			
+			//alert (this.readyQueue);
 			if(this.counter >= this.quantum) //A SWITCH MUST OCCUR
-			{
+			{	
+				//get index by finding index of pcb in ready queue
+                var curIndex = this.readyQueue.indexOf(_PCB);
+			
+				//alert(curIndex);
+				
 				var nextPCB;
 				//get next pcb in list				
 				//go to start of list if reached end
-				if(this.readyQueue[_PCB.pid+1] == null)
-				{
-					nextPCB = this.readyQueue[0];
-				}
-				else 
-				{
-					nextPCB = this.readyQueue[_PCB.pid+1];
-				}
 				
+				if(curIndex == 0)
+				{
+					curIndex = 1;
 				
+				}
+				else if (curIndex == 1)
+				{
+					curIndex = 2;
+				}
+				else if (curIndex ==  2)
+				{
+					curIndex = 0;
+				}				
+				
+					
+					
+				nextPCB = this.readyQueue[curIndex];
+				
+			
+				
+				_PCB = nextPCB;
 				_CPU.switchTo(nextPCB);
 			
 				this.counter = 0;
-			}
-		
-		
-		
+			}		
 		
 		}
 		
@@ -113,10 +127,7 @@ module TSOS
 		
 		
 		public updatePCBTable():void
-		{		
-			
-			
-			
+		{				
 			
 			//IF PCB IS STATE READY MOVE TO READYQUEUE
 			

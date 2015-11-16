@@ -31,6 +31,7 @@ var TSOS;
             this.isExecuting = isExecuting;
         }
         Cpu.prototype.init = function () {
+            _CPU = this;
             this.PC = 0;
             this.Acc = 0;
             this.Xreg = 0;
@@ -217,8 +218,8 @@ var TSOS;
                 _PCB.Zflag = this.Zflag;
                 _PCB.state = 2; // RUNNING
                 _Scheduler.updatePCBTable();
-                _Scheduler.switcher();
                 _MemManager.updateMemoryTable();
+                _Scheduler.switcher();
             }
         };
         Cpu.prototype.getConstantNumber = function (num) {
@@ -234,6 +235,7 @@ var TSOS;
             this.isExecuting = false;
         };
         Cpu.prototype.switchTo = function (newpcb) {
+            _PCB = newpcb;
             this.PC = newpcb.PC;
             this.Acc = newpcb.Acc;
             this.Xreg = newpcb.Xreg;

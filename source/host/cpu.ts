@@ -32,6 +32,7 @@ module TSOS
 
         public init(): void 
 		{
+			_CPU = this;
             this.PC = 0;
             this.Acc = 0;
             this.Xreg = 0;
@@ -69,6 +70,7 @@ module TSOS
 			_Kernel.krnTrace('CPU cycle');
 			if(this.isExecuting)
 			{
+			
 			
 			ir = _Memory.Data[this.PC];
 			//ir = _MemManager.getMemory(_PCB.PC);
@@ -310,19 +312,15 @@ module TSOS
 			_PCB.Acc = this.Acc;
 			_PCB.Xreg = this.Xreg;
 			_PCB.Yreg = this.Yreg;
-			_PCB.Zflag = this.Zflag;
-			
-			
-			
-			
+			_PCB.Zflag = this.Zflag;			
 			_PCB.state = 2; // RUNNING
 			_Scheduler.updatePCBTable();
-			_Scheduler.switcher();
+			
 			
 			
 			_MemManager.updateMemoryTable();
 			
-			
+			_Scheduler.switcher();
 			
 			}
 			
@@ -349,6 +347,7 @@ module TSOS
 		
 		public switchTo(newpcb) : void
 		{
+			_PCB = newpcb;
 			this.PC = newpcb.PC;
             this.Acc = newpcb.Acc;
             this.Xreg = newpcb.Xreg;
