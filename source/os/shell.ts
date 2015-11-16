@@ -152,7 +152,7 @@ module TSOS
             this.commandList[this.commandList.length] = sc;
 			
 			sc = new ShellCommand(this.shellQuantum,
-                                  "Quantum",
+                                  "quantum",
                                   "- Change Scheduling quantum. RR ");
             this.commandList[this.commandList.length] = sc;
 			
@@ -378,12 +378,13 @@ module TSOS
 		public shellQuantum(args)
 		{
 			//isNAN wow I learned something new !
-			if (!isNAN(args) && args>0) //IS NUMBER & POSITIVE
+			if (args>0) //IS NUMBER & POSITIVE
 			{
-				_Scheduler.counter = args;		
+				_Scheduler.quantum = args;
+				_StdOut.putText("Quantum Updated!");				
 			}
 			else
-			_StdOut.putText("<quantum> required.");
+			_StdOut.putText("valid <quantum> required.");
 		
 		
 		}

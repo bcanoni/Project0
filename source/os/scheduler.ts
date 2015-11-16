@@ -7,11 +7,14 @@ module TSOS
 {
 	export class Scheduler 
 	{
+		
+		
 		constructor(
 					public readyQueue: PCB[] = [] ,
 					public residentQueue: PCB[] = [],
 					public terminatedQueue: PCB[] = [],
-                    public counter :number =0
+                    public counter :number =0,
+					public quantum : number = 6
                     ) {}
 					
 					
@@ -76,10 +79,31 @@ module TSOS
 		
 		public switcher()
 		{
-		//inc 1 until reach quantum 
-		this.counter ++;
 		
-		//if(counter >= 
+		
+			//EACH CPU CYCLE
+			this.counter++;
+			
+			if(this.counter >= this.quantum) //A SWITCH MUST OCCUR
+			{
+				var nextPCB;
+				//get next pcb in list				
+				//go to start of list if reached end
+				if(this.readyQueue[_PCB.pid+1] == null)
+				{
+					nextPCB = this.readyQueue[0];
+				}
+				else 
+				{
+					nextPCB = this.readyQueue[_PCB.pid+1];
+				}
+				
+				
+				_CPU.switchTo(nextPCB);
+			
+				this.counter = 0;
+			}
+		
 		
 		
 		

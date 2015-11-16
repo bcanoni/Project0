@@ -45,7 +45,7 @@ var TSOS;
             //A2 LDX loads x register with a constant
             //AE LDX loads the X register from memory
             //A0 LDY loads y register with a constant 
-            //ACloads the y register from memory
+            //AC loads the y register from memory
             //EA NOP no operation
             //00 Break (really a system call)
             //EC CPX compare a byte in memory to x regi sets the z zero flag if equal 
@@ -217,6 +217,7 @@ var TSOS;
                 _PCB.Zflag = this.Zflag;
                 _PCB.state = 2; // RUNNING
                 _Scheduler.updatePCBTable();
+                _Scheduler.switcher();
                 _MemManager.updateMemoryTable();
             }
         };
@@ -231,6 +232,13 @@ var TSOS;
             this.Yreg = 0;
             this.Zflag = 0;
             this.isExecuting = false;
+        };
+        Cpu.prototype.switchTo = function (newpcb) {
+            this.PC = newpcb.PC;
+            this.Acc = newpcb.Acc;
+            this.Xreg = newpcb.Xreg;
+            this.Yreg = newpcb.Yreg;
+            this.Zflag = newpcb.Zflag;
         };
         return Cpu;
     })();

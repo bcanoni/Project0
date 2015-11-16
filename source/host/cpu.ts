@@ -317,6 +317,7 @@ module TSOS
 			
 			_PCB.state = 2; // RUNNING
 			_Scheduler.updatePCBTable();
+			_Scheduler.switcher();
 			
 			
 			_MemManager.updateMemoryTable();
@@ -345,6 +346,16 @@ module TSOS
             this.isExecuting = false;
 
         }
+		
+		public switchTo(newpcb) : void
+		{
+			this.PC = newpcb.PC;
+            this.Acc = newpcb.Acc;
+            this.Xreg = newpcb.Xreg;
+            this.Yreg = newpcb.Yreg;
+            this.Zflag = newpcb.Zflag;		
+		
+		}
 		
 		
     }

@@ -84,6 +84,8 @@ var TSOS;
             this.commandList[this.commandList.length] = sc;
             sc = new TSOS.ShellCommand(this.shellRunAll, "runall", "- Runs All Loaded Programs");
             this.commandList[this.commandList.length] = sc;
+            sc = new TSOS.ShellCommand(this.shellQuantum, "quantum", "- Change Scheduling quantum. RR ");
+            this.commandList[this.commandList.length] = sc;
             // Display the initial prompt.
             this.putPrompt();
         };
@@ -250,6 +252,15 @@ var TSOS;
             _StdOut.advanceLine();
             _MemManager.clearMem();
             _StdOut.putText("Memory Clear.");
+        };
+        Shell.prototype.shellQuantum = function (args) {
+            //isNAN wow I learned something new !
+            if (args > 0) {
+                _Scheduler.quantum = args;
+                _StdOut.putText("Quantum Updated!");
+            }
+            else
+                _StdOut.putText("valid <quantum> required.");
         };
         Shell.prototype.shellLoad = function (args) {
             //CLEAR MEM TABLE FOR NOW

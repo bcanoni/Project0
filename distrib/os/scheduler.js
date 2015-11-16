@@ -6,15 +6,17 @@ Comments
 var TSOS;
 (function (TSOS) {
     var Scheduler = (function () {
-        function Scheduler(readyQueue, residentQueue, terminatedQueue, counter) {
+        function Scheduler(readyQueue, residentQueue, terminatedQueue, counter, quantum) {
             if (readyQueue === void 0) { readyQueue = []; }
             if (residentQueue === void 0) { residentQueue = []; }
             if (terminatedQueue === void 0) { terminatedQueue = []; }
             if (counter === void 0) { counter = 0; }
+            if (quantum === void 0) { quantum = 6; }
             this.readyQueue = readyQueue;
             this.residentQueue = residentQueue;
             this.terminatedQueue = terminatedQueue;
             this.counter = counter;
+            this.quantum = quantum;
         }
         Scheduler.prototype.loadProgMem = function (program) {
             var curPCB = new TSOS.PCB();
@@ -29,7 +31,6 @@ var TSOS;
             this.readyQueue.push(_PCB);
             //clear cpu values
             _CPU.clearCpu();
-            //dont need to run on pid yet but keep that in mind for later
             _CPU.isExecuting = true;
             this.addRow();
         };
@@ -52,9 +53,21 @@ var TSOS;
             _CPU.isExecuting = true;
         };
         Scheduler.prototype.switcher = function () {
-            //inc 1 until reach quantum 
+            //EACH CPU CYCLE
             this.counter++;
-            //if(counter >= 
+            if (this.counter >= this.quantum) {
+                var nextPCB;
+                //get next pcb in list				
+                //go to start of list if reached end
+                if (this.readyQueue[_PCB.pid + 1] == null) {
+                    nextPCB = this.readyQueue[0];
+                }
+                else {
+                    nextPCB = this.readyQueue[_PCB.pid + 1];
+                }
+                _CPU.switchTo(nextPCB);
+                this.counter = 0;
+            }
         };
         Scheduler.prototype.updatePCBTable = function () {
             //IF PCB IS STATE READY MOVE TO READYQUEUE
