@@ -151,6 +151,11 @@ module TSOS
                                   "- Runs All Loaded Programs");
             this.commandList[this.commandList.length] = sc;
 			
+			sc = new ShellCommand(this.shellQuantum,
+                                  "Quantum",
+                                  "- Change Scheduling quantum. RR ");
+            this.commandList[this.commandList.length] = sc;
+			
             
             // Display the initial prompt.
             this.putPrompt();
@@ -367,6 +372,19 @@ module TSOS
 			_StdOut.advanceLine();
 			_MemManager.clearMem();
 			_StdOut.putText("Memory Clear.");
+		
+		}
+		
+		public shellQuantum(args)
+		{
+			//isNAN wow I learned something new !
+			if (!isNAN(args) && args>0) //IS NUMBER & POSITIVE
+			{
+				_Scheduler.counter = args;		
+			}
+			else
+			_StdOut.putText("<quantum> required.");
+		
 		
 		}
 		

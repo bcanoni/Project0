@@ -49,7 +49,7 @@ module TSOS
 		    //A2 LDX loads x register with a constant
 		    //AE LDX loads the X register from memory
 		    //A0 LDY loads y register with a constant 
-		    //ACloads the y register from memory
+		    //AC loads the y register from memory
 		    //EA NOP no operation
 		    //00 Break (really a system call)
 		    //EC CPX compare a byte in memory to x regi sets the z zero flag if equal 
@@ -69,6 +69,7 @@ module TSOS
 			_Kernel.krnTrace('CPU cycle');
 			if(this.isExecuting)
 			{
+			
 			ir = _Memory.Data[this.PC];
 			//ir = _MemManager.getMemory(_PCB.PC);
 			//alert(ir + "@" + this.PC);
@@ -310,6 +311,10 @@ module TSOS
 			_PCB.Xreg = this.Xreg;
 			_PCB.Yreg = this.Yreg;
 			_PCB.Zflag = this.Zflag;
+			
+			
+			
+			
 			_PCB.state = 2; // RUNNING
 			_Scheduler.updatePCBTable();
 			
