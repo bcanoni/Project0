@@ -49,7 +49,6 @@ var TSOS;
                 this.readyQueue.push(temp);
             }
             this.readyQueue.push(temp);
-            //TODO FLESH OUT SWITCHER PROGRAM TO SWITCH BASED ON SET QUANTUM 
             _PCB = temp;
             _CPU.clearCpu();
             _CPU.isExecuting = true;
