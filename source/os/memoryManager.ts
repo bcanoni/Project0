@@ -45,7 +45,7 @@ module TSOS
 				
 				//alert(_PCB.base + " " + _PCB.limit);
 				_PCB = curPCB;
-				_Scheduler.residentQueue.push(_PCB);
+				_Scheduler.residentQueue.enqueue(_PCB);
 				return true;
 			
 			

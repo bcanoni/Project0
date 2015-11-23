@@ -1,4 +1,5 @@
 ///<reference path="pcb.ts" />
+///<reference path="queue.ts" />
 ///<reference path="../globals.ts" />
 /*
 Comments
@@ -7,9 +8,9 @@ var TSOS;
 (function (TSOS) {
     var Scheduler = (function () {
         function Scheduler(readyQueue, residentQueue, terminatedQueue, counter, quantum) {
-            if (readyQueue === void 0) { readyQueue = []; }
-            if (residentQueue === void 0) { residentQueue = []; }
-            if (terminatedQueue === void 0) { terminatedQueue = []; }
+            if (readyQueue === void 0) { readyQueue = new TSOS.Queue(); }
+            if (residentQueue === void 0) { residentQueue = new TSOS.Queue(); }
+            if (terminatedQueue === void 0) { terminatedQueue = new TSOS.Queue(); }
             if (counter === void 0) { counter = 0; }
             if (quantum === void 0) { quantum = 6; }
             this.readyQueue = readyQueue;
@@ -25,30 +26,40 @@ var TSOS;
         };
         Scheduler.prototype.runAProgram = function (pid) {
             //relates to single run function
-            _PCB = this.residentQueue[pid];
+            var pos = 0;
+            for (var x = 0; x < this.residentQueue.getSize(); x++) {
+                if (this.residentQueue[x].pid == pid) {
+                    pos = x;
+                }
+            }
+            _PCB = this.residentQueue[pos];
             _PCB.state = 2; //running	
             //ADD to readyQueue;
-            this.readyQueue.push(_PCB);
+            this.readyQueue.enqueue(_PCB);
             //clear cpu values
             _CPU.clearCpu();
             _CPU.isExecuting = true;
             this.addRow();
         };
         Scheduler.prototype.validPID = function (pid) {
-            if (this.residentQueue[pid] != null)
-                return true;
-            return false;
+            //PID != pos in queue
+            var out = false;
+            for (var x = 0; x < this.residentQueue.getSize(); x++) {
+                if (this.residentQueue[x].pid == pid) {
+                    out = true;
+                }
+            }
+            return out;
         };
         Scheduler.prototype.runAllPrograms = function () {
             //relates to new run all method
             //REM will use some kind of ROUND ROBIN scheduling 
             //ALL PROGRAMS IN RESIDENT QUEUE ACTIVATE AND PUT IN READY QUEUE
-            for (var a = 0; a < this.residentQueue.length; a++) {
-                var temp = this.residentQueue[a];
-                this.residentQueue.pop();
-                this.readyQueue.push(temp);
+            for (var a = 0; a < this.residentQueue.getSize(); a++) {
+                var temp = this.residentQueue.dequeue();
+                this.readyQueue.enqueue(temp);
             }
-            this.readyQueue.push(temp);
+            this.readyQueue.enqueue(temp);
             _PCB = temp;
             _CPU.clearCpu();
             _CPU.isExecuting = true;
@@ -58,22 +69,12 @@ var TSOS;
             this.counter++;
             //alert (this.readyQueue);
             if (this.counter >= this.quantum) {
-                //get index by finding index of pcb in ready queue
-                var curIndex = this.readyQueue.indexOf(_PCB);
-                //alert(curIndex);
+                //PUT OLD PCB AT END OF QUEUE/ BOTTOM
+                this.readyQueue.q.push(_PCB);
                 var nextPCB;
                 //get next pcb in list				
                 //go to start of list if reached end
-                if (curIndex == 0) {
-                    curIndex = 1;
-                }
-                else if (curIndex == 1) {
-                    curIndex = 2;
-                }
-                else if (curIndex == 2) {
-                    curIndex = 0;
-                }
-                nextPCB = this.readyQueue[curIndex];
+                nextPCB = this.readyQueue.dequeue();
                 _PCB = nextPCB;
                 _CPU.switchTo(nextPCB);
                 this.counter = 0;
@@ -87,28 +88,29 @@ var TSOS;
             //EX     pid+pid , pid+PC , + pid+ACC
             //DISPLAY ONLY  (running) PCB's
             //row name
-            for (var x = 0; x < this.readyQueue.length; x++) {
-                if (this.readyQueue[x] != null) {
-                    var cell = document.getElementById("" + this.readyQueue[x].pid + "pid");
-                    cell.innerHTML = "" + this.readyQueue[x].pid;
-                    cell = document.getElementById("" + this.readyQueue[x].pid + "PC");
-                    cell.innerHTML = "" + this.readyQueue[x].PC;
-                    cell = document.getElementById("" + this.readyQueue[x].pid + "Acc");
-                    cell.innerHTML = "" + this.readyQueue[x].Acc;
-                    cell = document.getElementById("" + this.readyQueue[x].pid + "Xreg");
-                    cell.innerHTML = "" + this.readyQueue[x].Xreg;
-                    cell = document.getElementById("" + this.readyQueue[x].pid + "Yreg");
-                    cell.innerHTML = "" + this.readyQueue[x].Yreg;
-                    cell = document.getElementById("" + this.readyQueue[x].pid + "Zflag");
-                    cell.innerHTML = "" + this.readyQueue[x].Zflag;
-                    cell = document.getElementById("" + this.readyQueue[x].pid + "base");
-                    cell.innerHTML = "" + this.readyQueue[x].base;
-                    cell = document.getElementById("" + this.readyQueue[x].pid + "limit");
-                    cell.innerHTML = "" + this.readyQueue[x].limit;
-                    cell = document.getElementById("" + this.readyQueue[x].pid + "state");
-                    cell.innerHTML = "" + this.readyQueue[x].state;
+            if (!this.readyQueue.isEmpty())
+                for (var x = 0; x < this.readyQueue.getSize(); x++) {
+                    if (this.readyQueue[x] != null) {
+                        var cell = document.getElementById("" + this.readyQueue[x].pid + "pid");
+                        cell.innerHTML = "" + this.readyQueue[x].pid;
+                        cell = document.getElementById("" + this.readyQueue[x].pid + "PC");
+                        cell.innerHTML = "" + this.readyQueue[x].PC;
+                        cell = document.getElementById("" + this.readyQueue[x].pid + "Acc");
+                        cell.innerHTML = "" + this.readyQueue[x].Acc;
+                        cell = document.getElementById("" + this.readyQueue[x].pid + "Xreg");
+                        cell.innerHTML = "" + this.readyQueue[x].Xreg;
+                        cell = document.getElementById("" + this.readyQueue[x].pid + "Yreg");
+                        cell.innerHTML = "" + this.readyQueue[x].Yreg;
+                        cell = document.getElementById("" + this.readyQueue[x].pid + "Zflag");
+                        cell.innerHTML = "" + this.readyQueue[x].Zflag;
+                        cell = document.getElementById("" + this.readyQueue[x].pid + "base");
+                        cell.innerHTML = "" + this.readyQueue[x].base;
+                        cell = document.getElementById("" + this.readyQueue[x].pid + "limit");
+                        cell.innerHTML = "" + this.readyQueue[x].limit;
+                        cell = document.getElementById("" + this.readyQueue[x].pid + "state");
+                        cell.innerHTML = "" + this.readyQueue[x].state;
+                    }
                 }
-            }
         };
         Scheduler.prototype.addRow = function () {
             //last row in ready Queue is new
