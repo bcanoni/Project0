@@ -79,10 +79,11 @@ module TSOS
 			//REM will use some kind of ROUND ROBIN scheduling 
 			
 		    //ALL PROGRAMS IN RESIDENT QUEUE ACTIVATE AND PUT IN READY QUEUE
-			for(var a = 0; a<this.residentQueue.getSize() ; a++)
+			while(!this.residentQueue.isEmpty())
 			{
 				var temp: PCB = this.residentQueue.dequeue();
 				this.readyQueue.enqueue(temp);	
+				this.addRow();
 				
 			}
 			this.readyQueue.enqueue(temp);	
@@ -192,8 +193,8 @@ module TSOS
 				//need to give it html tag to refer to and add it to table 
 				
 				//this.readyQueue[this.readyQueue.length-1];
-				var temppid = this.readyQueue[0].pid;
-				var thePcb = this.readyQueue[0];
+				var temppid = this.readyQueue.q[0].pid;
+				var thePcb = this.readyQueue.q[0];
 				
 				
 				var readyTable: HTMLTableElement = (<HTMLTableElement> document.getElementById("readyQueueTable"));
