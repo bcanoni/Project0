@@ -241,6 +241,7 @@ var TSOS;
             this.Xreg = newpcb.Xreg;
             this.Yreg = newpcb.Yreg;
             this.Zflag = newpcb.Zflag;
+            _Kernel.krnTrace('Switch to PID[' + _PCB.pid + ']');
         };
         return Cpu;
     })();
