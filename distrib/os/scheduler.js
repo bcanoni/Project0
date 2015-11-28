@@ -28,7 +28,7 @@ var TSOS;
             //relates to single run function
             var pos = 0;
             for (var x = 0; x < this.residentQueue.getSize(); x++) {
-                if (this.residentQueue[x].pid == pid) {
+                if (this.residentQueue.q[x].pid == pid) {
                     pos = x;
                 }
             }
@@ -39,13 +39,13 @@ var TSOS;
             //clear cpu values
             _CPU.clearCpu();
             _CPU.isExecuting = true;
-            this.addRow();
+            this.addRow(_PCB);
         };
         Scheduler.prototype.validPID = function (pid) {
             //PID != pos in queue
             var out = false;
             for (var x = 0; x < this.residentQueue.getSize(); x++) {
-                if (this.residentQueue[x].pid == pid) {
+                if (this.residentQueue.q[x].pid == pid) {
                     out = true;
                 }
             }
@@ -58,9 +58,8 @@ var TSOS;
             while (!this.residentQueue.isEmpty()) {
                 var temp = this.residentQueue.dequeue();
                 this.readyQueue.enqueue(temp);
-                this.addRow();
+                this.addRow(temp);
             }
-            this.readyQueue.enqueue(temp);
             _PCB = temp;
             _CPU.clearCpu();
             _CPU.isExecuting = true;
@@ -89,36 +88,35 @@ var TSOS;
             //EX     pid+pid , pid+PC , + pid+ACC
             //DISPLAY ONLY  (running) PCB's
             //row name
-            if (!this.readyQueue.isEmpty())
-                for (var x = 0; x < this.readyQueue.getSize(); x++) {
-                    if (this.readyQueue[x] != null) {
-                        var cell = document.getElementById("" + this.readyQueue[x].pid + "pid");
-                        cell.innerHTML = "" + this.readyQueue[x].pid;
-                        cell = document.getElementById("" + this.readyQueue[x].pid + "PC");
-                        cell.innerHTML = "" + this.readyQueue[x].PC;
-                        cell = document.getElementById("" + this.readyQueue[x].pid + "Acc");
-                        cell.innerHTML = "" + this.readyQueue[x].Acc;
-                        cell = document.getElementById("" + this.readyQueue[x].pid + "Xreg");
-                        cell.innerHTML = "" + this.readyQueue[x].Xreg;
-                        cell = document.getElementById("" + this.readyQueue[x].pid + "Yreg");
-                        cell.innerHTML = "" + this.readyQueue[x].Yreg;
-                        cell = document.getElementById("" + this.readyQueue[x].pid + "Zflag");
-                        cell.innerHTML = "" + this.readyQueue[x].Zflag;
-                        cell = document.getElementById("" + this.readyQueue[x].pid + "base");
-                        cell.innerHTML = "" + this.readyQueue[x].base;
-                        cell = document.getElementById("" + this.readyQueue[x].pid + "limit");
-                        cell.innerHTML = "" + this.readyQueue[x].limit;
-                        cell = document.getElementById("" + this.readyQueue[x].pid + "state");
-                        cell.innerHTML = "" + this.readyQueue[x].state;
-                    }
-                }
+            var x = 0;
+            while (x < this.readyQueue.getSize()) {
+                var cell = document.getElementById("" + this.readyQueue.q[x].pid + "pid");
+                cell.innerHTML = "" + this.readyQueue.q[x].pid;
+                cell = document.getElementById("" + this.readyQueue.q[x].pid + "PC");
+                cell.innerHTML = "" + this.readyQueue.q[x].PC;
+                cell = document.getElementById("" + this.readyQueue.q[x].pid + "Acc");
+                cell.innerHTML = "" + this.readyQueue.q[x].Acc;
+                cell = document.getElementById("" + this.readyQueue.q[x].pid + "Xreg");
+                cell.innerHTML = "" + this.readyQueue.q[x].Xreg;
+                cell = document.getElementById("" + this.readyQueue.q[x].pid + "Yreg");
+                cell.innerHTML = "" + this.readyQueue.q[x].Yreg;
+                cell = document.getElementById("" + this.readyQueue.q[x].pid + "Zflag");
+                cell.innerHTML = "" + this.readyQueue.q[x].Zflag;
+                cell = document.getElementById("" + this.readyQueue.q[x].pid + "base");
+                cell.innerHTML = "" + this.readyQueue.q[x].base;
+                cell = document.getElementById("" + this.readyQueue.q[x].pid + "limit");
+                cell.innerHTML = "" + this.readyQueue.q[x].limit;
+                cell = document.getElementById("" + this.readyQueue.q[x].pid + "state");
+                cell.innerHTML = "" + this.readyQueue.q[x].state;
+                x++;
+            }
         };
-        Scheduler.prototype.addRow = function () {
+        Scheduler.prototype.addRow = function (temp) {
             //last row in ready Queue is new
             //need to give it html tag to refer to and add it to table 
             //this.readyQueue[this.readyQueue.length-1];
-            var temppid = this.readyQueue.q[0].pid;
-            var thePcb = this.readyQueue.q[0];
+            var temppid = temp.pid;
+            var thePcb = temp;
             var readyTable = document.getElementById("readyQueueTable");
             var footer = readyTable.createTFoot();
             var row = footer.insertRow(0);
