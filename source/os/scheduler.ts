@@ -104,19 +104,21 @@ module TSOS
 			//alert (this.readyQueue);
 			if(this.counter >= this.quantum) //A SWITCH MUST OCCUR
 			{	
+				//get next pcb in list	
+				var nextPCB = this.readyQueue.dequeue();
 				
 				//PUT OLD PCB AT END OF QUEUE/ BOTTOM
 				this.readyQueue.q.push(_PCB);
 				
-				var nextPCB;
-				//get next pcb in list				
-				//go to start of list if reached end
+				
+							
+				
 				
 								
 				
 					
 					
-				nextPCB = this.readyQueue.dequeue();
+				
 				
 			
 				
@@ -124,7 +126,11 @@ module TSOS
 				_CPU.switchTo(nextPCB);
 			
 				this.counter = 0;
-			}		
+			}
+			if(this.readyQueue.isEmpty())
+			{
+				_CPU.isExecuting = false;
+			}
 		
 		}
 		
