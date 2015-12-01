@@ -169,9 +169,10 @@ module TSOS
 				
 				case "00": //end
                         
-                        this.isExecuting = false;
+                       // this.isExecuting = false;
 						_PCB.state=3; //terminated
 						_Scheduler.removeRow(1);
+						_Scheduler.switcher();
                         //this.PC=0;
                 break;
 				
@@ -352,7 +353,8 @@ module TSOS
             this.Acc = newpcb.Acc;
             this.Xreg = newpcb.Xreg;
             this.Yreg = newpcb.Yreg;
-            this.Zflag = newpcb.Zflag;		
+            this.Zflag = newpcb.Zflag;	
+			_Kernel.krnTrace('Switch to PID[' + _PCB.pid + ']');			
 		
 		}
 		

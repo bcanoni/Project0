@@ -125,9 +125,10 @@ var TSOS;
                         this.PC++;
                         break;
                     case "00":
-                        this.isExecuting = false;
+                        // this.isExecuting = false;
                         _PCB.state = 3; //terminated
                         _Scheduler.removeRow(1);
+                        _Scheduler.switcher();
                         //this.PC=0;
                         break;
                     case "EC":
@@ -241,6 +242,7 @@ var TSOS;
             this.Xreg = newpcb.Xreg;
             this.Yreg = newpcb.Yreg;
             this.Zflag = newpcb.Zflag;
+            _Kernel.krnTrace('Switch to PID[' + _PCB.pid + ']');
         };
         return Cpu;
     })();

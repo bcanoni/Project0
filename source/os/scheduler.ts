@@ -1,4 +1,5 @@
 ///<reference path="pcb.ts" />
+///<reference path="queue.ts" />
 ///<reference path="../globals.ts" />
 /*
 Comments
@@ -10,10 +11,10 @@ module TSOS
 		
 		
 		constructor(
-					public readyQueue: PCB[] = [] ,
-					public residentQueue: PCB[] = [],
-					public terminatedQueue: PCB[] = [],
-                    public counter :number =0,
+					public readyQueue = new TSOS.Queue() ,
+					public residentQueue = new TSOS.Queue(),
+					public terminatedQueue = new TSOS.Queue(),
+                    public counter : number =0,
 					public quantum : number = 6					
                     ) {}
 					
@@ -31,25 +32,42 @@ module TSOS
 		public runAProgram(pid) 
 		{
 			//relates to single run function
-		    _PCB = this.residentQueue[pid];
+			var pos = 0;
+			for(var x = 0; x < this.residentQueue.getSize(); x++)
+			{
+				if(this.residentQueue.q[x].pid == pid)
+				{
+					pos = x;
+				}
+			}
+		    _PCB = this.residentQueue[pos];
 			
 			_PCB.state = 2; //running	
 			
 			//ADD to readyQueue;
-			this.readyQueue.push(_PCB);			
+			this.readyQueue.enqueue(_PCB);			
 			//clear cpu values
 			_CPU.clearCpu();
 		    
 			_CPU.isExecuting = true;
-			this.addRow();
+			this.addRow(_PCB);
 		}
 		
 		public validPID(pid) : boolean
 		{
-			if( this.residentQueue[pid] != null)
-			return true;
+			//PID != pos in queue
+			var out = false;
 			
-			return false;
+			for(var x = 0; x < this.residentQueue.getSize(); x++)
+			{
+				if(this.residentQueue.q[x].pid == pid)
+				{
+					out = true;
+				}
+			}
+			
+			
+			return out;
 		
 		}
 		
@@ -61,15 +79,15 @@ module TSOS
 			//REM will use some kind of ROUND ROBIN scheduling 
 			
 		    //ALL PROGRAMS IN RESIDENT QUEUE ACTIVATE AND PUT IN READY QUEUE
-			for(var a = 0; a<this.residentQueue.length ; a++)
+			while(!this.residentQueue.isEmpty())
 			{
-				var temp: PCB = this.residentQueue[a];
-				this.residentQueue.pop();
-				this.readyQueue.push(temp);	
+				var temp: PCB = this.residentQueue.dequeue();
+				this.readyQueue.enqueue(temp);	
+				this.addRow(temp);
 				
 			}
-			this.readyQueue.push(temp);	
-			//TODO FLESH OUT SWITCHER PROGRAM TO SWITCH BASED ON SET QUANTUM 
+			
+			
 			_PCB = temp;
 			
 			_CPU.clearCpu();
@@ -86,32 +104,21 @@ module TSOS
 			//alert (this.readyQueue);
 			if(this.counter >= this.quantum) //A SWITCH MUST OCCUR
 			{	
-				//get index by finding index of pcb in ready queue
-                var curIndex = this.readyQueue.indexOf(_PCB);
-			
-				//alert(curIndex);
+				//get next pcb in list	
+				var nextPCB = this.readyQueue.dequeue();
 				
-				var nextPCB;
-				//get next pcb in list				
-				//go to start of list if reached end
+				//PUT OLD PCB AT END OF QUEUE/ BOTTOM
+				this.readyQueue.q.push(_PCB);
 				
-				if(curIndex == 0)
-				{
-					curIndex = 1;
 				
-				}
-				else if (curIndex == 1)
-				{
-					curIndex = 2;
-				}
-				else if (curIndex ==  2)
-				{
-					curIndex = 0;
-				}				
+							
+				
+				
+								
 				
 					
 					
-				nextPCB = this.readyQueue[curIndex];
+				
 				
 			
 				
@@ -119,7 +126,11 @@ module TSOS
 				_CPU.switchTo(nextPCB);
 			
 				this.counter = 0;
-			}		
+			}
+			if(this.readyQueue.isEmpty())
+			{
+				_CPU.isExecuting = false;
+			}
 		
 		}
 		
@@ -136,44 +147,42 @@ module TSOS
 			//   pid + (column name) 
 			//EX     pid+pid , pid+PC , + pid+ACC
 			
-			
-			
-			
+		
 		
 		
 			//DISPLAY ONLY  (running) PCB's
 			//row name
-			for(var x = 0; x< this.readyQueue.length ; x++)
+			var x = 0;
+			while(x < this.readyQueue.getSize())
 			{
-				if(this.readyQueue[x]!=null)
-				{			
-					var cell = <HTMLTableDataCellElement>document.getElementById(""+this.readyQueue[x].pid+"pid");
-					cell.innerHTML = ""+this.readyQueue[x].pid;
-					
-					cell = <HTMLTableDataCellElement>document.getElementById(""+this.readyQueue[x].pid+"PC");
-					cell.innerHTML = ""+this.readyQueue[x].PC;
-					
-					cell = <HTMLTableDataCellElement>document.getElementById(""+this.readyQueue[x].pid+"Acc");
-					cell.innerHTML = ""+this.readyQueue[x].Acc;
-					
-					cell = <HTMLTableDataCellElement>document.getElementById(""+this.readyQueue[x].pid+"Xreg");
-					cell.innerHTML = ""+this.readyQueue[x].Xreg;
-					
-					cell = <HTMLTableDataCellElement>document.getElementById(""+this.readyQueue[x].pid+"Yreg");
-					cell.innerHTML = ""+this.readyQueue[x].Yreg;
-					
-					cell = <HTMLTableDataCellElement>document.getElementById(""+this.readyQueue[x].pid+"Zflag");
-					cell.innerHTML = ""+this.readyQueue[x].Zflag;
-					
-					cell = <HTMLTableDataCellElement>document.getElementById(""+this.readyQueue[x].pid+"base");
-					cell.innerHTML = ""+this.readyQueue[x].base;
-					
-					cell = <HTMLTableDataCellElement>document.getElementById(""+this.readyQueue[x].pid+"limit");
-					cell.innerHTML = ""+this.readyQueue[x].limit;
-					
-					cell = <HTMLTableDataCellElement>document.getElementById(""+this.readyQueue[x].pid+"state");
-					cell.innerHTML = ""+this.readyQueue[x].state;
-				}				
+				
+				var cell = <HTMLTableDataCellElement>document.getElementById(""+this.readyQueue.q[x].pid+"pid");
+				cell.innerHTML = ""+this.readyQueue.q[x].pid;
+				
+				cell = <HTMLTableDataCellElement>document.getElementById(""+this.readyQueue.q[x].pid+"PC");
+				cell.innerHTML = ""+this.readyQueue.q[x].PC;
+				
+				cell = <HTMLTableDataCellElement>document.getElementById(""+this.readyQueue.q[x].pid+"Acc");
+				cell.innerHTML = ""+this.readyQueue.q[x].Acc;
+				
+				cell = <HTMLTableDataCellElement>document.getElementById(""+this.readyQueue.q[x].pid+"Xreg");
+				cell.innerHTML = ""+this.readyQueue.q[x].Xreg;
+				
+				cell = <HTMLTableDataCellElement>document.getElementById(""+this.readyQueue.q[x].pid+"Yreg");
+				cell.innerHTML = ""+this.readyQueue.q[x].Yreg;
+				
+				cell = <HTMLTableDataCellElement>document.getElementById(""+this.readyQueue.q[x].pid+"Zflag");
+				cell.innerHTML = ""+this.readyQueue.q[x].Zflag;
+				
+				cell = <HTMLTableDataCellElement>document.getElementById(""+this.readyQueue.q[x].pid+"base");
+				cell.innerHTML = ""+this.readyQueue.q[x].base;
+				
+				cell = <HTMLTableDataCellElement>document.getElementById(""+this.readyQueue.q[x].pid+"limit");
+				cell.innerHTML = ""+this.readyQueue.q[x].limit;
+				
+				cell = <HTMLTableDataCellElement>document.getElementById(""+this.readyQueue.q[x].pid+"state");
+				cell.innerHTML = ""+this.readyQueue.q[x].state;
+				x++;
 			}
 				
 				
@@ -181,14 +190,14 @@ module TSOS
 			
 			}
 			
-			public addRow()
+			public addRow(temp)
 			{
 				//last row in ready Queue is new
 				//need to give it html tag to refer to and add it to table 
 				
 				//this.readyQueue[this.readyQueue.length-1];
-				var temppid = this.readyQueue[0].pid;
-				var thePcb = this.readyQueue[0];
+				var temppid = temp.pid;
+				var thePcb = temp;
 				
 				
 				var readyTable: HTMLTableElement = (<HTMLTableElement> document.getElementById("readyQueueTable"));
