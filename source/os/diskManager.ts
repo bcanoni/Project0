@@ -9,7 +9,9 @@ module TSOS
 {
     export class DiskManager
 	{
-	
+		//REM BLOCKS OF 2 CAUSE HEX
+		headerLen = 4;
+		dataLen = 60;
 	
 		constructor(){}
 		
@@ -48,7 +50,7 @@ module TSOS
 					
 					cell = row.insertCell(1);
 					cell.innerHTML = ("00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000");
-					
+					_HardDrive.write(t,s,b,
 					
 					row.id = t + ":" + s + ":" + b;
 					
