@@ -16,7 +16,7 @@ module TSOS
 		//REM BLOCKS OF 2 CAUSE HEX
 		var headerLen = 4;
 		var dataLen = 60;
-		//for init purposes
+		var fileNames = [];
 		
 		}
 		
@@ -25,6 +25,14 @@ module TSOS
 			this.initHardDriveTable();
 		
 		}
+		
+		public createFile(fileName)
+		{
+		
+		
+		}
+		
+		
 		
 		public read(t,s,b)
 		{
