@@ -116,10 +116,10 @@ module TSOS
 				//
 				//var b1 = ;//
 				//var b2 = ;//
-				var b1 = parseInt(data.charCodeAt(x),16);
+				var b1 = data.charCodeAt(x);	
+				var b2 = b1.toString(16);
 				
-				
-				hdata += b1;
+				hdata += b2;
 			
 			}	
 			
