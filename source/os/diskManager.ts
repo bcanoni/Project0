@@ -109,11 +109,21 @@ module TSOS
 		
 		public write(t,s,b, data)
 		{
-			var hdata = data.toString(16);
+			var hdata = ""
+			for( var x = 0; x < data.length; x++)
+			{
+				
+				hdata += String.fromCharCode(parseInt(data.getCharAt(x), 16));
+			
+			}
+			
+			
+			
+			
 			
 			for (var i = data.length; i < 64; i++) 
 			{
-				data += "\0\0";
+				hdata += "\0\0";
 			}
 			return _HardDrive.write(t,s,b, hdata);
 		}
