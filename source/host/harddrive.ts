@@ -28,14 +28,14 @@ module TSOS
 		public write(t, s, b, data)
 		{
 			var key = this.getKey(t, s, b);
-			localStorage.setItem(key, data);
+			sessionStorage.setItem(key, data);
 
 		}	
 		
 	    public read(t, s, b)
 		{
 			var key = this.getKey(t, s, b);
-			localStorage.getItem(key);
+			sessionStorage.getItem(key);
 
 		}
 

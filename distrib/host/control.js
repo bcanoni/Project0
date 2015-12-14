@@ -79,6 +79,10 @@ var TSOS;
 			
 			_MemManager = new TSOS.MemoryManager();
 			
+			_HardDrive = new TSOS.HardDrive();
+			_DiskManager = new TSOS.DiskManager();
+			_DiskManager.init();
+			
 			_Scheduler = new TSOS.Scheduler();
 			
             // ... then set the host clock pulse ...
