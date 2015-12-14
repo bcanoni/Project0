@@ -40,21 +40,41 @@ module TSOS
 				//return
 				
 				// if file too big
-				
+				//cannot be > 60
 				//
 				
 				
-				//OTHERWISE SET THIS 
+				//OTHERWISE SET THIS
+				
+				//find first next free spot
+				
+				
+				
+
+				return null;
 			
 			}
 		
 		
 		}
 		
+		public nextFree()
+		{
+			var data = this.getContent(0, 0, 0);
+			//var fileLocation = slice data and ;
+			return fileLocation;
 		
+		}
 		
 		public read(t,s,b)
 		{
+			//CONVERT HEX TO DEC
+			return _HardDrive.read(t,s,b);
+		}
+		
+		public getContent(t,s,b)
+		{
+			//CONVERT HEX TO DEC
 			return _HardDrive.read(t,s,b);
 		}
 		

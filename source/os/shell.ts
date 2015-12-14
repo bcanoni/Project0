@@ -572,7 +572,8 @@ module TSOS
 		
 		public shellCreate(args)
 		{
-			//TODO
+			//create file
+			_DiskManager.create(args[0]);
 		
 		
 		}
