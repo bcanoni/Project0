@@ -10,19 +10,45 @@ module TSOS
 		private diskDrive 
 		
 		
+		
+		
+		
 		//What is a track?
 		//what is a sector?
 		//what is a block?
-		//what do i need for my program
 		
-		 constructor(public tracks number = 0; 
-					 public sectors number = 0;
-					 public blocks number = 128;	 
+		
+		constructor(public tracks = 0,
+					public sectors = 0,
+					public blocks = 128	 
 		 
 					 ){}
 					 
 					 
-		//Some kind of access
+		public write(t, s, b, data)
+		{
+			var key = this.getKey(t, s, b);
+			localStorage.setItem(key, data);
+
+		}	
+		
+	    public read(t, s, b)
+		{
+			var key = this.getKey(t, s, b);
+			localStorage.getItem(key);
+
+		}
+
+
+
+		public getKey( t, s, b)
+		{
+			return t + ":" + s + ":" + b;
+		
+		}
+					 
+					 
+
 		
 		
 	
