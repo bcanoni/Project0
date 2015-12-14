@@ -39,7 +39,9 @@ var TSOS;
             this.fileNames.push(fileName); //at end of array
             var loc = this.nextFree();
             if (loc != null) {
+                alert("" + loc.charAt(0) + loc.charAt(1) + loc.charAt(2));
                 _HardDrive.write(loc.charAt(0), loc.charAt(1), loc.charAt(2), fileName);
+                this.updateHardDriveTable();
                 return null;
             }
             return null;
@@ -72,6 +74,7 @@ var TSOS;
             return _HardDrive.write(t, s, b, hdata);
         };
         DiskManager.prototype.updateHardDriveTable = function () {
+            alert("uhh");
             for (var t = 0; t <= 3; t++) {
                 for (var s = 0; s <= 7; s++) {
                     for (var b = 0; b <= 7; b++) {

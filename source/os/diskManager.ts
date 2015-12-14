@@ -51,7 +51,9 @@ module TSOS
 			var loc = this.nextFree();
 			if(loc != null)
 			{
-				_HardDrive.write(loc.charAt(0),loc.charAt(1),loc.charAt(2),fileName);
+				alert(""+loc.charAt(0)+loc.charAt(1)+loc.charAt(2));
+				this.write(loc.charAt(0),loc.charAt(1),loc.charAt(2),fileName);
+				this.updateHardDriveTable();
 				return null;
 			}
 			
@@ -108,13 +110,18 @@ module TSOS
 		public write(t,s,b, data)
 		{
 			var hdata = data.toString(16);
+			
+			for (var i = data.length; i < 64; i++) 
+			{
+				data += "\0\0";
+			}
 			return _HardDrive.write(t,s,b, hdata);
 		}
 		
 		
 		public updateHardDriveTable()
 		{
-			
+			alert("uhh");
 			
 			for(var t = 0 ; t <= 3 ; t++)
 			{		
