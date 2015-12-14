@@ -376,6 +376,8 @@ var TSOS;
             //TODO
         };
         Shell.prototype.shellRead = function (args) {
+            alert(args[0] + args[1] + args[2]);
+            alert(_DiskManager.read(args[0], args[1], args[2]));
         };
         Shell.prototype.shellWrite = function (args) {
         };

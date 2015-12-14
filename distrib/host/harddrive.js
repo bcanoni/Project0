@@ -19,7 +19,7 @@ var TSOS;
         };
         HardDrive.prototype.read = function (t, s, b) {
             var key = this.getKey(t, s, b);
-            sessionStorage.getItem(key);
+            return sessionStorage.getItem(key);
         };
         HardDrive.prototype.getKey = function (t, s, b) {
             return t + ":" + s + ":" + b;

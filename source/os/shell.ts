@@ -579,6 +579,8 @@ module TSOS
 		
 		public shellRead(args)
 		{
+			//alert(args[0] + args[1] + args[2]);
+			alert(_DiskManager.read(args[0],args[1],args[2]));
 		
 		}
 		

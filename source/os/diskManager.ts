@@ -9,16 +9,31 @@ module TSOS
 {
     export class DiskManager
 	{
-		//REM BLOCKS OF 2 CAUSE HEX
-		headerLen = 4;
-		dataLen = 60;
+		
 	
-		constructor(){}
+		constructor()
+		{	
+		//REM BLOCKS OF 2 CAUSE HEX
+		var headerLen = 4;
+		var dataLen = 60;
+		//for init purposes
+		
+		}
 		
 		public init()
 		{
 			this.initHardDriveTable();
 		
+		}
+		
+		public read(t,s,b)
+		{
+			return _HardDrive.read(t,s,b);
+		}
+		
+		public write(t,s,b, data)
+		{
+			return _HardDrive.write(t,s,b, data);
 		}
 		
 		
@@ -30,6 +45,8 @@ module TSOS
 		
 		public initHardDriveTable()
 		{
+			var zero128 = "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000";
+		
 			var hardTable: HTMLTableElement = (<HTMLTableElement> document.getElementById("hardTable"));
 			
 			// 0:0:0 - 3:7:7
@@ -49,8 +66,9 @@ module TSOS
 					cell.innerHTML = t + ":" + s + ":" + b;
 					
 					cell = row.insertCell(1);
-					cell.innerHTML = ("00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000");
-					_HardDrive.write(t,s,b,
+					
+					cell.innerHTML = (zero128);
+					_HardDrive.write(t,s,b,zero128);
 					
 					row.id = t + ":" + s + ":" + b;
 					
