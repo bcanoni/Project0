@@ -86,6 +86,22 @@ var TSOS;
             this.commandList[this.commandList.length] = sc;
             sc = new TSOS.ShellCommand(this.shellQuantum, "quantum", "- Change Scheduling quantum. RR ");
             this.commandList[this.commandList.length] = sc;
+            sc = new TSOS.ShellCommand(this.shellCreate, "create", "- Create <filename> ");
+            this.commandList[this.commandList.length] = sc;
+            sc = new TSOS.ShellCommand(this.shellRead, "read", "- Read <filename> ");
+            this.commandList[this.commandList.length] = sc;
+            sc = new TSOS.ShellCommand(this.shellWrite, "write", "- Write <filename> ");
+            this.commandList[this.commandList.length] = sc;
+            sc = new TSOS.ShellCommand(this.shellDelete, "delete", "- Delete <filename>");
+            this.commandList[this.commandList.length] = sc;
+            sc = new TSOS.ShellCommand(this.shellFormat, "format", "- initialize all blocks in all sectors in all tracks");
+            this.commandList[this.commandList.length] = sc;
+            sc = new TSOS.ShellCommand(this.shellLS, "ls", "- List Files");
+            this.commandList[this.commandList.length] = sc;
+            sc = new TSOS.ShellCommand(this.shellSetSchedule, "setschedule", "- Set sechedule [rr,fcfs,priority");
+            this.commandList[this.commandList.length] = sc;
+            sc = new TSOS.ShellCommand(this.shellGetSchedule, "getschedule", "- Get current cpu scheduling algorithm");
+            this.commandList[this.commandList.length] = sc;
             // Display the initial prompt.
             this.putPrompt();
         };
@@ -355,6 +371,23 @@ var TSOS;
                 _StdOut.advanceLine();
                 _StdOut.putText("PID: " + _Scheduler.readyQueue[x].pid + " running.");
             }
+        };
+        Shell.prototype.shellCreate = function (args) {
+            //TODO
+        };
+        Shell.prototype.shellRead = function (args) {
+        };
+        Shell.prototype.shellWrite = function (args) {
+        };
+        Shell.prototype.shellDelete = function (args) {
+        };
+        Shell.prototype.shellFormat = function (args) {
+        };
+        Shell.prototype.shellLS = function (args) {
+        };
+        Shell.prototype.shellSetSchedule = function (args) {
+        };
+        Shell.prototype.shellGetSchedule = function (args) {
         };
         Shell.prototype.shellShutdown = function (args) {
             _StdOut.putText("Shutting down...");

@@ -569,6 +569,49 @@ module TSOS
 			}
 			
 		}
+		
+		public shellCreate(args)
+		{
+			//TODO
+		
+		
+		}
+		
+		public shellRead(args)
+		{
+		
+		}
+		
+		public shellWrite(args)
+		{
+		
+		}
+		
+		public shellDelete(args)
+		{
+		
+		}
+		
+		public shellFormat(args)
+		{
+		
+		}
+		
+		public shellLS(args)
+		{
+		
+		}
+		
+		public shellSetSchedule(args)
+		{
+		}
+		
+		public shellGetSchedule(args)
+		{
+		
+		}
+		
+		
 
         public shellShutdown(args) 
 		{		     
