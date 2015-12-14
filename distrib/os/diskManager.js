@@ -70,9 +70,17 @@ var TSOS;
             return _HardDrive.read(t, s, b);
         };
         DiskManager.prototype.write = function (t, s, b, data) {
-            var hdata = parseInt(data, 16);
+            var hdata = "";
+            for (var x = 0; x < data.length; x++) {
+                //char code of char at x 
+                //
+                //var b1 = ;//
+                //var b2 = ;//
+                var b1 = parseInt(data.charCodeAt(x), 16);
+                hdata += b1;
+            }
             for (var i = data.length; i < 64; i++) {
-                data += "\0\0";
+                hdata += "00";
             }
             return _HardDrive.write(t, s, b, hdata);
         };
