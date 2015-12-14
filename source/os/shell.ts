@@ -574,6 +574,7 @@ module TSOS
 		{
 			//create file
 			_DiskManager.create(args[0]);
+			_StdOut.putText("File" + args[0] + " successfully created." );			
 		
 		
 		}

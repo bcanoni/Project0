@@ -24,6 +24,7 @@ module TSOS
 		
 		public createFile(fileName)
 		{
+			/*
 			for(var x = 0; x < this.fileNames.length ; x++)
 			{
 				if(this.fileNames[x] == fileName)
@@ -32,7 +33,8 @@ module TSOS
 					return null;
 				}
 			}
-				
+			*/
+				alert("cret fl");
 			//if no space 
 			//return
 			
@@ -49,7 +51,7 @@ module TSOS
 			var loc = this.nextFree();
 			if(loc != null)
 			{
-				_HardDrive.write(loc.substring(0,1),loc.substring(2,3),loc.substring(4,5),fileName);
+				_HardDrive.write(loc.charAt(0),loc.charAt(1),loc.charAt(2),fileName);
 				return null;
 			}
 			
@@ -67,18 +69,17 @@ module TSOS
 			var data;
 			
 			for(var t = 0 ; t <= 3 ; t++)
-			{
-				
-				
+			{			
 				
 				for(var s = 0; s <= 7 ; s++)
 				{
 					for(var b = 0; b <= 7 ; b++)
 					{
 						data = _HardDrive.read(t,s,b);
+						alert(data);
 						if( data.substring(0,4) == "0000")
 						{
-							return t+":"+s+":"+b;
+							return t + "" + s + "" + b;
 						}
 					 
 					}
