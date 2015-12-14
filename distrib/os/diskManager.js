@@ -28,6 +28,7 @@ var TSOS;
                 }
             }
             */
+            alert("cret fl");
             //if no space 
             //return
             // if file too big

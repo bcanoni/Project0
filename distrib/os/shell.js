@@ -373,13 +373,16 @@ var TSOS;
             }
         };
         Shell.prototype.shellCreate = function (args) {
-            //TODO
+            //create file
+            _DiskManager.createFile(args[0]);
+            _StdOut.putText("File" + args[0] + " successfully created.");
         };
         Shell.prototype.shellRead = function (args) {
-            alert(args[0] + args[1] + args[2]);
+            //alert(args[0] + args[1] + args[2]);
             alert(_DiskManager.read(args[0], args[1], args[2]));
         };
         Shell.prototype.shellWrite = function (args) {
+            //_DiskManager
         };
         Shell.prototype.shellDelete = function (args) {
         };

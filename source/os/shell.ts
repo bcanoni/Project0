@@ -573,7 +573,7 @@ module TSOS
 		public shellCreate(args)
 		{
 			//create file
-			_DiskManager.create(args[0]);
+			_DiskManager.createFile(args[0]);
 			_StdOut.putText("File" + args[0] + " successfully created." );			
 		
 		
