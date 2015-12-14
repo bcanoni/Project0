@@ -121,7 +121,7 @@ module TSOS
 				{
 					for(var b = 0; b <= 7 ; b++)
 					{
-					var cell =  <HTMLTableDataCellElement>document.getElementById(t + ":" + s + ":" + b + "d";);
+					var cell =  <HTMLTableDataCellElement>document.getElementById(t + ":" + s + ":" + b + "d");
 					
 					var updateData = _HardDrive.read(t,s,b);
 					cell.innerHTML = updateData;					
