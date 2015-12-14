@@ -28,6 +28,25 @@ module TSOS
 		
 		public createFile(fileName)
 		{
+			for(var fn : this.fileNames)
+			{
+				if(fn == fileName)
+				{
+					//BAD!
+					return null;
+				}
+				
+				//if no space 
+				//return
+				
+				// if file too big
+				
+				//
+				
+				
+				//OTHERWISE SET THIS 
+			
+			}
 		
 		
 		}
