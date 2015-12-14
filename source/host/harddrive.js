@@ -15,11 +15,11 @@ var TSOS;
         }
         HardDrive.prototype.write = function (t, s, b, data) {
             var key = this.getKey(t, s, b);
-            localStorage.setItem(key, data);
+            sessionStorage.setItem(key, data);
         };
         HardDrive.prototype.read = function (t, s, b) {
             var key = this.getKey(t, s, b);
-            localStorage.getItem(key);
+            sessionStorage.getItem(key);
         };
         HardDrive.prototype.getKey = function (t, s, b) {
             return t + ":" + s + ":" + b;

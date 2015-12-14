@@ -46,7 +46,8 @@ module TSOS
 					var cell = row.insertCell(0);
 					cell.innerHTML = t + ":" + s + ":" + b;
 					
-					//cell = row.insertCell(1);
+					cell = row.insertCell(1);
+					cell.innerHTML = ("00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000");
 					
 					
 					row.id = t + ":" + s + ":" + b;
