@@ -51,6 +51,9 @@ module TSOS
 				
 				this.write(loc.charAt(0),loc.charAt(1),loc.charAt(2),fileName);
 				this.setHeader(loc.charAt(0),loc.charAt(1),loc.charAt(2),"1000");
+				
+				
+				
 				this.updateHardDriveTable();
 				return "Success!"; //success
 			}			
@@ -62,6 +65,8 @@ module TSOS
 		
 		
 		}
+		
+		
 		
 		public nextFree()
 		{
@@ -205,7 +210,7 @@ module TSOS
 			return "No such file found.";
 			
 			
-			
+			return "No such file found.";
 		
 		
 		}

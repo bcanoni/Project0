@@ -115,7 +115,8 @@ var TSOS;
                     for (var s = 0; s <= 7; s++) {
                         for (var b = 0; b <= 7; b++) {
                             var data = _HardDrive.read(t, s, b);
-                            if (data.substring(4) == fileName) {
+                            var content = data.substring(4);
+                            if (content == fileName) {
                                 //MATCH!
                                 meta = data.substring(1, 4);
                                 return _HardDrive.read(meta.charAt(0), meta.charAt(1), meta.charAt(2));
@@ -126,6 +127,7 @@ var TSOS;
             }
             else
                 return "No such file found.";
+            return "No such file found.";
         };
         //TABLE FUNCTIONS
         DiskManager.prototype.updateHardDriveTable = function () {
