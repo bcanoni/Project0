@@ -111,7 +111,11 @@ module TSOS
 		{
 			var data = this.read(t,s,b);
 			var content = data.slice(this.headerLen);
+			alert(content);
+			alert(head);
+			
 			var update = head + content;
+			alert(update);
 			_HardDrive.write(t,s,b,update);	
 		
 		}
