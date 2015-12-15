@@ -34,8 +34,9 @@ var TSOS;
             this.fileNames.push(fileName); //at end of array
             var loc = this.nextFree();
             if (loc != null) {
+                alert(fileName);
                 this.write(loc.charAt(0), loc.charAt(1), loc.charAt(2), fileName);
-                this.setHeader(loc.charAt(0), loc.charAt(1), loc.charAt(2), "1000");
+                this.addHeader(loc.charAt(0), loc.charAt(1), loc.charAt(2), "1000");
                 this.updateHardDriveTable();
                 return "Success!"; //success
             }
@@ -63,9 +64,14 @@ var TSOS;
             //CONVERT HEX TO DEC
             return _HardDrive.read(t, s, b);
         };
+        DiskManager.prototype.addHeader = function (t, s, b, head) {
+            var data = _HardDrive.read(t, s, b);
+            var update = head + data;
+            _HardDrive.write(t, s, b, update);
+        };
         DiskManager.prototype.setHeader = function (t, s, b, head) {
-            var data = this.read(t, s, b);
-            var content = data.slice(this.headerLen);
+            var data = _HardDrive.read(t, s, b);
+            var content = data.slice(4);
             var update = head + content;
             _HardDrive.write(t, s, b, update);
         };

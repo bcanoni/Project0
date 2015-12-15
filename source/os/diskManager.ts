@@ -48,11 +48,13 @@ module TSOS
 			var loc = this.nextFree();
 			if(loc != null)
 			{
+				alert(fileName);
 				
+		
 				this.write(loc.charAt(0),loc.charAt(1),loc.charAt(2),fileName);
-				this.setHeader(loc.charAt(0),loc.charAt(1),loc.charAt(2),"1000");
 				
 				
+				this.addHeader(loc.charAt(0),loc.charAt(1),loc.charAt(2),"1000");
 				
 				this.updateHardDriveTable();
 				return "Success!"; //success
@@ -107,15 +109,24 @@ module TSOS
 			return _HardDrive.read(t,s,b);
 		}
 		
+		public addHeader(t,s,b,head)
+		{
+			var data = _HardDrive.read(t,s,b);			
+			
+			var update = head + data;
+		
+			_HardDrive.write(t,s,b,update);	
+		
+		}
+		
 		public setHeader(t,s,b,head)
 		{
-			var data = this.read(t,s,b);
-			var content = data.slice(this.headerLen);
-			alert(content);
-			alert(head);
+			var data = _HardDrive.read(t,s,b);
+			var content = data.slice(4);
+			
 			
 			var update = head + content;
-			alert(update);
+		
 			_HardDrive.write(t,s,b,update);	
 		
 		}
@@ -128,6 +139,7 @@ module TSOS
 		
 		public write(t,s,b, data)
 		{
+			
 			var hdata = ""
 			for( var x = 0; x < data.length; x++)
 			{
@@ -147,6 +159,7 @@ module TSOS
 			{
 				hdata += "00";
 			}
+			
 			return _HardDrive.write(t,s,b, hdata);
 		}
 		
