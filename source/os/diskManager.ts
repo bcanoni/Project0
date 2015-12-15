@@ -107,6 +107,21 @@ module TSOS
 			return _HardDrive.read(t,s,b);
 		}
 		
+		public setHeader(t,s,b,head)
+		{
+			var data = this.read(t,s,b);
+			var content = data.slice(this.headerLen);
+			var update = head + content;
+			_HardDrive.write(t,s,b,update);	
+		
+		}
+		
+		public setContent(t,s,b,content)
+		{
+		
+		}
+		
+		
 		public write(t,s,b, data)
 		{
 			var hdata = ""
@@ -179,10 +194,17 @@ module TSOS
 					cell.innerHTML = t + ":" + s + ":" + b;
 					cell.id=t + ":" + s + ":" + b;
 					
-					cell = row.insertCell(1);
-					cell.id=t + ":" + s + ":" + b + "d";
 					
+					
+					cell = row.insertCell(1);
+					cell.id=t + ":" + s + ":" + b + "m";					
+					cell.innerHTML = "0000";
+					
+					
+					cell = row.insertCell(2);
+					cell.id=t + ":" + s + ":" + b + "d";										
 					cell.innerHTML = (zero128);
+					
 					_HardDrive.write(t,s,b,zero128);
 					
 					row.id = t + ":" + s + ":" + b;
