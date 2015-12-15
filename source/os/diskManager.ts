@@ -14,7 +14,9 @@ module TSOS
 	
 		constructor(public headerLen = 4,
 					public dataLen = 60,
-					public fileNames = []){}
+					public fileNames = [],
+					public newFile = {name:"",loc:""}
+					){}
 		
 		public init()
 		{
@@ -27,7 +29,7 @@ module TSOS
 			
 			for(var x = 0; x < this.fileNames.length ; x++)
 			{
-				if(this.fileNames[x] == fileName)
+				if(this.fileNames[x].name == fileName)
 				{
 					//BAD!
 					return fileName + "already exists!";
@@ -41,9 +43,8 @@ module TSOS
 			//			
 			
 			//OTHERWISE SET THIS
-			
 			//find first next free spot
-			this.fileNames.push(fileName); //at end of array
+			
 			
 			var loc = this.nextFree();
 			if(loc != null)
@@ -57,6 +58,11 @@ module TSOS
 				this.addHeader(loc.charAt(0),loc.charAt(1),loc.charAt(2),"1000");
 				
 				this.updateHardDriveTable();
+				
+				this.newFile.name = fileName;
+				this.newFile.loc = loc;
+				this.fileNames.push(this.newFile); //at end of array
+				
 				return "Success!"; //success
 			}			
 			
@@ -112,8 +118,7 @@ module TSOS
 		public addHeader(t,s,b,head)
 		{
 		
-			var data = _HardDrive.read(t,s,b);		
-			
+			var data = _HardDrive.read(t,s,b);				
 			
 			var update = head + data;
 		
@@ -189,55 +194,25 @@ module TSOS
 		public readFile(fileName)
 		{
 			//IS IT ON THE LIST?
-			var yesfile = false;
+			var meta = "000";
 			for(var x = 0; x < this.fileNames.length ; x++)
 			{
-				if(this.fileNames[x] == fileName)
+				if(this.fileNames[x].name == fileName)
 				{
 					//GOOD!!
-					yesfile = true;
+					
+					meta = _HardDrive.read(this.fileNames[x].loc.charAt(0),this.fileNames[x].loc.charAt(1),this.fileNames[x].loc.charAt(2)).substring(1,3);
 				}
 			}		
 		
 		
-			var meta = "000";
-			//FIND FILE 
-			if(yesfile)
-			{
-				for(var t = 0 ; t <= 3 ; t++)
-				{		
-					for(var s = 0; s <= 7 ; s++)
-					{
-						for(var b = 0; b <= 7 ; b++)
-						{
-							var data = _HardDrive.read(t,s,b);
-							var content = data.substring(4);
-							
-							var contentAscii = "";
-							
-							for(var x = 0; x < content.length ; x+=2)
-							{		
-								var temp = content.charAt(x) + content.charAt(x+1); //this represents a grouping of hex
-								contentAscii += temp;//String.fromCharCode(parseInt(temp , 16));
-							}						
-							
-							if(contentAscii == fileName)
-							{
-								//MATCH!
-								meta =  data.substring(1,4);	
-								return _HardDrive.read(meta.charAt(0),meta.charAt(1),meta.charAt(2));							
-							}					
-						}
-					}	
-				}
-				
-				
-			}
-			else
-			return "No such file found.";
-			alert("muggles");
 			
-			return "No such file found.";
+			
+			
+			
+			
+			
+			return this.read(meta.charAt(0),meta.charAt(1),meta.charAt(2));
 		
 		
 		}
