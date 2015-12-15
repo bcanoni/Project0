@@ -41,6 +41,7 @@ var TSOS;
             if (loc != null) {
                 alert("" + loc.charAt(0) + loc.charAt(1) + loc.charAt(2));
                 this.write(loc.charAt(0), loc.charAt(1), loc.charAt(2), fileName);
+                //this.setHeader(loc.charAt(0),loc.charAt(1),loc.charAt(2),"1000");
                 this.updateHardDriveTable();
                 return null;
             }
@@ -69,6 +70,14 @@ var TSOS;
             //CONVERT HEX TO DEC
             return _HardDrive.read(t, s, b);
         };
+        DiskManager.prototype.setHeader = function (t, s, b, head) {
+            var data = this.read(t, s, b);
+            var content = data.slice(this.headerLen);
+            var update = head + content;
+            this.write(t, s, b, update);
+        };
+        DiskManager.prototype.setContent = function (t, s, b, content) {
+        };
         DiskManager.prototype.write = function (t, s, b, data) {
             var hdata = "";
             for (var x = 0; x < data.length; x++) {
@@ -90,9 +99,13 @@ var TSOS;
             for (var t = 0; t <= 3; t++) {
                 for (var s = 0; s <= 7; s++) {
                     for (var b = 0; b <= 7; b++) {
-                        var cell = document.getElementById(t + ":" + s + ":" + b + "d");
-                        var updateData = _HardDrive.read(t, s, b);
-                        cell.innerHTML = updateData;
+                        var cell = document.getElementById(t + ":" + s + ":" + b + "m");
+                        var data = _HardDrive.read(t, s, b);
+                        var head = data.substring(0, 4);
+                        cell.innerHTML = head;
+                        cell = document.getElementById(t + ":" + s + ":" + b + "d");
+                        //var updateData = _HardDrive.read(t,s,b);
+                        cell.innerHTML = data;
                     }
                 }
             }

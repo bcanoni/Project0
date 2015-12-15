@@ -34,7 +34,7 @@ module TSOS
 				}
 			}
 			*/
-				alert("cret fl");
+				
 			//if no space 
 			//return
 			
@@ -51,8 +51,9 @@ module TSOS
 			var loc = this.nextFree();
 			if(loc != null)
 			{
-				alert(""+loc.charAt(0)+loc.charAt(1)+loc.charAt(2));
+				
 				this.write(loc.charAt(0),loc.charAt(1),loc.charAt(2),fileName);
+				//this.setHeader(loc.charAt(0),loc.charAt(1),loc.charAt(2),"1000");
 				this.updateHardDriveTable();
 				return null;
 			}
@@ -78,7 +79,7 @@ module TSOS
 					for(var b = 0; b <= 7 ; b++)
 					{
 						data = _HardDrive.read(t,s,b);
-						alert(data);
+						
 						if( data.substring(0,4) == "0000")
 						{
 							return t + "" + s + "" + b;
@@ -112,7 +113,7 @@ module TSOS
 			var data = this.read(t,s,b);
 			var content = data.slice(this.headerLen);
 			var update = head + content;
-			_HardDrive.write(t,s,b,update);	
+			this.write(t,s,b,update);	
 		
 		}
 		
@@ -149,7 +150,7 @@ module TSOS
 		
 		public updateHardDriveTable()
 		{
-			alert("uhh");
+			
 			
 			for(var t = 0 ; t <= 3 ; t++)
 			{		
@@ -157,10 +158,16 @@ module TSOS
 				{
 					for(var b = 0; b <= 7 ; b++)
 					{
-					var cell =  <HTMLTableDataCellElement>document.getElementById(t + ":" + s + ":" + b + "d");
+					var cell =  <HTMLTableDataCellElement>document.getElementById(t + ":" + s + ":" + b + "m");
+					var data = _HardDrive.read(t,s,b)
+					var head =  data.substring(0,4);
+					cell.innerHTML = head;
 					
-					var updateData = _HardDrive.read(t,s,b);
-					cell.innerHTML = updateData;					
+					
+					cell =  <HTMLTableDataCellElement>document.getElementById(t + ":" + s + ":" + b + "d");
+					
+					//var updateData = _HardDrive.read(t,s,b);
+					cell.innerHTML = data;					
 					
 					}
 					
