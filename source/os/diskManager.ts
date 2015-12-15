@@ -158,7 +158,7 @@ module TSOS
 				{
 					for(var b = 0; b <= 7 ; b++)
 					{
-						this.write(t,s,b,zero128);
+						_HardDrive.write(t,s,b,zero128);
 					}
 				}
 			}			
