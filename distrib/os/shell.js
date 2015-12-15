@@ -374,12 +374,12 @@ var TSOS;
         };
         Shell.prototype.shellCreate = function (args) {
             //create file
-            _DiskManager.createFile(args[0]);
-            _StdOut.putText("File" + args[0] + " successfully created.");
+            _StdOut.putText("File " + args[0] + ". Result:" + _DiskManager.createFile(args[0]));
         };
         Shell.prototype.shellRead = function (args) {
-            //alert(args[0] + args[1] + args[2]);
-            alert(_DiskManager.read(args[0], args[1], args[2]));
+            //args[0] = file name
+            _StdOut.putText("" + _DiskManager.readFile(args[0]));
+            //alert(_DiskManager.read(args[0],args[1],args[2]));
         };
         Shell.prototype.shellWrite = function (args) {
             //_DiskManager
@@ -387,6 +387,8 @@ var TSOS;
         Shell.prototype.shellDelete = function (args) {
         };
         Shell.prototype.shellFormat = function (args) {
+            _DiskManager.format();
+            _StdOut.putText("Format Complete.");
         };
         Shell.prototype.shellLS = function (args) {
         };

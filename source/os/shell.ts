@@ -573,16 +573,17 @@ module TSOS
 		public shellCreate(args)
 		{
 			//create file
-			_DiskManager.createFile(args[0]);
-			_StdOut.putText("File" + args[0] + " successfully created." );			
+			
+			_StdOut.putText("File " + args[0] + ". Result:" + _DiskManager.createFile(args[0]) );			
 		
 		
 		}
 		
 		public shellRead(args)
 		{
-			//alert(args[0] + args[1] + args[2]);
-			alert(_DiskManager.read(args[0],args[1],args[2]));
+			//args[0] = file name
+			_StdOut.putText("" + _DiskManager.readFile(args[0]));
+			//alert(_DiskManager.read(args[0],args[1],args[2]));
 		
 		}
 		
@@ -597,8 +598,10 @@ module TSOS
 		}
 		
 		public shellFormat(args)
-		{
-		
+		{	
+			_DiskManager.format();
+			_StdOut.putText("Format Complete." );	
+			
 		}
 		
 		public shellLS(args)
