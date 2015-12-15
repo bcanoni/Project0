@@ -28,7 +28,6 @@ var TSOS;
                 }
             }
             */
-            alert("cret fl");
             //if no space 
             //return
             // if file too big
@@ -39,9 +38,8 @@ var TSOS;
             this.fileNames.push(fileName); //at end of array
             var loc = this.nextFree();
             if (loc != null) {
-                alert("" + loc.charAt(0) + loc.charAt(1) + loc.charAt(2));
                 this.write(loc.charAt(0), loc.charAt(1), loc.charAt(2), fileName);
-                //this.setHeader(loc.charAt(0),loc.charAt(1),loc.charAt(2),"1000");
+                this.setHeader(loc.charAt(0), loc.charAt(1), loc.charAt(2), "1000");
                 this.updateHardDriveTable();
                 return null;
             }
@@ -53,7 +51,6 @@ var TSOS;
                 for (var s = 0; s <= 7; s++) {
                     for (var b = 0; b <= 7; b++) {
                         data = _HardDrive.read(t, s, b);
-                        alert(data);
                         if (data.substring(0, 4) == "0000") {
                             return t + "" + s + "" + b;
                         }
@@ -74,7 +71,7 @@ var TSOS;
             var data = this.read(t, s, b);
             var content = data.slice(this.headerLen);
             var update = head + content;
-            this.write(t, s, b, update);
+            _HardDrive.write(t, s, b, update);
         };
         DiskManager.prototype.setContent = function (t, s, b, content) {
         };
@@ -95,7 +92,6 @@ var TSOS;
             return _HardDrive.write(t, s, b, hdata);
         };
         DiskManager.prototype.updateHardDriveTable = function () {
-            alert("uhh");
             for (var t = 0; t <= 3; t++) {
                 for (var s = 0; s <= 7; s++) {
                     for (var b = 0; b <= 7; b++) {

@@ -53,7 +53,7 @@ module TSOS
 			{
 				
 				this.write(loc.charAt(0),loc.charAt(1),loc.charAt(2),fileName);
-				//this.setHeader(loc.charAt(0),loc.charAt(1),loc.charAt(2),"1000");
+				this.setHeader(loc.charAt(0),loc.charAt(1),loc.charAt(2),"1000");
 				this.updateHardDriveTable();
 				return null;
 			}
@@ -113,7 +113,7 @@ module TSOS
 			var data = this.read(t,s,b);
 			var content = data.slice(this.headerLen);
 			var update = head + content;
-			this.write(t,s,b,update);	
+			_HardDrive.write(t,s,b,update);	
 		
 		}
 		
