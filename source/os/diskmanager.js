@@ -121,7 +121,12 @@ var TSOS;
                         for (var b = 0; b <= 7; b++) {
                             var data = _HardDrive.read(t, s, b);
                             var content = data.substring(4);
-                            if (content == fileName) {
+                            var contentAscii = "";
+                            for (var x = 0; x < content.length; x += 2) {
+                                var temp = content.charAt(x) + content.charAt(x + 1); //this represents a grouping of hex
+                                contentAscii += temp; //String.fromCharCode(parseInt(temp , 16));
+                            }
+                            if (contentAscii == fileName) {
                                 //MATCH!
                                 meta = data.substring(1, 4);
                                 return _HardDrive.read(meta.charAt(0), meta.charAt(1), meta.charAt(2));

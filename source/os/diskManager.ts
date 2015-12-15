@@ -48,7 +48,7 @@ module TSOS
 			var loc = this.nextFree();
 			if(loc != null)
 			{
-				alert(fileName);
+				
 				
 		
 				this.write(loc.charAt(0),loc.charAt(1),loc.charAt(2),fileName);
@@ -113,7 +113,7 @@ module TSOS
 		{
 		
 			var data = _HardDrive.read(t,s,b);		
-			alert(data);	
+			
 			
 			var update = head + data;
 		
@@ -213,11 +213,19 @@ module TSOS
 							var data = _HardDrive.read(t,s,b);
 							var content = data.substring(4);
 							
-							if(content == fileName)
+							var contentAscii = "";
+							
+							for(var x = 0; x < content.length ; x+=2)
+							{		
+								var temp = content.charAt(x) + content.charAt(x+1); //this represents a grouping of hex
+								contentAscii += temp;//String.fromCharCode(parseInt(temp , 16));
+							}						
+							
+							if(contentAscii == fileName)
 							{
-							//MATCH!
-							meta =  data.substring(1,4);	
-							return _HardDrive.read(meta.charAt(0),meta.charAt(1),meta.charAt(2));							
+								//MATCH!
+								meta =  data.substring(1,4);	
+								return _HardDrive.read(meta.charAt(0),meta.charAt(1),meta.charAt(2));							
 							}					
 						}
 					}	
@@ -227,7 +235,7 @@ module TSOS
 			}
 			else
 			return "No such file found.";
-			
+			alert("muggles");
 			
 			return "No such file found.";
 		
