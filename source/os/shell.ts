@@ -581,7 +581,8 @@ module TSOS
 		
 		public shellRead(args)
 		{
-			//alert(args[0] + args[1] + args[2]);
+			//args[0] = file name
+			_StdOut.putText("" + _DiskManager.readFile(args[0]));
 			//alert(_DiskManager.read(args[0],args[1],args[2]));
 		
 		}

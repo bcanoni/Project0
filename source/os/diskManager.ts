@@ -32,16 +32,13 @@ module TSOS
 					//BAD!
 					return fileName + "already exists!";
 				}
-			}
-			
-				
+			}				
 			//if no space 
 			//return
 			
 			// if file too big
 			//cannot be > 60
-			//
-			
+			//			
 			
 			//OTHERWISE SET THIS
 			
@@ -56,8 +53,7 @@ module TSOS
 				this.setHeader(loc.charAt(0),loc.charAt(1),loc.charAt(2),"1000");
 				this.updateHardDriveTable();
 				return "Success!"; //success
-			}
-			
+			}			
 			
 			
 
@@ -90,9 +86,7 @@ module TSOS
 				}
 				
 			}
-			return null;
-			
-			
+			return null;		
 		
 		}
 		
@@ -165,6 +159,55 @@ module TSOS
 		
 			this.updateHardDriveTable();
 		}
+		
+		
+		
+		public readFile(fileName)
+		{
+			//IS IT ON THE LIST?
+			var yesfile = false;
+			for(var x = 0; x < this.fileNames.length ; x++)
+			{
+				if(this.fileNames[x] == fileName)
+				{
+					//GOOD!!
+					yesfile = true;
+				}
+			}		
+		
+		
+			var meta;
+			//FIND FILE 
+			if(yesfile)
+			{
+				for(var t = 0 ; t <= 3 ; t++)
+				{		
+					for(var s = 0; s <= 7 ; s++)
+					{
+						for(var b = 0; b <= 7 ; b++)
+						{
+							var data = _HardDrive.read(t,s,b);
+						
+							if(data.substring(4) == fileName)
+							{
+							//MATCH!
+							meta =  data.substring(1,4);						
+							}					
+						}
+					}	
+				}
+				
+				
+			}
+			else
+			return "No such file found.";
+			
+			//GET METADATA 
+			return this.read(meta.charAt(0),meta.charAt(1),meta.charAt(2));
+		
+		
+		}
+		
 		
 		
 		//TABLE FUNCTIONS
