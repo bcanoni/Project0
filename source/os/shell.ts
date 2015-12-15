@@ -156,6 +156,48 @@ module TSOS
                                   "- Change Scheduling quantum. RR ");
             this.commandList[this.commandList.length] = sc;
 			
+			
+			sc = new ShellCommand(this.shellCreate,
+                                  "create",
+                                  "- Create <filename> ");
+            this.commandList[this.commandList.length] = sc;
+			
+			sc = new ShellCommand(this.shellRead,
+                                  "read",
+                                  "- Read <filename> ");
+            this.commandList[this.commandList.length] = sc;
+			
+			sc = new ShellCommand(this.shellWrite,
+                                  "write",
+                                  "- Write <filename> ");
+            this.commandList[this.commandList.length] = sc;
+			
+			sc = new ShellCommand(this.shellDelete,
+                                  "delete",
+                                  "- Delete <filename>");
+            this.commandList[this.commandList.length] = sc;
+			
+			sc = new ShellCommand(this.shellFormat,
+                                  "format",
+                                  "- initialize all blocks in all sectors in all tracks");
+            this.commandList[this.commandList.length] = sc;
+			
+			sc = new ShellCommand(this.shellLS,
+                                  "ls",
+                                  "- List Files");
+            this.commandList[this.commandList.length] = sc;
+			
+			sc = new ShellCommand(this.shellSetSchedule,
+                                  "setschedule",
+                                  "- Set sechedule [rr,fcfs,priority");
+            this.commandList[this.commandList.length] = sc;
+			
+			sc = new ShellCommand(this.shellGetSchedule,
+                                  "getschedule",
+                                  "- Get current cpu scheduling algorithm");
+            this.commandList[this.commandList.length] = sc;
+			
+			
             
             // Display the initial prompt.
             this.putPrompt();
@@ -527,6 +569,53 @@ module TSOS
 			}
 			
 		}
+		
+		public shellCreate(args)
+		{
+			//create file
+			_DiskManager.createFile(args[0]);
+			_StdOut.putText("File" + args[0] + " successfully created." );			
+		
+		
+		}
+		
+		public shellRead(args)
+		{
+			//alert(args[0] + args[1] + args[2]);
+			alert(_DiskManager.read(args[0],args[1],args[2]));
+		
+		}
+		
+		public shellWrite(args)
+		{
+			//_DiskManager
+		}
+		
+		public shellDelete(args)
+		{
+		
+		}
+		
+		public shellFormat(args)
+		{
+		
+		}
+		
+		public shellLS(args)
+		{
+		
+		}
+		
+		public shellSetSchedule(args)
+		{
+		}
+		
+		public shellGetSchedule(args)
+		{
+		
+		}
+		
+		
 
         public shellShutdown(args) 
 		{		     

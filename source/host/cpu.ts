@@ -323,6 +323,8 @@ module TSOS
 			
 			_Scheduler.switcher();
 			
+			_DiskManager.updateHardDriveTable();
+			
 			}
 			
 			

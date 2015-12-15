@@ -221,6 +221,7 @@ var TSOS;
                 _Scheduler.updatePCBTable();
                 _MemManager.updateMemoryTable();
                 _Scheduler.switcher();
+                _DiskManager.updateHardDriveTable();
             }
         };
         Cpu.prototype.getConstantNumber = function (num) {
