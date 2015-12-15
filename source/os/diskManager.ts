@@ -106,7 +106,20 @@ module TSOS
 		public read(t,s,b)
 		{
 			//CONVERT HEX TO DEC
-			return _HardDrive.read(t,s,b);
+			var temp = _HardDrive.read(t,s,b);
+			var output = "";
+			
+			for(var x = 4 ; x<temp.length ;x++)
+			{
+				var bit = temp.charAt(x) + temp.charAt(x)				
+				output+= String.fromCharCode(parseInt(bit , 16));
+				
+				
+			
+			}
+			
+			
+			return output;
 		}
 		
 		public getContent(t,s,b)
@@ -201,18 +214,13 @@ module TSOS
 				{
 					//GOOD!!
 					
-					meta = _HardDrive.read(this.fileNames[x].loc.charAt(0),this.fileNames[x].loc.charAt(1),this.fileNames[x].loc.charAt(2)).substring(1,3);
+					meta = _HardDrive.read(this.fileNames[x].loc.charAt(0),this.fileNames[x].loc.charAt(1),this.fileNames[x].loc.charAt(2)).substring(1,4);
 				}
-			}		
-		
-		
+			}			
+			alert(meta);
+			var result = this.read(meta.charAt(0),meta.charAt(1),meta.charAt(2));
 			
-			
-			
-			
-			
-			
-			return this.read(meta.charAt(0),meta.charAt(1),meta.charAt(2));
+			return result;
 		
 		
 		}

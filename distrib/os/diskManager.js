@@ -6,20 +6,22 @@ DiskManager
 var TSOS;
 (function (TSOS) {
     var DiskManager = (function () {
-        function DiskManager(headerLen, dataLen, fileNames) {
+        function DiskManager(headerLen, dataLen, fileNames, newFile) {
             if (headerLen === void 0) { headerLen = 4; }
             if (dataLen === void 0) { dataLen = 60; }
             if (fileNames === void 0) { fileNames = []; }
+            if (newFile === void 0) { newFile = { name: "", loc: "" }; }
             this.headerLen = headerLen;
             this.dataLen = dataLen;
             this.fileNames = fileNames;
+            this.newFile = newFile;
         }
         DiskManager.prototype.init = function () {
             this.initHardDriveTable();
         };
         DiskManager.prototype.createFile = function (fileName) {
             for (var x = 0; x < this.fileNames.length; x++) {
-                if (this.fileNames[x] == fileName) {
+                if (this.fileNames[x].name == fileName) {
                     //BAD!
                     return fileName + "already exists!";
                 }
@@ -31,12 +33,14 @@ var TSOS;
             //			
             //OTHERWISE SET THIS
             //find first next free spot
-            this.fileNames.push(fileName); //at end of array
             var loc = this.nextFree();
             if (loc != null) {
                 this.write(loc.charAt(0), loc.charAt(1), loc.charAt(2), fileName);
                 this.addHeader(loc.charAt(0), loc.charAt(1), loc.charAt(2), "1000");
                 this.updateHardDriveTable();
+                this.newFile.name = fileName;
+                this.newFile.loc = loc;
+                this.fileNames.push(this.newFile); //at end of array
                 return "Success!"; //success
             }
             return null;
@@ -57,7 +61,13 @@ var TSOS;
         };
         DiskManager.prototype.read = function (t, s, b) {
             //CONVERT HEX TO DEC
-            return _HardDrive.read(t, s, b);
+            var temp = _HardDrive.read(t, s, b);
+            var output = "";
+            for (var x = 4; x < temp.length; x++) {
+                var bit = temp.charAt(x) + temp.charAt(x);
+                output += String.fromCharCode(parseInt(bit, 16));
+            }
+            return output;
         };
         DiskManager.prototype.getContent = function (t, s, b) {
             //CONVERT HEX TO DEC
@@ -106,40 +116,16 @@ var TSOS;
         };
         DiskManager.prototype.readFile = function (fileName) {
             //IS IT ON THE LIST?
-            var yesfile = false;
-            for (var x = 0; x < this.fileNames.length; x++) {
-                if (this.fileNames[x] == fileName) {
-                    //GOOD!!
-                    yesfile = true;
-                }
-            }
             var meta = "000";
-            //FIND FILE 
-            if (yesfile) {
-                for (var t = 0; t <= 3; t++) {
-                    for (var s = 0; s <= 7; s++) {
-                        for (var b = 0; b <= 7; b++) {
-                            var data = _HardDrive.read(t, s, b);
-                            var content = data.substring(4);
-                            var contentAscii = "";
-                            for (var x = 0; x < content.length; x += 2) {
-                                var temp = content.charAt(x) + content.charAt(x + 1); //this represents a grouping of hex
-                                contentAscii += temp; //String.fromCharCode(parseInt(temp , 16));
-                            }
-                            alert(contentAscii);
-                            if (contentAscii == fileName) {
-                                //MATCH!
-                                meta = data.substring(1, 4);
-                                return _HardDrive.read(meta.charAt(0), meta.charAt(1), meta.charAt(2));
-                            }
-                        }
-                    }
+            for (var x = 0; x < this.fileNames.length; x++) {
+                if (this.fileNames[x].name == fileName) {
+                    //GOOD!!
+                    meta = _HardDrive.read(this.fileNames[x].loc.charAt(0), this.fileNames[x].loc.charAt(1), this.fileNames[x].loc.charAt(2)).substring(1, 4);
                 }
             }
-            else
-                return "No such file found.";
-            alert("muggles");
-            return "No such file found.";
+            alert(meta);
+            var result = this.read(meta.charAt(0), meta.charAt(1), meta.charAt(2));
+            return result;
         };
         //TABLE FUNCTIONS
         DiskManager.prototype.updateHardDriveTable = function () {
