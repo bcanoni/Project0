@@ -176,7 +176,7 @@ module TSOS
 			}		
 		
 		
-			var meta;
+			var meta = "000";
 			//FIND FILE 
 			if(yesfile)
 			{
@@ -187,11 +187,13 @@ module TSOS
 						for(var b = 0; b <= 7 ; b++)
 						{
 							var data = _HardDrive.read(t,s,b);
-						
-							if(data.substring(4) == fileName)
+							var content = data.substring(4);
+							
+							if(content == fileName)
 							{
 							//MATCH!
-							meta =  data.substring(1,4);						
+							meta =  data.substring(1,4);	
+							return _HardDrive.read(meta.charAt(0),meta.charAt(1),meta.charAt(2));							
 							}					
 						}
 					}	
@@ -202,8 +204,8 @@ module TSOS
 			else
 			return "No such file found.";
 			
-			//GET METADATA 
-			return this.read(meta.charAt(0),meta.charAt(1),meta.charAt(2));
+			
+			
 		
 		
 		}

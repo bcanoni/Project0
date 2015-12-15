@@ -28,7 +28,7 @@ var TSOS;
             //return
             // if file too big
             //cannot be > 60
-            //
+            //			
             //OTHERWISE SET THIS
             //find first next free spot
             this.fileNames.push(fileName); //at end of array
@@ -98,6 +98,34 @@ var TSOS;
                 }
             }
             this.updateHardDriveTable();
+        };
+        DiskManager.prototype.readFile = function (fileName) {
+            //IS IT ON THE LIST?
+            var yesfile = false;
+            for (var x = 0; x < this.fileNames.length; x++) {
+                if (this.fileNames[x] == fileName) {
+                    //GOOD!!
+                    yesfile = true;
+                }
+            }
+            var meta = "000";
+            //FIND FILE 
+            if (yesfile) {
+                for (var t = 0; t <= 3; t++) {
+                    for (var s = 0; s <= 7; s++) {
+                        for (var b = 0; b <= 7; b++) {
+                            var data = _HardDrive.read(t, s, b);
+                            if (data.substring(4) == fileName) {
+                                //MATCH!
+                                meta = data.substring(1, 4);
+                                return _HardDrive.read(meta.charAt(0), meta.charAt(1), meta.charAt(2));
+                            }
+                        }
+                    }
+                }
+            }
+            else
+                return "No such file found.";
         };
         //TABLE FUNCTIONS
         DiskManager.prototype.updateHardDriveTable = function () {
