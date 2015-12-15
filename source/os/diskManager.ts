@@ -24,16 +24,16 @@ module TSOS
 		
 		public createFile(fileName)
 		{
-			/*
+			
 			for(var x = 0; x < this.fileNames.length ; x++)
 			{
 				if(this.fileNames[x] == fileName)
 				{
 					//BAD!
-					return null;
+					return fileName + "already exists!";
 				}
 			}
-			*/
+			
 				
 			//if no space 
 			//return
@@ -55,7 +55,7 @@ module TSOS
 				this.write(loc.charAt(0),loc.charAt(1),loc.charAt(2),fileName);
 				this.setHeader(loc.charAt(0),loc.charAt(1),loc.charAt(2),"1000");
 				this.updateHardDriveTable();
-				return null;
+				return "Success!"; //success
 			}
 			
 			
