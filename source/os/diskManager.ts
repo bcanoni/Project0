@@ -148,6 +148,27 @@ module TSOS
 		}
 		
 		
+		public format()
+		{
+			var zero128 = "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000";
+			//fill with all zeros
+			for(var t = 0 ; t <= 3 ; t++)
+			{		
+				for(var s = 0; s <= 7 ; s++)
+				{
+					for(var b = 0; b <= 7 ; b++)
+					{
+						this.write(t,s,b,zero128);
+					}
+				}
+			}			
+		
+			this.updateHardDriveTable();
+		}
+		
+		
+		//TABLE FUNCTIONS
+		
 		public updateHardDriveTable()
 		{
 			
