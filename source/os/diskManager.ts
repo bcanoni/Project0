@@ -111,7 +111,9 @@ module TSOS
 		
 		public addHeader(t,s,b,head)
 		{
-			var data = _HardDrive.read(t,s,b);			
+		
+			var data = _HardDrive.read(t,s,b);		
+			alert(data);	
 			
 			var update = head + data;
 		
@@ -255,7 +257,7 @@ module TSOS
 					cell =  <HTMLTableDataCellElement>document.getElementById(t + ":" + s + ":" + b + "d");
 					
 					//var updateData = _HardDrive.read(t,s,b);
-					cell.innerHTML = data;					
+					cell.innerHTML = data.slice(4);					
 					
 					}
 					

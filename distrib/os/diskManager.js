@@ -66,6 +66,7 @@ var TSOS;
         };
         DiskManager.prototype.addHeader = function (t, s, b, head) {
             var data = _HardDrive.read(t, s, b);
+            alert(data);
             var update = head + data;
             _HardDrive.write(t, s, b, update);
         };
@@ -146,7 +147,7 @@ var TSOS;
                         cell.innerHTML = head;
                         cell = document.getElementById(t + ":" + s + ":" + b + "d");
                         //var updateData = _HardDrive.read(t,s,b);
-                        cell.innerHTML = data;
+                        cell.innerHTML = data.slice(4);
                     }
                 }
             }
