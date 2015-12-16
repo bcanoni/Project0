@@ -39,7 +39,6 @@ var TSOS;
                 this.addHeader(loc.charAt(0), loc.charAt(1), loc.charAt(2), "1000");
                 this.updateHardDriveTable();
                 this.newFile.name = fileName;
-                alert(loc);
                 this.newFile.loc = loc;
                 this.fileNames.push(this.newFile); //at end of array
                 return "Success!"; //success
@@ -78,8 +77,8 @@ var TSOS;
             //CONVERT HEX TO DEC
             var temp = _HardDrive.read(t, s, b);
             var output = "";
-            for (var x = 4; x < temp.length; x++) {
-                var bit = temp.charAt(x) + temp.charAt(x);
+            for (var x = 4; x < temp.length; x += 2) {
+                var bit = temp.charAt(x) + temp.charAt(x + 1);
                 output += String.fromCharCode(parseInt(bit, 16));
             }
             return output;
@@ -102,7 +101,6 @@ var TSOS;
             //Starting at 1:0:0
             if (meta == "1000") {
                 var newlocation = this.nextFreeO("1", "0", "0");
-                alert(location);
                 this.setHeader(location.charAt(0), location.charAt(1), location.charAt(2), "1" + newlocation);
                 this.write(newlocation.charAt(0), newlocation.charAt(1), newlocation.charAt(2), newData);
                 this.addHeader(newlocation.charAt(0), newlocation.charAt(1), newlocation.charAt(2), "1000");
@@ -166,11 +164,14 @@ var TSOS;
             //IS IT ON THE LIST?
             var meta = "000";
             for (var x = 0; x < this.fileNames.length; x++) {
+                alert(this.fileNames[x].name);
                 if (this.fileNames[x].name == fileName) {
                     //GOOD!!
+                    alert(this.fileNames[x].loc.charAt(0) + ":" + this.fileNames[x].loc.charAt(1) + this.fileNames[x].loc.charAt(2));
                     meta = _HardDrive.read(this.fileNames[x].loc.charAt(0), this.fileNames[x].loc.charAt(1), this.fileNames[x].loc.charAt(2)).substring(1, 4);
                 }
             }
+            alert("loc of data" + meta);
             var result = this.read(meta.charAt(0), meta.charAt(1), meta.charAt(2));
             return result;
         };
