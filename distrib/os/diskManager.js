@@ -95,8 +95,10 @@ var TSOS;
                 return "file not found.";
             }
             //GRAB META DATA
+            alert("before meta" + location);
             var meta = this.getHeader(location.charAt(0), location.charAt(1), location.charAt(2));
-            location = meta.substring(1, 4);
+            var metalocation = meta.substring(1, 4);
+            alert("grabbed meta" + location);
             //If the meta isnt set give it the first free 
             //Starting at 1:0:0
             if (meta == "1000") {
@@ -106,8 +108,8 @@ var TSOS;
                 this.addHeader(newlocation.charAt(0), newlocation.charAt(1), newlocation.charAt(2), "1000");
             }
             else {
-                this.write(location.charAt(0), location.charAt(1), location.charAt(2), newData);
-                this.addHeader(location.charAt(0), location.charAt(1), location.charAt(2), "1000");
+                this.write(metalocation.charAt(0), metalocation.charAt(1), metalocation.charAt(2), newData);
+                this.addHeader(metalocation.charAt(0), metalocation.charAt(1), metalocation.charAt(2), "1000");
             }
             this.updateHardDriveTable();
             return "Success";
@@ -122,6 +124,7 @@ var TSOS;
             _HardDrive.write(t, s, b, update);
         };
         DiskManager.prototype.setHeader = function (t, s, b, head) {
+            //alert("set here:" + t+""+s+""+b);
             var data = _HardDrive.read(t, s, b);
             var content = data.slice(4);
             var update = head + content;
@@ -164,14 +167,14 @@ var TSOS;
             //IS IT ON THE LIST?
             var meta = "000";
             for (var x = 0; x < this.fileNames.length; x++) {
-                alert(this.fileNames[x].name);
+                //alert(this.fileNames[x].name);
                 if (this.fileNames[x].name == fileName) {
                     //GOOD!!
-                    alert(this.fileNames[x].loc.charAt(0) + ":" + this.fileNames[x].loc.charAt(1) + this.fileNames[x].loc.charAt(2));
+                    //alert(this.fileNames[x].loc.charAt(0) + ":" + this.fileNames[x].loc.charAt(1) + this.fileNames[x].loc.charAt(2));
                     meta = _HardDrive.read(this.fileNames[x].loc.charAt(0), this.fileNames[x].loc.charAt(1), this.fileNames[x].loc.charAt(2)).substring(1, 4);
                 }
             }
-            alert("loc of data" + meta);
+            //alert("loc of data" + meta);
             var result = this.read(meta.charAt(0), meta.charAt(1), meta.charAt(2));
             return result;
         };
