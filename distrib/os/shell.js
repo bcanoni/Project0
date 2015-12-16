@@ -383,7 +383,21 @@ var TSOS;
         };
         Shell.prototype.shellWrite = function (args) {
             //_DiskManager
-            _StdOut.putText("" + _DiskManager.writeFile(args[0], args[1]));
+            if (args.length >= 2) {
+                var output = "";
+                for (var x = 1; x < args.length; x++) {
+                    output += args[x] + " ";
+                }
+                if ((output.charAt(0) == "\"") && (output.charAt(output.length - 2) == "\"")) {
+                    output = output.slice(1).slice(0, output.length - 3); // Took a while
+                    _StdOut.putText("" + _DiskManager.writeFile(args[0], output));
+                }
+                else {
+                    _StdOut.putText("Need Quotes");
+                }
+            }
+            else
+                _StdOut.putText("need filename");
         };
         Shell.prototype.shellDelete = function (args) {
             //DELETE

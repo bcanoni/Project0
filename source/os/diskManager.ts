@@ -219,7 +219,7 @@ module TSOS
 		
 		public setHeader(t,s,b,head)
 		{
-			//alert("set here:" + t+""+s+""+b);
+			
 			var data = _HardDrive.read(t,s,b);
 			var content = data.slice(4);
 			
@@ -295,12 +295,12 @@ module TSOS
 			var found = false;
 			for(var x = 0; x < this.fileNames.length ; x++)
 			{
-				//alert(this.fileNames[x][0]);
+				
 				if(this.fileNames[x][0] == fileName)
 				{
 					//GOOD!!
 					found = true;
-					//alert(this.fileNames[x][1].charAt(0) + ":" + this.fileNames[x][1].charAt(1) + this.fileNames[x][1].charAt(2));
+					
 					meta = _HardDrive.read(this.fileNames[x][1].charAt(0),this.fileNames[x][1].charAt(1),this.fileNames[x][1].charAt(2)).substring(1,4);
 				}
 			}
@@ -314,7 +314,7 @@ module TSOS
 			}
 
 				
-			//alert("loc of data" + meta);
+		
 			var result = this.read(meta.charAt(0),meta.charAt(1),meta.charAt(2));
 			
 			return result;
