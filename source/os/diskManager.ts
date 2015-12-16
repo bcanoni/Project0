@@ -14,14 +14,14 @@ module TSOS
 	
 		constructor(public headerLen = 4,
 					public dataLen = 60,
-<<<<<<< HEAD
+
 					public fileNames = [],
 					public newFile = {name:"",loc:""},
 					public ff = "1:0:0"  //first free file write loc
-=======
+
 					public fileNames = []
 					//public newFile = {name:"",loc:""}				
->>>>>>> refs/remotes/origin/master
+
 					){}
 		
 		public init()
@@ -137,10 +137,10 @@ module TSOS
 		}
 		
 		
-<<<<<<< HEAD
+
 		
-=======
->>>>>>> refs/remotes/origin/master
+
+
 		public read(t,s,b)
 		{
 			//CONVERT HEX TO DEC
@@ -149,22 +149,22 @@ module TSOS
 			
 			for(var x = 4 ; x<temp.length ;x+=2)
 			{
-<<<<<<< HEAD
+
 				var bit = temp.charAt(x) + temp.charAt(x)				
 				output+= String.fromCharCode(parseInt(bit , 16));		
 			}		
-=======
+
 				var bit = temp.charAt(x) + temp.charAt(x+1)				
 				output+= String.fromCharCode(parseInt(bit , 16));			
 			}
 			
->>>>>>> refs/remotes/origin/master
+
 			
 			return output;
 		}
 		
 		public writeFile(fileName,newData)
-<<<<<<< HEAD
+
 		{
 			
 			
@@ -175,7 +175,7 @@ module TSOS
 				if(this.fileNames[x].name == fileName)
 				{
 					location = this.fileNames[x].loc;
-=======
+
 		{			
 			var location = "";			
 			
@@ -184,7 +184,7 @@ module TSOS
 				if(this.fileNames[x][0] == fileName)
 				{
 					location = this.fileNames[x][1];
->>>>>>> refs/remotes/origin/master
+
 					x = this.fileNames.length;				
 				}
 			
@@ -195,45 +195,44 @@ module TSOS
 			}			
 			
 			//GRAB META DATA
-<<<<<<< HEAD
+
 			var meta = this.getHeader(location.charAt(0),location.charAt(1),location.charAt(2));
 			location = meta.substring(1,4);
 			
 			alert(meta);
-=======
+
 			
 			
 			var meta = this.getHeader(location.charAt(0),location.charAt(1),location.charAt(2));
 			var metalocation = meta.substring(1,4);			
->>>>>>> refs/remotes/origin/master
-			
+
 			//If the meta isnt set give it the first free 
 			//Starting at 1:0:0
 			if(meta == "1000")
-<<<<<<< HEAD
+
 			{
 				location =  this.nextFreeO("1", "0","0");
 				this.write(location.charAt(0),location.charAt(1),location.charAt(2),newData);	
-=======
+
 			{	
 				
 				var newlocation =  this.nextFreeO("1", "0", "0");
->>>>>>> refs/remotes/origin/master
+
 				
 				this.setHeader(location.charAt(0),location.charAt(1),location.charAt(2),"1"+newlocation);				
 				
-<<<<<<< HEAD
+
 				
 			
-=======
+
 				this.write(newlocation.charAt(0),newlocation.charAt(1),newlocation.charAt(2),newData);	
 				this.addHeader(newlocation.charAt(0),newlocation.charAt(1),newlocation.charAt(2),"1000");			
->>>>>>> refs/remotes/origin/master
+
 			
 			}
 			else //go to meta and clear and write
 			{
-<<<<<<< HEAD
+
 				this.write(location.charAt(0),location.charAt(1),location.charAt(2),newData);			
 							
 			}
@@ -241,11 +240,11 @@ module TSOS
 			return "Success";
 			
 			
-=======
+
 				this.write(metalocation.charAt(0),metalocation.charAt(1),metalocation.charAt(2),newData);
 				this.addHeader(metalocation.charAt(0),metalocation.charAt(1),metalocation.charAt(2),"1000");							
 			}
->>>>>>> refs/remotes/origin/master
+
 			
 			this.updateHardDriveTable();
 			return "Success";
