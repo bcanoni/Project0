@@ -595,6 +595,8 @@ module TSOS
 		
 		public shellDelete(args)
 		{
+			//DELETE
+			_StdOut.putText("" + _DiskManager.deleteFile(args[0]));
 		
 		}
 		
@@ -616,7 +618,7 @@ module TSOS
 			
 			
 			}
-			_StdOut.putText("\" );
+			_StdOut.putText("|");
 		
 		
 		}

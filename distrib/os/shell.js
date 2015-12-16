@@ -386,6 +386,8 @@ var TSOS;
             _StdOut.putText("" + _DiskManager.writeFile(args[0], args[1]));
         };
         Shell.prototype.shellDelete = function (args) {
+            //DELETE
+            _StdOut.putText("" + _DiskManager.deleteFile(args[0]));
         };
         Shell.prototype.shellFormat = function (args) {
             _DiskManager.format();

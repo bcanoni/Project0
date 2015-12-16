@@ -310,6 +310,40 @@ module TSOS
 		
 		}
 		
+		public deleteFile(fileName)
+		{
+			//does file exist
+			var location = "";			
+			
+			for(var x = 0; x < this.fileNames.length ; x++)
+			{
+				if(this.fileNames[x][0] == fileName)
+				{
+					location = this.fileNames[x][1];
+					x = this.fileNames.length;				
+				}
+			
+			}
+			if(location == "")
+			{
+				return "file not found.";			
+			}			
+			
+			//location found
+			//remove file from filename list
+			 this.fileNames.splice(this.fileNames.indexOf(fileName), 1);
+			 
+			 //put in zeros
+			 var zero128 = "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000";
+			 _HardDrive.write(location.charAt(0),location.charAt(1),location.charAt(2),zero128);
+			 this.updateHardDriveTable();
+			 return "File Deleted.";
+			
+		
+		
+		
+		}
+		
 		
 		
 		//TABLE FUNCTIONS
@@ -346,6 +380,7 @@ module TSOS
 		
 		public initHardDriveTable()
 		{
+			//saving time when executing
 			var zero128 = "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000";
 		
 			var hardTable: HTMLTableElement = (<HTMLTableElement> document.getElementById("hardTable"));

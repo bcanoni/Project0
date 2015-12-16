@@ -177,6 +177,27 @@ var TSOS;
             var result = this.read(meta.charAt(0), meta.charAt(1), meta.charAt(2));
             return result;
         };
+        DiskManager.prototype.deleteFile = function (fileName) {
+            //does file exist
+            var location = "";
+            for (var x = 0; x < this.fileNames.length; x++) {
+                if (this.fileNames[x][0] == fileName) {
+                    location = this.fileNames[x][1];
+                    x = this.fileNames.length;
+                }
+            }
+            if (location == "") {
+                return "file not found.";
+            }
+            //location found
+            //remove file from filename list
+            this.fileNames.splice(this.fileNames.indexOf(fileName), 1);
+            //put in zeros
+            var zero128 = "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000";
+            _HardDrive.write(location.charAt(0), location.charAt(1), location.charAt(2), zero128);
+            this.updateHardDriveTable();
+            return "File Deleted.";
+        };
         //TABLE FUNCTIONS
         DiskManager.prototype.updateHardDriveTable = function () {
             for (var t = 0; t <= 3; t++) {
@@ -194,6 +215,7 @@ var TSOS;
             }
         };
         DiskManager.prototype.initHardDriveTable = function () {
+            //saving time when executing
             var zero128 = "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000";
             var hardTable = document.getElementById("hardTable");
             // 0:0:0 - 3:7:7
