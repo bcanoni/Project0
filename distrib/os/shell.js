@@ -383,6 +383,7 @@ var TSOS;
         };
         Shell.prototype.shellWrite = function (args) {
             //_DiskManager
+            _StdOut.putText("" + _DiskManager.writeFile(args[0], args[1]));
         };
         Shell.prototype.shellDelete = function (args) {
         };

@@ -179,7 +179,11 @@ module TSOS
 			//Starting at 1:0:0
 			if(meta == "1000")
 			{
-				location =  this.nextFreeO("1", "0","0");
+				
+				var newlocation =  this.nextFreeO("1", "0","0");
+				this.setHeader(location.charAt(0),location.charAt(1),location.charAt(2),"1"+newlocation);
+				
+				
 				this.write(location.charAt(0),location.charAt(1),location.charAt(2),newData);	
 				
 				

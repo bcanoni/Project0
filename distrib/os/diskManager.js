@@ -6,15 +6,18 @@ DiskManager
 var TSOS;
 (function (TSOS) {
     var DiskManager = (function () {
-        function DiskManager(headerLen, dataLen, fileNames, newFile) {
+        function DiskManager(headerLen, dataLen, fileNames, newFile, ff //first free file write loc
+            ) {
             if (headerLen === void 0) { headerLen = 4; }
             if (dataLen === void 0) { dataLen = 60; }
             if (fileNames === void 0) { fileNames = []; }
             if (newFile === void 0) { newFile = { name: "", loc: "" }; }
+            if (ff === void 0) { ff = "1:0:0"; }
             this.headerLen = headerLen;
             this.dataLen = dataLen;
             this.fileNames = fileNames;
             this.newFile = newFile;
+            this.ff = ff;
         }
         DiskManager.prototype.init = function () {
             this.initHardDriveTable();
@@ -59,6 +62,20 @@ var TSOS;
             }
             return null;
         };
+        DiskManager.prototype.nextFreeO = function (st, ss, sb) {
+            var data;
+            for (var t = st; t <= 3; t++) {
+                for (var s = ss; s <= 7; s++) {
+                    for (var b = sb; b <= 7; b++) {
+                        data = _HardDrive.read(t, s, b);
+                        if (data.substring(0, 4) == "0000") {
+                            return t + "" + s + "" + b;
+                        }
+                    }
+                }
+            }
+            return null;
+        };
         DiskManager.prototype.read = function (t, s, b) {
             //CONVERT HEX TO DEC
             var temp = _HardDrive.read(t, s, b);
@@ -68,6 +85,33 @@ var TSOS;
                 output += String.fromCharCode(parseInt(bit, 16));
             }
             return output;
+        };
+        DiskManager.prototype.writeFile = function (fileName, newData) {
+            var location = "";
+            for (var x = 0; x < this.fileNames.length; x++) {
+                if (this.fileNames[x].name == fileName) {
+                    location = this.fileNames[x].loc;
+                    x = this.fileNames.length;
+                }
+            }
+            if (location == "") {
+                return "file not found.";
+            }
+            //GRAB META DATA
+            var meta = this.getHeader(location.charAt(0), location.charAt(1), location.charAt(2));
+            location = meta.substring(1, 4);
+            alert(meta);
+            //If the meta isnt set give it the first free 
+            //Starting at 1:0:0
+            if (meta == "1000") {
+                location = this.nextFreeO("1", "0", "0");
+                this.write(location.charAt(0), location.charAt(1), location.charAt(2), newData);
+            }
+            else {
+                this.write(location.charAt(0), location.charAt(1), location.charAt(2), newData);
+            }
+            this.updateHardDriveTable();
+            return "Success";
         };
         DiskManager.prototype.getContent = function (t, s, b) {
             //CONVERT HEX TO DEC
@@ -83,6 +127,9 @@ var TSOS;
             var content = data.slice(4);
             var update = head + content;
             _HardDrive.write(t, s, b, update);
+        };
+        DiskManager.prototype.getHeader = function (t, s, b) {
+            return _HardDrive.read(t, s, b).substring(0, 4);
         };
         DiskManager.prototype.setContent = function (t, s, b, content) {
         };
