@@ -184,8 +184,8 @@ module TSOS
 				this.setHeader(location.charAt(0),location.charAt(1),location.charAt(2),"1"+newlocation);
 				
 				
-				this.write(location.charAt(0),location.charAt(1),location.charAt(2),newData);	
-				
+				this.write(newlocation.charAt(0),newlocation.charAt(1),newlocation.charAt(2),newData);	
+				this.addHeader(newlocation.charAt(0),newlocation.charAt(1),newlocation.charAt(2),"1000");
 				
 				
 			
@@ -193,7 +193,8 @@ module TSOS
 			}
 			else //go to meta and clear and write
 			{
-				this.write(location.charAt(0),location.charAt(1),location.charAt(2),newData);			
+				this.write(location.charAt(0),location.charAt(1),location.charAt(2),newData);
+				this.addHeader(location.charAt(0),location.charAt(1),location.charAt(2),"1000");
 							
 			}
 			this.updateHardDriveTable();

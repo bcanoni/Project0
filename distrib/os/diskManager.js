@@ -104,11 +104,14 @@ var TSOS;
             //If the meta isnt set give it the first free 
             //Starting at 1:0:0
             if (meta == "1000") {
-                location = this.nextFreeO("1", "0", "0");
-                this.write(location.charAt(0), location.charAt(1), location.charAt(2), newData);
+                var newlocation = this.nextFreeO("1", "0", "0");
+                this.setHeader(location.charAt(0), location.charAt(1), location.charAt(2), "1" + newlocation);
+                this.write(newlocation.charAt(0), newlocation.charAt(1), newlocation.charAt(2), newData);
+                this.addHeader(newlocation.charAt(0), newlocation.charAt(1), newlocation.charAt(2), "1000");
             }
             else {
                 this.write(location.charAt(0), location.charAt(1), location.charAt(2), newData);
+                this.addHeader(location.charAt(0), location.charAt(1), location.charAt(2), "1000");
             }
             this.updateHardDriveTable();
             return "Success";
