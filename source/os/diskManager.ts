@@ -167,10 +167,10 @@ module TSOS
 			
 			//GRAB META DATA
 			
-			alert("before meta" +location)
+			
 			var meta = this.getHeader(location.charAt(0),location.charAt(1),location.charAt(2));
 			var metalocation = meta.substring(1,4);			
-			alert("grabbed meta" +location);
+			
 			//If the meta isnt set give it the first free 
 			//Starting at 1:0:0
 			if(meta == "1000")
@@ -292,16 +292,28 @@ module TSOS
 		{
 			//IS IT ON THE LIST?
 			var meta = "000";
+			var found = false;
 			for(var x = 0; x < this.fileNames.length ; x++)
 			{
 				//alert(this.fileNames[x][0]);
 				if(this.fileNames[x][0] == fileName)
 				{
 					//GOOD!!
+					found = true;
 					//alert(this.fileNames[x][1].charAt(0) + ":" + this.fileNames[x][1].charAt(1) + this.fileNames[x][1].charAt(2));
 					meta = _HardDrive.read(this.fileNames[x][1].charAt(0),this.fileNames[x][1].charAt(1),this.fileNames[x][1].charAt(2)).substring(1,4);
 				}
-			}			
+			}
+			if(!found)
+			{
+				return "File not found.";
+			}
+			if(meta == "000")
+			{
+				return "File Empty.";
+			}
+
+				
 			//alert("loc of data" + meta);
 			var result = this.read(meta.charAt(0),meta.charAt(1),meta.charAt(2));
 			
