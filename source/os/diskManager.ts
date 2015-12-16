@@ -14,9 +14,14 @@ module TSOS
 	
 		constructor(public headerLen = 4,
 					public dataLen = 60,
+<<<<<<< HEAD
 					public fileNames = [],
 					public newFile = {name:"",loc:""},
 					public ff = "1:0:0"  //first free file write loc
+=======
+					public fileNames = []
+					//public newFile = {name:"",loc:""}				
+>>>>>>> refs/remotes/origin/master
 					){}
 		
 		public init()
@@ -30,7 +35,7 @@ module TSOS
 			
 			for(var x = 0; x < this.fileNames.length ; x++)
 			{
-				if(this.fileNames[x].name == fileName)
+				if(this.fileNames[x][0] == fileName)
 				{
 					//BAD!
 					return fileName + "already exists!";
@@ -50,9 +55,6 @@ module TSOS
 			var loc = this.nextFree();
 			if(loc != null)
 			{
-				
-				
-		
 				this.write(loc.charAt(0),loc.charAt(1),loc.charAt(2),fileName);
 				
 				
@@ -60,9 +62,11 @@ module TSOS
 				
 				this.updateHardDriveTable();
 				
-				this.newFile.name = fileName;
-				this.newFile.loc = loc;
-				this.fileNames.push(this.newFile); //at end of array
+				//this.newFile.name = fileName;
+				
+				//this.newFile.loc = loc;
+				var nf = [fileName,loc];
+				this.fileNames.push(nf); //at end of array
 				
 				return "Success!"; //success
 			}			
@@ -133,23 +137,34 @@ module TSOS
 		}
 		
 		
+<<<<<<< HEAD
 		
+=======
+>>>>>>> refs/remotes/origin/master
 		public read(t,s,b)
 		{
 			//CONVERT HEX TO DEC
 			var temp = _HardDrive.read(t,s,b);
 			var output = "";
 			
-			for(var x = 4 ; x<temp.length ;x++)
+			for(var x = 4 ; x<temp.length ;x+=2)
 			{
+<<<<<<< HEAD
 				var bit = temp.charAt(x) + temp.charAt(x)				
 				output+= String.fromCharCode(parseInt(bit , 16));		
 			}		
+=======
+				var bit = temp.charAt(x) + temp.charAt(x+1)				
+				output+= String.fromCharCode(parseInt(bit , 16));			
+			}
+			
+>>>>>>> refs/remotes/origin/master
 			
 			return output;
 		}
 		
 		public writeFile(fileName,newData)
+<<<<<<< HEAD
 		{
 			
 			
@@ -160,6 +175,16 @@ module TSOS
 				if(this.fileNames[x].name == fileName)
 				{
 					location = this.fileNames[x].loc;
+=======
+		{			
+			var location = "";			
+			
+			for(var x = 0; x < this.fileNames.length ; x++)
+			{
+				if(this.fileNames[x][0] == fileName)
+				{
+					location = this.fileNames[x][1];
+>>>>>>> refs/remotes/origin/master
 					x = this.fileNames.length;				
 				}
 			
@@ -170,25 +195,45 @@ module TSOS
 			}			
 			
 			//GRAB META DATA
+<<<<<<< HEAD
 			var meta = this.getHeader(location.charAt(0),location.charAt(1),location.charAt(2));
 			location = meta.substring(1,4);
 			
 			alert(meta);
+=======
+			
+			
+			var meta = this.getHeader(location.charAt(0),location.charAt(1),location.charAt(2));
+			var metalocation = meta.substring(1,4);			
+>>>>>>> refs/remotes/origin/master
 			
 			//If the meta isnt set give it the first free 
 			//Starting at 1:0:0
 			if(meta == "1000")
+<<<<<<< HEAD
 			{
 				location =  this.nextFreeO("1", "0","0");
 				this.write(location.charAt(0),location.charAt(1),location.charAt(2),newData);	
+=======
+			{	
 				
+				var newlocation =  this.nextFreeO("1", "0", "0");
+>>>>>>> refs/remotes/origin/master
 				
+				this.setHeader(location.charAt(0),location.charAt(1),location.charAt(2),"1"+newlocation);				
+				
+<<<<<<< HEAD
 				
 			
+=======
+				this.write(newlocation.charAt(0),newlocation.charAt(1),newlocation.charAt(2),newData);	
+				this.addHeader(newlocation.charAt(0),newlocation.charAt(1),newlocation.charAt(2),"1000");			
+>>>>>>> refs/remotes/origin/master
 			
 			}
 			else //go to meta and clear and write
 			{
+<<<<<<< HEAD
 				this.write(location.charAt(0),location.charAt(1),location.charAt(2),newData);			
 							
 			}
@@ -196,9 +241,21 @@ module TSOS
 			return "Success";
 			
 			
+=======
+				this.write(metalocation.charAt(0),metalocation.charAt(1),metalocation.charAt(2),newData);
+				this.addHeader(metalocation.charAt(0),metalocation.charAt(1),metalocation.charAt(2),"1000");							
+			}
+>>>>>>> refs/remotes/origin/master
 			
+			this.updateHardDriveTable();
+			return "Success";
 			
 		}
+			
+			
+			
+		
+		
 		
 		public getHeader(t,s,b)
 		{
@@ -228,6 +285,7 @@ module TSOS
 		
 		public setHeader(t,s,b,head)
 		{
+			
 			var data = _HardDrive.read(t,s,b);
 			var content = data.slice(4);
 			
@@ -236,6 +294,11 @@ module TSOS
 		
 			_HardDrive.write(t,s,b,update);	
 		
+		}
+		
+		public getHeader(t,s,b)
+		{
+			return _HardDrive.read(t,s,b).substring(0,4);
 		}
 		
 		public setContent(t,s,b,content)
@@ -295,19 +358,66 @@ module TSOS
 		{
 			//IS IT ON THE LIST?
 			var meta = "000";
+			var found = false;
 			for(var x = 0; x < this.fileNames.length ; x++)
 			{
-				if(this.fileNames[x].name == fileName)
+				
+				if(this.fileNames[x][0] == fileName)
 				{
 					//GOOD!!
+					found = true;
 					
-					meta = _HardDrive.read(this.fileNames[x].loc.charAt(0),this.fileNames[x].loc.charAt(1),this.fileNames[x].loc.charAt(2)).substring(1,4);
+					meta = _HardDrive.read(this.fileNames[x][1].charAt(0),this.fileNames[x][1].charAt(1),this.fileNames[x][1].charAt(2)).substring(1,4);
 				}
-			}			
-			alert(meta);
+			}
+			if(!found)
+			{
+				return "File not found.";
+			}
+			if(meta == "000")
+			{
+				return "File Empty.";
+			}
+
+				
+		
 			var result = this.read(meta.charAt(0),meta.charAt(1),meta.charAt(2));
 			
 			return result;
+		
+		
+		}
+		
+		public deleteFile(fileName)
+		{
+			//does file exist
+			var location = "";			
+			
+			for(var x = 0; x < this.fileNames.length ; x++)
+			{
+				if(this.fileNames[x][0] == fileName)
+				{
+					location = this.fileNames[x][1];
+					x = this.fileNames.length;				
+				}
+			
+			}
+			if(location == "")
+			{
+				return "file not found.";			
+			}			
+			
+			//location found
+			//remove file from filename list
+			 this.fileNames.splice(this.fileNames.indexOf(fileName), 1);
+			 
+			 //put in zeros
+			 var zero128 = "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000";
+			 _HardDrive.write(location.charAt(0),location.charAt(1),location.charAt(2),zero128);
+			 this.updateHardDriveTable();
+			 return "File Deleted.";
+			
+		
 		
 		
 		}
@@ -348,6 +458,7 @@ module TSOS
 		
 		public initHardDriveTable()
 		{
+			//saving time when executing
 			var zero128 = "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000";
 		
 			var hardTable: HTMLTableElement = (<HTMLTableElement> document.getElementById("hardTable"));
@@ -401,4 +512,11 @@ module TSOS
 	}
 	
 	
+}
+
+function newFile(n , l)
+{
+	this.name = n;
+	this.loc = l;
+
 }

@@ -383,18 +383,56 @@ var TSOS;
         };
         Shell.prototype.shellWrite = function (args) {
             //_DiskManager
+            if (args.length >= 2) {
+                var output = "";
+                for (var x = 1; x < args.length; x++) {
+                    output += args[x] + " ";
+                }
+                if ((output.charAt(0) == "\"") && (output.charAt(output.length - 2) == "\"")) {
+                    output = output.slice(1).slice(0, output.length - 3); // Took a while
+                    _StdOut.putText("" + _DiskManager.writeFile(args[0], output));
+                }
+                else {
+                    _StdOut.putText("Need Quotes");
+                }
+            }
+            else
+                _StdOut.putText("need filename");
         };
         Shell.prototype.shellDelete = function (args) {
+            //DELETE
+            _StdOut.putText("" + _DiskManager.deleteFile(args[0]));
         };
         Shell.prototype.shellFormat = function (args) {
             _DiskManager.format();
             _StdOut.putText("Format Complete.");
         };
         Shell.prototype.shellLS = function (args) {
+            _StdOut.putText("-Files");
+            _StdOut.advanceLine();
+            for (var x = 0; x < _DiskManager.fileNames.length; x++) {
+                _StdOut.putText("|-" + _DiskManager.fileNames[x][0]);
+                _StdOut.advanceLine();
+            }
+            _StdOut.putText("|");
         };
         Shell.prototype.shellSetSchedule = function (args) {
+            if (args[0] == "rr")
+                _Scheduler.mode = 1;
+            else if (args[0] == "fcfs")
+                _Scheduler.mode = 2;
+            else if (args[0] == "priority")
+                _Scheduler.mode = 3;
+            else
+                _StdOut.putText("Pick valid Algorithm [rr, fcfs, priorty]");
         };
         Shell.prototype.shellGetSchedule = function (args) {
+            if (_Scheduler.mode == 1)
+                _StdOut.putText("Running in: Round Robin");
+            else if (_Scheduler.mode == 2)
+                _StdOut.putText("Running in: First Come First Serve.");
+            else if (_Scheduler.mode == 3)
+                _StdOut.putText("Running in: Priorty");
         };
         Shell.prototype.shellShutdown = function (args) {
             _StdOut.putText("Shutting down...");

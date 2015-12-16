@@ -6,22 +6,20 @@ DiskManager
 var TSOS;
 (function (TSOS) {
     var DiskManager = (function () {
-        function DiskManager(headerLen, dataLen, fileNames, newFile) {
+        function DiskManager(headerLen, dataLen, fileNames) {
             if (headerLen === void 0) { headerLen = 4; }
             if (dataLen === void 0) { dataLen = 60; }
             if (fileNames === void 0) { fileNames = []; }
-            if (newFile === void 0) { newFile = { name: "", loc: "" }; }
             this.headerLen = headerLen;
             this.dataLen = dataLen;
             this.fileNames = fileNames;
-            this.newFile = newFile;
         }
         DiskManager.prototype.init = function () {
             this.initHardDriveTable();
         };
         DiskManager.prototype.createFile = function (fileName) {
             for (var x = 0; x < this.fileNames.length; x++) {
-                if (this.fileNames[x].name == fileName) {
+                if (this.fileNames[x][0] == fileName) {
                     //BAD!
                     return fileName + "already exists!";
                 }
@@ -38,9 +36,10 @@ var TSOS;
                 this.write(loc.charAt(0), loc.charAt(1), loc.charAt(2), fileName);
                 this.addHeader(loc.charAt(0), loc.charAt(1), loc.charAt(2), "1000");
                 this.updateHardDriveTable();
-                this.newFile.name = fileName;
-                this.newFile.loc = loc;
-                this.fileNames.push(this.newFile); //at end of array
+                //this.newFile.name = fileName;
+                //this.newFile.loc = loc;
+                var nf = [fileName, loc];
+                this.fileNames.push(nf); //at end of array
                 return "Success!"; //success
             }
             return null;
@@ -59,15 +58,58 @@ var TSOS;
             }
             return null;
         };
+        DiskManager.prototype.nextFreeO = function (st, ss, sb) {
+            var data;
+            for (var t = st; t <= 3; t++) {
+                for (var s = ss; s <= 7; s++) {
+                    for (var b = sb; b <= 7; b++) {
+                        data = _HardDrive.read(t, s, b);
+                        if (data.substring(0, 4) == "0000") {
+                            return t + "" + s + "" + b;
+                        }
+                    }
+                }
+            }
+            return null;
+        };
         DiskManager.prototype.read = function (t, s, b) {
             //CONVERT HEX TO DEC
             var temp = _HardDrive.read(t, s, b);
             var output = "";
-            for (var x = 4; x < temp.length; x++) {
-                var bit = temp.charAt(x) + temp.charAt(x);
+            for (var x = 4; x < temp.length; x += 2) {
+                var bit = temp.charAt(x) + temp.charAt(x + 1);
                 output += String.fromCharCode(parseInt(bit, 16));
             }
             return output;
+        };
+        DiskManager.prototype.writeFile = function (fileName, newData) {
+            var location = "";
+            for (var x = 0; x < this.fileNames.length; x++) {
+                if (this.fileNames[x][0] == fileName) {
+                    location = this.fileNames[x][1];
+                    x = this.fileNames.length;
+                }
+            }
+            if (location == "") {
+                return "file not found.";
+            }
+            //GRAB META DATA
+            var meta = this.getHeader(location.charAt(0), location.charAt(1), location.charAt(2));
+            var metalocation = meta.substring(1, 4);
+            //If the meta isnt set give it the first free 
+            //Starting at 1:0:0
+            if (meta == "1000") {
+                var newlocation = this.nextFreeO("1", "0", "0");
+                this.setHeader(location.charAt(0), location.charAt(1), location.charAt(2), "1" + newlocation);
+                this.write(newlocation.charAt(0), newlocation.charAt(1), newlocation.charAt(2), newData);
+                this.addHeader(newlocation.charAt(0), newlocation.charAt(1), newlocation.charAt(2), "1000");
+            }
+            else {
+                this.write(metalocation.charAt(0), metalocation.charAt(1), metalocation.charAt(2), newData);
+                this.addHeader(metalocation.charAt(0), metalocation.charAt(1), metalocation.charAt(2), "1000");
+            }
+            this.updateHardDriveTable();
+            return "Success";
         };
         DiskManager.prototype.getContent = function (t, s, b) {
             //CONVERT HEX TO DEC
@@ -83,6 +125,9 @@ var TSOS;
             var content = data.slice(4);
             var update = head + content;
             _HardDrive.write(t, s, b, update);
+        };
+        DiskManager.prototype.getHeader = function (t, s, b) {
+            return _HardDrive.read(t, s, b).substring(0, 4);
         };
         DiskManager.prototype.setContent = function (t, s, b, content) {
         };
@@ -117,15 +162,43 @@ var TSOS;
         DiskManager.prototype.readFile = function (fileName) {
             //IS IT ON THE LIST?
             var meta = "000";
+            var found = false;
             for (var x = 0; x < this.fileNames.length; x++) {
-                if (this.fileNames[x].name == fileName) {
+                if (this.fileNames[x][0] == fileName) {
                     //GOOD!!
-                    meta = _HardDrive.read(this.fileNames[x].loc.charAt(0), this.fileNames[x].loc.charAt(1), this.fileNames[x].loc.charAt(2)).substring(1, 4);
+                    found = true;
+                    meta = _HardDrive.read(this.fileNames[x][1].charAt(0), this.fileNames[x][1].charAt(1), this.fileNames[x][1].charAt(2)).substring(1, 4);
                 }
             }
-            alert(meta);
+            if (!found) {
+                return "File not found.";
+            }
+            if (meta == "000") {
+                return "File Empty.";
+            }
             var result = this.read(meta.charAt(0), meta.charAt(1), meta.charAt(2));
             return result;
+        };
+        DiskManager.prototype.deleteFile = function (fileName) {
+            //does file exist
+            var location = "";
+            for (var x = 0; x < this.fileNames.length; x++) {
+                if (this.fileNames[x][0] == fileName) {
+                    location = this.fileNames[x][1];
+                    x = this.fileNames.length;
+                }
+            }
+            if (location == "") {
+                return "file not found.";
+            }
+            //location found
+            //remove file from filename list
+            this.fileNames.splice(this.fileNames.indexOf(fileName), 1);
+            //put in zeros
+            var zero128 = "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000";
+            _HardDrive.write(location.charAt(0), location.charAt(1), location.charAt(2), zero128);
+            this.updateHardDriveTable();
+            return "File Deleted.";
         };
         //TABLE FUNCTIONS
         DiskManager.prototype.updateHardDriveTable = function () {
@@ -144,6 +217,7 @@ var TSOS;
             }
         };
         DiskManager.prototype.initHardDriveTable = function () {
+            //saving time when executing
             var zero128 = "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000";
             var hardTable = document.getElementById("hardTable");
             // 0:0:0 - 3:7:7
@@ -172,3 +246,7 @@ var TSOS;
     })();
     TSOS.DiskManager = DiskManager;
 })(TSOS || (TSOS = {}));
+function newFile(n, l) {
+    this.name = n;
+    this.loc = l;
+}

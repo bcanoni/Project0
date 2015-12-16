@@ -131,7 +131,7 @@ module TSOS
 			 sc = new ShellCommand(this.shellClearMem,
                                   "clearmem",
                                   "- Clear all Mem");
-            this.commandList[this.commandList.length] = sc;
+            this.commandList[this.commandList.length] = sc; 
 			
 			
 			
@@ -588,13 +588,40 @@ module TSOS
 		
 		public shellWrite(args)
 		{
+<<<<<<< HEAD
 			//write filename "data"
 			_StdOut.putText("" + _DiskManager.writeFile(args[0],args[1]));
+=======
+			//_DiskManager
+			
+			if (args.length >= 2 ) //needs to have at least ""
+			{          
+				var output = "";
+				for (var x = 1; x < args.length; x++) //REM args 1 was filename
+				{
+					output += args[x] + " ";
+				}
+
+				if ((output.charAt(0) == "\"") && (output.charAt(output.length - 2) == "\"")) 
+				{
+					output = output.slice(1).slice(0, output.length - 3); // Took a while
+					_StdOut.putText("" + _DiskManager.writeFile(args[0],output));
+				} else 
+				{
+					_StdOut.putText("Need Quotes");
+				}			
+			}
+			else
+			_StdOut.putText("need filename");
+			
+>>>>>>> refs/remotes/origin/master
 			
 		}
 		
 		public shellDelete(args)
 		{
+			//DELETE
+			_StdOut.putText("" + _DiskManager.deleteFile(args[0]));
 		
 		}
 		
@@ -607,16 +634,43 @@ module TSOS
 		
 		public shellLS(args)
 		{
+			_StdOut.putText("-Files" );
+			_StdOut.advanceLine();
+			for(var x = 0; x< _DiskManager.fileNames.length; x++)
+			{
+				_StdOut.putText("|-" + _DiskManager.fileNames[x][0]);
+				_StdOut.advanceLine();
+			
+			
+			}
+			_StdOut.putText("|");
+		
 		
 		}
 		
 		public shellSetSchedule(args)
 		{
+		  if(args[0] == "rr") //round robin
+		  _Scheduler.mode = 1;
+		  else if(args[0] == "fcfs")
+		  _Scheduler.mode = 2;
+		  else if(args[0] == "priority")
+		  _Scheduler.mode = 3;
+		  else 
+		  _StdOut.putText("Pick valid Algorithm [rr, fcfs, priorty]");
+		  
+		  
 		}
 		
 		public shellGetSchedule(args)
 		{
-		
+			if(_Scheduler.mode == 1)
+			_StdOut.putText("Running in: Round Robin");
+			else if(_Scheduler.mode == 2)
+			_StdOut.putText("Running in: First Come First Serve.");
+			else if(_Scheduler.mode == 3)
+			_StdOut.putText("Running in: Priorty");
+			
 		}
 		
 		

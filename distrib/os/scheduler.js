@@ -7,17 +7,19 @@ Comments
 var TSOS;
 (function (TSOS) {
     var Scheduler = (function () {
-        function Scheduler(readyQueue, residentQueue, terminatedQueue, counter, quantum) {
+        function Scheduler(readyQueue, residentQueue, terminatedQueue, counter, quantum, mode) {
             if (readyQueue === void 0) { readyQueue = new TSOS.Queue(); }
             if (residentQueue === void 0) { residentQueue = new TSOS.Queue(); }
             if (terminatedQueue === void 0) { terminatedQueue = new TSOS.Queue(); }
             if (counter === void 0) { counter = 0; }
             if (quantum === void 0) { quantum = 6; }
+            if (mode === void 0) { mode = 1; }
             this.readyQueue = readyQueue;
             this.residentQueue = residentQueue;
             this.terminatedQueue = terminatedQueue;
             this.counter = counter;
             this.quantum = quantum;
+            this.mode = mode;
         }
         Scheduler.prototype.loadProgMem = function (program) {
             var curPCB = new TSOS.PCB();
@@ -32,7 +34,7 @@ var TSOS;
                     pos = x;
                 }
             }
-            _PCB = this.residentQueue[pos];
+            _PCB = this.residentQueue.q[pos];
             _PCB.state = 2; //running	
             //ADD to readyQueue;
             this.readyQueue.enqueue(_PCB);
@@ -65,20 +67,32 @@ var TSOS;
             _CPU.isExecuting = true;
         };
         Scheduler.prototype.switcher = function () {
-            //EACH CPU CYCLE
-            this.counter++;
-            //alert (this.readyQueue);
-            if (this.counter >= this.quantum) {
-                //get next pcb in list	
-                var nextPCB = this.readyQueue.dequeue();
-                //PUT OLD PCB AT END OF QUEUE/ BOTTOM
-                this.readyQueue.q.push(_PCB);
-                _PCB = nextPCB;
-                _CPU.switchTo(nextPCB);
-                this.counter = 0;
+            if (this.mode == 1 || this.mode == 3) {
+                //EACH CPU CYCLE
+                this.counter++;
+                //alert (this.readyQueue);
+                if (this.counter >= this.quantum) {
+                    //get next pcb in list	
+                    var nextPCB = this.readyQueue.dequeue();
+                    //PUT OLD PCB AT END OF QUEUE/ BOTTOM
+                    this.readyQueue.q.push(_PCB);
+                    _PCB = nextPCB;
+                    _CPU.switchTo(nextPCB);
+                    this.counter = 0;
+                }
+                if (this.readyQueue.isEmpty()) {
+                    _CPU.isExecuting = false;
+                }
             }
-            if (this.readyQueue.isEmpty()) {
-                _CPU.isExecuting = false;
+            else if (this.mode == 2) {
+                if (_PCB.state == 3) {
+                    // process terminated
+                    _PCB = nextPCB;
+                    _CPU.switchTo(nextPCB);
+                    if (this.readyQueue.isEmpty()) {
+                        _CPU.isExecuting = false;
+                    }
+                }
             }
         };
         Scheduler.prototype.updatePCBTable = function () {

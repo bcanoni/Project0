@@ -15,7 +15,8 @@ module TSOS
 					public residentQueue = new TSOS.Queue(),
 					public terminatedQueue = new TSOS.Queue(),
                     public counter : number =0,
-					public quantum : number = 6					
+					public quantum : number = 6,
+					public mode: number = 1
                     ) {}
 					
 					
@@ -40,7 +41,7 @@ module TSOS
 					pos = x;
 				}
 			}
-		    _PCB = this.residentQueue[pos];
+		    _PCB = this.residentQueue.q[pos];
 			
 			_PCB.state = 2; //running	
 			
@@ -64,9 +65,7 @@ module TSOS
 				{
 					out = true;
 				}
-			}
-			
-			
+			}			
 			return out;
 		
 		}
@@ -83,11 +82,8 @@ module TSOS
 			{
 				var temp: PCB = this.residentQueue.dequeue();
 				this.readyQueue.enqueue(temp);	
-				this.addRow(temp);
-				
-			}
-			
-			
+				this.addRow(temp);				
+			}			
 			_PCB = temp;
 			
 			_CPU.clearCpu();
@@ -98,39 +94,50 @@ module TSOS
 		
 		public switcher(): void
 		{	
-			//EACH CPU CYCLE
-			this.counter++;
-			
-			//alert (this.readyQueue);
-			if(this.counter >= this.quantum) //A SWITCH MUST OCCUR
-			{	
-				//get next pcb in list	
-				var nextPCB = this.readyQueue.dequeue();
-				
-				//PUT OLD PCB AT END OF QUEUE/ BOTTOM
-				this.readyQueue.q.push(_PCB);
-				
-				
-							
-				
-				
-								
-				
-					
-					
-				
-				
-			
-				
-				_PCB = nextPCB;
-				_CPU.switchTo(nextPCB);
-			
-				this.counter = 0;
-			}
-			if(this.readyQueue.isEmpty())
+			if(this.mode == 1 || this.mode == 3 ) //priority not implemented
 			{
-				_CPU.isExecuting = false;
+				//EACH CPU CYCLE
+				this.counter++;
+				
+				//alert (this.readyQueue);
+				if(this.counter >= this.quantum) //A SWITCH MUST OCCUR
+				{	
+					//get next pcb in list	
+					var nextPCB = this.readyQueue.dequeue();
+					
+					//PUT OLD PCB AT END OF QUEUE/ BOTTOM
+					this.readyQueue.q.push(_PCB);			
+					
+					_PCB = nextPCB;
+					_CPU.switchTo(nextPCB);
+				
+					this.counter = 0;
+				}
+				if(this.readyQueue.isEmpty())
+				{
+					_CPU.isExecuting = false;
+				}
 			}
+			else if(this.mode == 2)
+			{
+				if(_PCB.state == 3) 
+				{
+					// process terminated
+					
+					
+					_PCB = nextPCB;
+					_CPU.switchTo(nextPCB);
+					
+					if(this.readyQueue.isEmpty())
+					{
+						_CPU.isExecuting = false;
+					}
+				}
+			
+			
+			
+			}
+			
 		
 		}
 		
