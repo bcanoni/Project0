@@ -40,7 +40,7 @@ module TSOS
 					pos = x;
 				}
 			}
-		    _PCB = this.residentQueue[pos];
+		    _PCB = this.residentQueue.q[pos];
 			
 			_PCB.state = 2; //running	
 			
@@ -64,9 +64,7 @@ module TSOS
 				{
 					out = true;
 				}
-			}
-			
-			
+			}			
 			return out;
 		
 		}
@@ -83,11 +81,8 @@ module TSOS
 			{
 				var temp: PCB = this.residentQueue.dequeue();
 				this.readyQueue.enqueue(temp);	
-				this.addRow(temp);
-				
-			}
-			
-			
+				this.addRow(temp);				
+			}			
 			_PCB = temp;
 			
 			_CPU.clearCpu();
@@ -108,19 +103,7 @@ module TSOS
 				var nextPCB = this.readyQueue.dequeue();
 				
 				//PUT OLD PCB AT END OF QUEUE/ BOTTOM
-				this.readyQueue.q.push(_PCB);
-				
-				
-							
-				
-				
-								
-				
-					
-					
-				
-				
-			
+				this.readyQueue.q.push(_PCB);			
 				
 				_PCB = nextPCB;
 				_CPU.switchTo(nextPCB);

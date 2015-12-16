@@ -32,7 +32,7 @@ var TSOS;
                     pos = x;
                 }
             }
-            _PCB = this.residentQueue[pos];
+            _PCB = this.residentQueue.q[pos];
             _PCB.state = 2; //running	
             //ADD to readyQueue;
             this.readyQueue.enqueue(_PCB);

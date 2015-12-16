@@ -15,8 +15,8 @@ module TSOS
 		constructor(public headerLen = 4,
 					public dataLen = 60,
 					public fileNames = [],
-					public newFile = {name:"",loc:""},
-					public ff = "1:0:0"  //first free file write loc
+					public newFile = {name:"",loc:""}
+				
 					){}
 		
 		public init()
@@ -50,9 +50,6 @@ module TSOS
 			var loc = this.nextFree();
 			if(loc != null)
 			{
-				
-				
-		
 				this.write(loc.charAt(0),loc.charAt(1),loc.charAt(2),fileName);
 				
 				
@@ -61,6 +58,7 @@ module TSOS
 				this.updateHardDriveTable();
 				
 				this.newFile.name = fileName;
+				alert(loc);
 				this.newFile.loc = loc;
 				this.fileNames.push(this.newFile); //at end of array
 				
@@ -150,10 +148,8 @@ module TSOS
 		}
 		
 		public writeFile(fileName,newData)
-		{
-			
-			
-			var location = "";
+		{			
+			var location = "";			
 			
 			for(var x = 0; x < this.fileNames.length ; x++)
 			{
@@ -171,32 +167,27 @@ module TSOS
 			
 			//GRAB META DATA
 			var meta = this.getHeader(location.charAt(0),location.charAt(1),location.charAt(2));
-			location = meta.substring(1,4);
-			
-			alert(meta);
+			location = meta.substring(1,4);			
 			
 			//If the meta isnt set give it the first free 
 			//Starting at 1:0:0
 			if(meta == "1000")
-			{
+			{	
 				
-				var newlocation =  this.nextFreeO("1", "0","0");
-				this.setHeader(location.charAt(0),location.charAt(1),location.charAt(2),"1"+newlocation);
-				
+				var newlocation =  this.nextFreeO("1", "0", "0");
+				alert(location);
+				this.setHeader(location.charAt(0),location.charAt(1),location.charAt(2),"1"+newlocation);				
 				
 				this.write(newlocation.charAt(0),newlocation.charAt(1),newlocation.charAt(2),newData);	
-				this.addHeader(newlocation.charAt(0),newlocation.charAt(1),newlocation.charAt(2),"1000");
-				
-				
-			
+				this.addHeader(newlocation.charAt(0),newlocation.charAt(1),newlocation.charAt(2),"1000");			
 			
 			}
 			else //go to meta and clear and write
 			{
 				this.write(location.charAt(0),location.charAt(1),location.charAt(2),newData);
-				this.addHeader(location.charAt(0),location.charAt(1),location.charAt(2),"1000");
-							
+				this.addHeader(location.charAt(0),location.charAt(1),location.charAt(2),"1000");							
 			}
+			
 			this.updateHardDriveTable();
 			return "Success";
 			
@@ -307,7 +298,7 @@ module TSOS
 					meta = _HardDrive.read(this.fileNames[x].loc.charAt(0),this.fileNames[x].loc.charAt(1),this.fileNames[x].loc.charAt(2)).substring(1,4);
 				}
 			}			
-			alert(meta);
+			
 			var result = this.read(meta.charAt(0),meta.charAt(1),meta.charAt(2));
 			
 			return result;

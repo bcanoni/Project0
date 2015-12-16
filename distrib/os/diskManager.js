@@ -6,18 +6,15 @@ DiskManager
 var TSOS;
 (function (TSOS) {
     var DiskManager = (function () {
-        function DiskManager(headerLen, dataLen, fileNames, newFile, ff //first free file write loc
-            ) {
+        function DiskManager(headerLen, dataLen, fileNames, newFile) {
             if (headerLen === void 0) { headerLen = 4; }
             if (dataLen === void 0) { dataLen = 60; }
             if (fileNames === void 0) { fileNames = []; }
             if (newFile === void 0) { newFile = { name: "", loc: "" }; }
-            if (ff === void 0) { ff = "1:0:0"; }
             this.headerLen = headerLen;
             this.dataLen = dataLen;
             this.fileNames = fileNames;
             this.newFile = newFile;
-            this.ff = ff;
         }
         DiskManager.prototype.init = function () {
             this.initHardDriveTable();
@@ -42,6 +39,7 @@ var TSOS;
                 this.addHeader(loc.charAt(0), loc.charAt(1), loc.charAt(2), "1000");
                 this.updateHardDriveTable();
                 this.newFile.name = fileName;
+                alert(loc);
                 this.newFile.loc = loc;
                 this.fileNames.push(this.newFile); //at end of array
                 return "Success!"; //success
@@ -100,11 +98,11 @@ var TSOS;
             //GRAB META DATA
             var meta = this.getHeader(location.charAt(0), location.charAt(1), location.charAt(2));
             location = meta.substring(1, 4);
-            alert(meta);
             //If the meta isnt set give it the first free 
             //Starting at 1:0:0
             if (meta == "1000") {
                 var newlocation = this.nextFreeO("1", "0", "0");
+                alert(location);
                 this.setHeader(location.charAt(0), location.charAt(1), location.charAt(2), "1" + newlocation);
                 this.write(newlocation.charAt(0), newlocation.charAt(1), newlocation.charAt(2), newData);
                 this.addHeader(newlocation.charAt(0), newlocation.charAt(1), newlocation.charAt(2), "1000");
@@ -173,7 +171,6 @@ var TSOS;
                     meta = _HardDrive.read(this.fileNames[x].loc.charAt(0), this.fileNames[x].loc.charAt(1), this.fileNames[x].loc.charAt(2)).substring(1, 4);
                 }
             }
-            alert(meta);
             var result = this.read(meta.charAt(0), meta.charAt(1), meta.charAt(2));
             return result;
         };
