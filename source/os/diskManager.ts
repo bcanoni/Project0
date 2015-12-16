@@ -15,7 +15,8 @@ module TSOS
 		constructor(public headerLen = 4,
 					public dataLen = 60,
 					public fileNames = [],
-					public newFile = {name:"",loc:""}
+					public newFile = {name:"",loc:""},
+					public ff = "1:0:0"  //first free file write loc
 					){}
 		
 		public init()
@@ -103,6 +104,36 @@ module TSOS
 		
 		}
 		
+		public nextFreeO(st , ss , sb) //OVERLOADED VERSION 
+		{
+			
+			var data;
+			
+			for(var t = st ; t <= 3 ; t++)
+			{			
+				
+				for(var s = ss; s <= 7 ; s++)
+				{
+					for(var b = sb; b <= 7 ; b++)
+					{
+						data = _HardDrive.read(t,s,b);
+						
+						if( data.substring(0,4) == "0000")
+						{
+							return t + "" + s + "" + b;
+						}
+					 
+					}
+					
+				}
+				
+			}
+			return null;		
+		
+		}
+		
+		
+		
 		public read(t,s,b)
 		{
 			//CONVERT HEX TO DEC
@@ -112,15 +143,71 @@ module TSOS
 			for(var x = 4 ; x<temp.length ;x++)
 			{
 				var bit = temp.charAt(x) + temp.charAt(x)				
-				output+= String.fromCharCode(parseInt(bit , 16));
-				
-				
-			
-			}
-			
+				output+= String.fromCharCode(parseInt(bit , 16));		
+			}		
 			
 			return output;
 		}
+		
+		public writeFile(fileName,newData)
+		{
+			
+			
+			var location = "";
+			
+			for(var x = 0; x < this.fileNames.length ; x++)
+			{
+				if(this.fileNames[x].name == fileName)
+				{
+					location = this.fileNames[x].loc;
+					x = this.fileNames.length;				
+				}
+			
+			}
+			if(location == "")
+			{
+				return "file not found.";			
+			}			
+			
+			//GRAB META DATA
+			var meta = this.getHeader(location.charAt(0),location.charAt(1),location.charAt(2));
+			location = meta.substring(1,4);
+			
+			alert(meta);
+			
+			//If the meta isnt set give it the first free 
+			//Starting at 1:0:0
+			if(meta == "1000")
+			{
+				location =  this.nextFreeO("1", "0","0");
+				this.write(location.charAt(0),location.charAt(1),location.charAt(2),newData);	
+				
+				
+				
+			
+			
+			}
+			else //go to meta and clear and write
+			{
+				this.write(location.charAt(0),location.charAt(1),location.charAt(2),newData);			
+							
+			}
+			this.updateHardDriveTable();
+			return "Success";
+			
+			
+			
+			
+		}
+		
+		public getHeader(t,s,b)
+		{
+			return _HardDrive.read(t,s,b).substring(0,4);
+		}
+		
+		
+		
+	
 		
 		public getContent(t,s,b)
 		{

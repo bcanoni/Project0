@@ -573,7 +573,6 @@ module TSOS
 		public shellCreate(args)
 		{
 			//create file
-			
 			_StdOut.putText("File " + args[0] + ". Result:" + _DiskManager.createFile(args[0]) );			
 		
 		
@@ -583,13 +582,15 @@ module TSOS
 		{
 			//args[0] = file name
 			_StdOut.putText("" + _DiskManager.readFile(args[0]));
-			//alert(_DiskManager.read(args[0],args[1],args[2]));
+			
 		
 		}
 		
 		public shellWrite(args)
 		{
-			//_DiskManager
+			//write filename "data"
+			_StdOut.putText("" + _DiskManager.writeFile(args[0],args[1]));
+			
 		}
 		
 		public shellDelete(args)
