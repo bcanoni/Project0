@@ -607,6 +607,17 @@ module TSOS
 		
 		public shellLS(args)
 		{
+			_StdOut.putText("-Files" );
+			_StdOut.advanceLine();
+			for(var x = 0; x< _DiskManager.fileNames.length; x++)
+			{
+				_StdOut.putText("|-" + _DiskManager.fileNames[x][0]);
+				_StdOut.advanceLine();
+			
+			
+			}
+			_StdOut.putText("\" );
+		
 		
 		}
 		

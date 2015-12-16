@@ -392,6 +392,13 @@ var TSOS;
             _StdOut.putText("Format Complete.");
         };
         Shell.prototype.shellLS = function (args) {
+            _StdOut.putText("-Files");
+            _StdOut.advanceLine();
+            for (var x = 0; x < _DiskManager.fileNames.length; x++) {
+                _StdOut.putText("|-" + _DiskManager.fileNames[x][0]);
+                _StdOut.advanceLine();
+            }
+            _StdOut.putText("|");
         };
         Shell.prototype.shellSetSchedule = function (args) {
         };

@@ -14,8 +14,8 @@ module TSOS
 	
 		constructor(public headerLen = 4,
 					public dataLen = 60,
-					public fileNames = [],
-					public newFile = {name:"",loc:""}				
+					public fileNames = []
+					//public newFile = {name:"",loc:""}				
 					){}
 		
 		public init()
@@ -29,7 +29,7 @@ module TSOS
 			
 			for(var x = 0; x < this.fileNames.length ; x++)
 			{
-				if(this.fileNames[x].name == fileName)
+				if(this.fileNames[x][0] == fileName)
 				{
 					//BAD!
 					return fileName + "already exists!";
@@ -56,10 +56,11 @@ module TSOS
 				
 				this.updateHardDriveTable();
 				
-				this.newFile.name = fileName;
+				//this.newFile.name = fileName;
 				
-				this.newFile.loc = loc;
-				this.fileNames.push(this.newFile); //at end of array
+				//this.newFile.loc = loc;
+				var nf = [fileName,loc];
+				this.fileNames.push(nf); //at end of array
 				
 				return "Success!"; //success
 			}			
@@ -152,9 +153,9 @@ module TSOS
 			
 			for(var x = 0; x < this.fileNames.length ; x++)
 			{
-				if(this.fileNames[x].name == fileName)
+				if(this.fileNames[x][0] == fileName)
 				{
-					location = this.fileNames[x].loc;
+					location = this.fileNames[x][1];
 					x = this.fileNames.length;				
 				}
 			
@@ -293,12 +294,12 @@ module TSOS
 			var meta = "000";
 			for(var x = 0; x < this.fileNames.length ; x++)
 			{
-				//alert(this.fileNames[x].name);
-				if(this.fileNames[x].name == fileName)
+				//alert(this.fileNames[x][0]);
+				if(this.fileNames[x][0] == fileName)
 				{
 					//GOOD!!
-					//alert(this.fileNames[x].loc.charAt(0) + ":" + this.fileNames[x].loc.charAt(1) + this.fileNames[x].loc.charAt(2));
-					meta = _HardDrive.read(this.fileNames[x].loc.charAt(0),this.fileNames[x].loc.charAt(1),this.fileNames[x].loc.charAt(2)).substring(1,4);
+					//alert(this.fileNames[x][1].charAt(0) + ":" + this.fileNames[x][1].charAt(1) + this.fileNames[x][1].charAt(2));
+					meta = _HardDrive.read(this.fileNames[x][1].charAt(0),this.fileNames[x][1].charAt(1),this.fileNames[x][1].charAt(2)).substring(1,4);
 				}
 			}			
 			//alert("loc of data" + meta);
@@ -398,4 +399,11 @@ module TSOS
 	}
 	
 	
+}
+
+function newFile(n , l)
+{
+	this.name = n;
+	this.loc = l;
+
 }

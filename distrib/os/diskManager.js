@@ -6,22 +6,20 @@ DiskManager
 var TSOS;
 (function (TSOS) {
     var DiskManager = (function () {
-        function DiskManager(headerLen, dataLen, fileNames, newFile) {
+        function DiskManager(headerLen, dataLen, fileNames) {
             if (headerLen === void 0) { headerLen = 4; }
             if (dataLen === void 0) { dataLen = 60; }
             if (fileNames === void 0) { fileNames = []; }
-            if (newFile === void 0) { newFile = { name: "", loc: "" }; }
             this.headerLen = headerLen;
             this.dataLen = dataLen;
             this.fileNames = fileNames;
-            this.newFile = newFile;
         }
         DiskManager.prototype.init = function () {
             this.initHardDriveTable();
         };
         DiskManager.prototype.createFile = function (fileName) {
             for (var x = 0; x < this.fileNames.length; x++) {
-                if (this.fileNames[x].name == fileName) {
+                if (this.fileNames[x][0] == fileName) {
                     //BAD!
                     return fileName + "already exists!";
                 }
@@ -38,9 +36,10 @@ var TSOS;
                 this.write(loc.charAt(0), loc.charAt(1), loc.charAt(2), fileName);
                 this.addHeader(loc.charAt(0), loc.charAt(1), loc.charAt(2), "1000");
                 this.updateHardDriveTable();
-                this.newFile.name = fileName;
-                this.newFile.loc = loc;
-                this.fileNames.push(this.newFile); //at end of array
+                //this.newFile.name = fileName;
+                //this.newFile.loc = loc;
+                var nf = [fileName, loc];
+                this.fileNames.push(nf); //at end of array
                 return "Success!"; //success
             }
             return null;
@@ -86,8 +85,8 @@ var TSOS;
         DiskManager.prototype.writeFile = function (fileName, newData) {
             var location = "";
             for (var x = 0; x < this.fileNames.length; x++) {
-                if (this.fileNames[x].name == fileName) {
-                    location = this.fileNames[x].loc;
+                if (this.fileNames[x][0] == fileName) {
+                    location = this.fileNames[x][1];
                     x = this.fileNames.length;
                 }
             }
@@ -167,11 +166,11 @@ var TSOS;
             //IS IT ON THE LIST?
             var meta = "000";
             for (var x = 0; x < this.fileNames.length; x++) {
-                //alert(this.fileNames[x].name);
-                if (this.fileNames[x].name == fileName) {
+                //alert(this.fileNames[x][0]);
+                if (this.fileNames[x][0] == fileName) {
                     //GOOD!!
-                    //alert(this.fileNames[x].loc.charAt(0) + ":" + this.fileNames[x].loc.charAt(1) + this.fileNames[x].loc.charAt(2));
-                    meta = _HardDrive.read(this.fileNames[x].loc.charAt(0), this.fileNames[x].loc.charAt(1), this.fileNames[x].loc.charAt(2)).substring(1, 4);
+                    //alert(this.fileNames[x][1].charAt(0) + ":" + this.fileNames[x][1].charAt(1) + this.fileNames[x][1].charAt(2));
+                    meta = _HardDrive.read(this.fileNames[x][1].charAt(0), this.fileNames[x][1].charAt(1), this.fileNames[x][1].charAt(2)).substring(1, 4);
                 }
             }
             //alert("loc of data" + meta);
@@ -223,3 +222,7 @@ var TSOS;
     })();
     TSOS.DiskManager = DiskManager;
 })(TSOS || (TSOS = {}));
+function newFile(n, l) {
+    this.name = n;
+    this.loc = l;
+}
