@@ -131,7 +131,7 @@ module TSOS
 			 sc = new ShellCommand(this.shellClearMem,
                                   "clearmem",
                                   "- Clear all Mem");
-            this.commandList[this.commandList.length] = sc;
+            this.commandList[this.commandList.length] = sc; 
 			
 			
 			
@@ -590,6 +590,7 @@ module TSOS
 		public shellWrite(args)
 		{
 			//_DiskManager
+			_StdOut.putText("" + _DiskManager.writeFile(args[0],args[1]));
 		}
 		
 		public shellDelete(args)
