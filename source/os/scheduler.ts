@@ -15,7 +15,8 @@ module TSOS
 					public residentQueue = new TSOS.Queue(),
 					public terminatedQueue = new TSOS.Queue(),
                     public counter : number =0,
-					public quantum : number = 6					
+					public quantum : number = 6,
+					public mode: number = 1
                     ) {}
 					
 					

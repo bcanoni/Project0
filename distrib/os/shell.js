@@ -403,8 +403,22 @@ var TSOS;
             _StdOut.putText("|");
         };
         Shell.prototype.shellSetSchedule = function (args) {
+            if (args[0] == "rr")
+                _Scheduler.mode = 1;
+            else if (args[0] == "fcfs")
+                _Scheduler.mode = 2;
+            else if (args[0] == "priority")
+                _Scheduler.mode = 3;
+            else
+                _StdOut.putText("Pick valid Algorithm [rr, fcfs, priorty]");
         };
         Shell.prototype.shellGetSchedule = function (args) {
+            if (_Scheduler.mode == 1)
+                _StdOut.putText("Running in: Round Robin");
+            else if (_Scheduler.mode == 2)
+                _StdOut.putText("Running in: First Come First Serve.");
+            else if (_Scheduler.mode == 3)
+                _StdOut.putText("Running in: Priorty");
         };
         Shell.prototype.shellShutdown = function (args) {
             _StdOut.putText("Shutting down...");

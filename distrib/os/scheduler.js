@@ -7,17 +7,19 @@ Comments
 var TSOS;
 (function (TSOS) {
     var Scheduler = (function () {
-        function Scheduler(readyQueue, residentQueue, terminatedQueue, counter, quantum) {
+        function Scheduler(readyQueue, residentQueue, terminatedQueue, counter, quantum, mode) {
             if (readyQueue === void 0) { readyQueue = new TSOS.Queue(); }
             if (residentQueue === void 0) { residentQueue = new TSOS.Queue(); }
             if (terminatedQueue === void 0) { terminatedQueue = new TSOS.Queue(); }
             if (counter === void 0) { counter = 0; }
             if (quantum === void 0) { quantum = 6; }
+            if (mode === void 0) { mode = 1; }
             this.readyQueue = readyQueue;
             this.residentQueue = residentQueue;
             this.terminatedQueue = terminatedQueue;
             this.counter = counter;
             this.quantum = quantum;
+            this.mode = mode;
         }
         Scheduler.prototype.loadProgMem = function (program) {
             var curPCB = new TSOS.PCB();
