@@ -104,7 +104,7 @@ var TSOS;
                 this.setHeader(location.charAt(0), location.charAt(1), location.charAt(2), "1" + newlocation);
                 for (var x = 0; x < (newData.length / this.dataLen); x++) {
                     newlocation = this.nextFreeO("1", "0", "0");
-                    this.write(newlocation.charAt(0), newlocation.charAt(1), newlocation.charAt(2), newData.substring(64 * x, 64 * (x + 1)));
+                    this.write(newlocation.charAt(0), newlocation.charAt(1), newlocation.charAt(2), newData.substring(64 * x, 60 * (x + 1)));
                     var newmeta = this.nextFreeO("1", "0", "0");
                     this.addHeader(newlocation.charAt(0), newlocation.charAt(1), newlocation.charAt(2), "1" + newmeta);
                 }
@@ -147,7 +147,7 @@ var TSOS;
                 var b2 = b1.toString(16);
                 hdata += b2;
             }
-            for (var i = data.length; i < 64; i++) {
+            for (var i = data.length; i < 60; i++) {
                 hdata += "00";
             }
             return _HardDrive.write(t, s, b, hdata);
