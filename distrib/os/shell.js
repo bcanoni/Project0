@@ -326,7 +326,7 @@ var TSOS;
                     _StdOut.putText("Program Successfully loaded at PID: " + _PID);
                     _PID++; //increment pid
                     _DiskManager.createFile("." + _PID);
-                    _DiskManager.writeFile("." + _PID, output);
+                    _DiskManager.writeMemFile("." + _PID, output);
                 }
                 else
                     _StdOut.putText("Invalid Code");

@@ -203,6 +203,85 @@ module TSOS
 			
 		}	
 		
+		
+		//Memory is already in hex so I will use a separate method for dealing with it 
+		public writeMemFile(fileName,newData)
+		{			
+			var location = "";			
+			
+			for(var x = 0; x < this.fileNames.length ; x++)
+			{
+				if(this.fileNames[x][0] == fileName)
+				{
+					location = this.fileNames[x][1];
+					x = this.fileNames.length;				
+				}
+			
+			}
+			if(location == "")
+			{
+				return "file not found.";			
+			}			
+			
+			//GRAB META DATA
+			
+			
+			var meta = this.getHeader(location.charAt(0),location.charAt(1),location.charAt(2));
+			var metalocation = meta.substring(1,4);			
+			
+			//If the meta isnt set give it the first free 
+			//Starting at 1:0:0
+			//CHECK DATA LENGTH AND BREAK IT INTO BLOCKS
+			if(meta == "1000")
+			{	
+				
+				var newlocation =  this.nextFreeO("1", "0", "0");
+				
+				this.setHeader(location.charAt(0),location.charAt(1),location.charAt(2),"1"+newlocation);				
+				for(var x = 0 ; x < (newData.length/this.dataLen) ; x++)
+				{
+					newlocation = this.nextFreeO("1","0","0");
+					
+					this.writeMem(newlocation.charAt(0),newlocation.charAt(1),newlocation.charAt(2), newData.substring(64 * x,  60 * (x+1)));	
+					var newmeta = this.nextFreeO("1","0","0");
+					this.addHeader(newlocation.charAt(0),newlocation.charAt(1),newlocation.charAt(2),"1"+newmeta);	
+					
+				}
+				//END OF DATA
+				this.setHeader(newlocation.charAt(0),newlocation.charAt(1),newlocation.charAt(2),"1000");	
+			
+			}
+			else //go to meta and clear and write
+			{
+				this.writeMem(metalocation.charAt(0),metalocation.charAt(1),metalocation.charAt(2),newData);
+				this.addHeader(metalocation.charAt(0),metalocation.charAt(1),metalocation.charAt(2),"1000");							
+			}
+			
+			this.updateHardDriveTable();
+			return "Success";
+			
+		}
+		
+		//No hex to dec conversions here
+		public writeMem(t,s,b,data)
+		{
+			var hdata = "";
+			
+			hdata = data;
+		
+			for (var i = data.length; i < 60; i++) 
+			{
+				hdata += "00";
+			}
+			
+			return _HardDrive.write(t,s,b, hdata);
+		
+		}
+		
+		
+		
+		
+		
 		public getContent(t,s,b)
 		{
 			//CONVERT HEX TO DEC
