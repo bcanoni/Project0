@@ -185,7 +185,11 @@ module TSOS
 					newlocation = this.nextFreeO("1","0","0");
 					this.write(newlocation.charAt(0),newlocation.charAt(1),newlocation.charAt(2),      newData.substring(64 * x,  60 * (x+1)));	
 					var newmeta = this.nextFreeO("1","0","0");
-					this.addHeader(newlocation.charAt(0),newlocation.charAt(1),newlocation.charAt(2),"1"+newmeta);	
+					if(newData.length>120)
+					{
+						this.addHeader(newlocation.charAt(0),newlocation.charAt(1),newlocation.charAt(2),"1"+newmeta);
+					}
+					
 					
 				}
 				//END OF DATA
@@ -242,9 +246,14 @@ module TSOS
 				{
 					newlocation = this.nextFreeO("1","0","0");
 					
-					this.writeMem(newlocation.charAt(0),newlocation.charAt(1),newlocation.charAt(2), newData.substring(64 * x,  60 * (x+1)));	
+					this.writeMem(newlocation.charAt(0),newlocation.charAt(1),newlocation.charAt(2), newData.substring(120 * x,  120 * (x+1)));	
 					var newmeta = this.nextFreeO("1","0","0");
-					this.addHeader(newlocation.charAt(0),newlocation.charAt(1),newlocation.charAt(2),"1"+newmeta);	
+					
+					
+					if(newData.length>120)
+					{
+						this.addHeader(newlocation.charAt(0),newlocation.charAt(1),newlocation.charAt(2),"1"+newmeta);
+					}					
 					
 				}
 				//END OF DATA
