@@ -102,6 +102,7 @@ module TSOS
 				//alert (this.readyQueue);
 				if(this.counter >= this.quantum) //A SWITCH MUST OCCUR
 				{	
+					_CPU.isExecuting = true;
 					//get next pcb in list	
 					var nextPCB = this.readyQueue.dequeue();
 					

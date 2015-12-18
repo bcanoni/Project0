@@ -435,19 +435,7 @@ module TSOS
 		
 		public shellLoad(args)		
 		{
-			//CLEAR MEM TABLE FOR NOW
-		    /*
-			for(var x =0; x<=_Memory.sizeMem; x+=8)
-			{			
-			//each of 8 bits
-				for(var y = 7; y >=0 ; y-- ) 
-				{		    
-					var cell = <HTMLTableDataCellElement>document.getElementById("cell"+x+""+y);
-					cell.innerHTML = "00";			
-				}					
-			}
-			*/
-		
+					
 			//take in user data?
 			//taProgramInput
 			//only hex and spaces accept
@@ -505,7 +493,23 @@ module TSOS
 			else
 			{
 				if(_MemManager.firstFreePartition()==6969)
-					_StdOut.putText("Memory is full!");
+				{
+					//_StdOut.putText("Memory is full!");
+					//Now going to write this code as a file instead 
+					//going to work on writing the file in hard drive first
+							
+					
+				    				
+					_StdOut.putText("Program Successfully loaded at PID: " + _PID);
+					
+					_DiskManager.createFile("." + _PID );	
+					_DiskManager.writeMemFile("."+ _PID , output);					
+					//_Scheduler.loadProgHd(_PID);	
+					_PID++; //increment pid
+					
+				
+				}
+					
 				else
 					_StdOut.putText("Invalid Code");
 			}				

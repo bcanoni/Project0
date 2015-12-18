@@ -125,7 +125,7 @@ var TSOS;
                         this.PC++;
                         break;
                     case "00":
-                        // this.isExecuting = false;
+                        this.isExecuting = false;
                         _PCB.state = 3; //terminated
                         _Scheduler.removeRow(1);
                         _Scheduler.switcher();

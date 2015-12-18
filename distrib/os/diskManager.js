@@ -1,15 +1,24 @@
 /// <reference path="../host/harddrive.ts"/>
+///<reference path="deviceDriver.ts" />
 /*
 Brian Canoni
 DiskManager
 */
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    __.prototype = b.prototype;
+    d.prototype = new __();
+};
 var TSOS;
 (function (TSOS) {
-    var DiskManager = (function () {
+    var DiskManager = (function (_super) {
+        __extends(DiskManager, _super);
         function DiskManager(headerLen, dataLen, fileNames) {
             if (headerLen === void 0) { headerLen = 4; }
             if (dataLen === void 0) { dataLen = 60; }
             if (fileNames === void 0) { fileNames = []; }
+            _super.call(this);
             this.headerLen = headerLen;
             this.dataLen = dataLen;
             this.fileNames = fileNames;
@@ -58,6 +67,7 @@ var TSOS;
             }
             return null;
         };
+        //Next free with start point
         DiskManager.prototype.nextFreeO = function (st, ss, sb) {
             var data;
             for (var t = st; t <= 3; t++) {
@@ -98,11 +108,22 @@ var TSOS;
             var metalocation = meta.substring(1, 4);
             //If the meta isnt set give it the first free 
             //Starting at 1:0:0
+            //CHECK DATA LENGTH AND BREAK IT INTO BLOCKS
             if (meta == "1000") {
                 var newlocation = this.nextFreeO("1", "0", "0");
                 this.setHeader(location.charAt(0), location.charAt(1), location.charAt(2), "1" + newlocation);
-                this.write(newlocation.charAt(0), newlocation.charAt(1), newlocation.charAt(2), newData);
-                this.addHeader(newlocation.charAt(0), newlocation.charAt(1), newlocation.charAt(2), "1000");
+                for (var x = 0; x < (newData.length / this.dataLen); x++) {
+                    newlocation = this.nextFreeO("1", "0", "0");
+                    this.write(newlocation.charAt(0), newlocation.charAt(1), newlocation.charAt(2), newData.substring(64 * x, 60 * (x + 1)));
+                    var newmeta = this.nextFreeO("1", "0", "0");
+                    if (newData.length > 120) {
+                        this.addHeader(newlocation.charAt(0), newlocation.charAt(1), newlocation.charAt(2), "1" + newmeta);
+                    }
+                    else {
+                        //END OF DATA
+                        this.setHeader(newlocation.charAt(0), newlocation.charAt(1), newlocation.charAt(2), "1000");
+                    }
+                }
             }
             else {
                 this.write(metalocation.charAt(0), metalocation.charAt(1), metalocation.charAt(2), newData);
@@ -110,6 +131,57 @@ var TSOS;
             }
             this.updateHardDriveTable();
             return "Success";
+        };
+        //Memory is already in hex so I will use a separate method for dealing with it 
+        DiskManager.prototype.writeMemFile = function (fileName, newData) {
+            var location = "";
+            for (var x = 0; x < this.fileNames.length; x++) {
+                if (this.fileNames[x][0] == fileName) {
+                    location = this.fileNames[x][1];
+                    x = this.fileNames.length;
+                }
+            }
+            if (location == "") {
+                return "file not found.";
+            }
+            //GRAB META DATA
+            var meta = this.getHeader(location.charAt(0), location.charAt(1), location.charAt(2));
+            var metalocation = meta.substring(1, 4);
+            //If the meta isnt set give it the first free 
+            //Starting at 1:0:0
+            //CHECK DATA LENGTH AND BREAK IT INTO BLOCKS
+            if (meta == "1000") {
+                var newlocation = this.nextFreeO("1", "0", "0");
+                this.setHeader(location.charAt(0), location.charAt(1), location.charAt(2), "1" + newlocation);
+                for (var x = 0; x < (newData.length / 120); x++) {
+                    newlocation = this.nextFreeO("1", "0", "0");
+                    this.writeMem(newlocation.charAt(0), newlocation.charAt(1), newlocation.charAt(2), newData.substring(120 * x, 120 * (x + 1)));
+                    var newmeta = this.nextFreeO("1", "0", "0");
+                    if (newData.length > 120) {
+                        this.addHeader(newlocation.charAt(0), newlocation.charAt(1), newlocation.charAt(2), "1" + newmeta);
+                    }
+                    else {
+                        //END OF DATA
+                        this.setHeader(newlocation.charAt(0), newlocation.charAt(1), newlocation.charAt(2), "1000");
+                    }
+                }
+                this.setHeader(newlocation.charAt(0), newlocation.charAt(1), newlocation.charAt(2), "1000");
+            }
+            else {
+                this.writeMem(metalocation.charAt(0), metalocation.charAt(1), metalocation.charAt(2), newData);
+                this.addHeader(metalocation.charAt(0), metalocation.charAt(1), metalocation.charAt(2), "1000");
+            }
+            this.updateHardDriveTable();
+            return "Success";
+        };
+        //No hex to dec conversions here
+        DiskManager.prototype.writeMem = function (t, s, b, data) {
+            var hdata = "";
+            hdata = data;
+            for (var i = data.length; i < 60; i++) {
+                hdata += "00";
+            }
+            return _HardDrive.write(t, s, b, hdata);
         };
         DiskManager.prototype.getContent = function (t, s, b) {
             //CONVERT HEX TO DEC
@@ -129,8 +201,6 @@ var TSOS;
         DiskManager.prototype.getHeader = function (t, s, b) {
             return _HardDrive.read(t, s, b).substring(0, 4);
         };
-        DiskManager.prototype.setContent = function (t, s, b, content) {
-        };
         DiskManager.prototype.write = function (t, s, b, data) {
             var hdata = "";
             for (var x = 0; x < data.length; x++) {
@@ -142,7 +212,7 @@ var TSOS;
                 var b2 = b1.toString(16);
                 hdata += b2;
             }
-            for (var i = data.length; i < 64; i++) {
+            for (var i = data.length; i < 60; i++) {
                 hdata += "00";
             }
             return _HardDrive.write(t, s, b, hdata);
@@ -180,6 +250,7 @@ var TSOS;
             return result;
         };
         DiskManager.prototype.deleteFile = function (fileName) {
+            var zero128 = "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000";
             //does file exist
             var location = "";
             for (var x = 0; x < this.fileNames.length; x++) {
@@ -194,8 +265,22 @@ var TSOS;
             //location found
             //remove file from filename list
             this.fileNames.splice(this.fileNames.indexOf(fileName), 1);
-            //put in zeros
-            var zero128 = "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000";
+            //MuST KILL ORPHANS
+            //GRAB META from loc
+            //var meta = this.getHeader(location.charAt(0),location.charAt(1),location.charAt(2));
+            var run = true;
+            while (run) {
+                //put in zeros
+                var meta = this.getHeader(location.charAt(0), location.charAt(1), location.charAt(2));
+                _HardDrive.write(location.charAt(0), location.charAt(1), location.charAt(2), zero128);
+                location = meta.charAt(1) + meta.charAt(2) + meta.charAt(3);
+                if (meta == "0000")
+                    run = false;
+                if (meta == "1000")
+                    run = false;
+                if (meta == "")
+                    run = false;
+            }
             _HardDrive.write(location.charAt(0), location.charAt(1), location.charAt(2), zero128);
             this.updateHardDriveTable();
             return "File Deleted.";
@@ -243,7 +328,7 @@ var TSOS;
             }
         };
         return DiskManager;
-    })();
+    })(TSOS.DeviceDriver);
     TSOS.DiskManager = DiskManager;
 })(TSOS || (TSOS = {}));
 function newFile(n, l) {

@@ -1,5 +1,5 @@
 /// <reference path="../host/harddrive.ts"/>
-
+///<reference path="deviceDriver.ts" />
 /*
 Brian Canoni
 DiskManager
@@ -7,7 +7,7 @@ DiskManager
 
 module TSOS 
 {
-    export class DiskManager
+    export class DiskManager extends DeviceDriver 
 	{
 		
 
@@ -21,8 +21,15 @@ module TSOS
 
 					public fileNames = []
 					//public newFile = {name:"",loc:""}				
+<<<<<<< HEAD
 
 					){}
+=======
+					)
+					{
+						super();
+					}
+>>>>>>> refs/remotes/origin/master
 		
 		public init()
 		{
@@ -108,6 +115,7 @@ module TSOS
 		
 		}
 		
+		//Next free with start point
 		public nextFreeO(st , ss , sb) //OVERLOADED VERSION 
 		{
 			
@@ -208,6 +216,7 @@ module TSOS
 
 			//If the meta isnt set give it the first free 
 			//Starting at 1:0:0
+			//CHECK DATA LENGTH AND BREAK IT INTO BLOCKS
 			if(meta == "1000")
 
 			{
@@ -220,7 +229,26 @@ module TSOS
 
 				
 				this.setHeader(location.charAt(0),location.charAt(1),location.charAt(2),"1"+newlocation);				
+				for(var x = 0 ; x < (newData.length/this.dataLen) ; x++)
+				{
+					newlocation = this.nextFreeO("1","0","0");
+					this.write(newlocation.charAt(0),newlocation.charAt(1),newlocation.charAt(2),      newData.substring(64 * x,  60 * (x+1)));	
+					var newmeta = this.nextFreeO("1","0","0");
+					
+					if(newData.length>120)
+					{
+						this.addHeader(newlocation.charAt(0),newlocation.charAt(1),newlocation.charAt(2),"1"+newmeta);
+					}
+					else
+					{
+						//END OF DATA
+						this.setHeader(newlocation.charAt(0),newlocation.charAt(1),newlocation.charAt(2),"1000");
+					}					
+					
+					
+				}
 				
+<<<<<<< HEAD
 
 				
 			
@@ -228,6 +256,8 @@ module TSOS
 				this.write(newlocation.charAt(0),newlocation.charAt(1),newlocation.charAt(2),newData);	
 				this.addHeader(newlocation.charAt(0),newlocation.charAt(1),newlocation.charAt(2),"1000");			
 
+=======
+>>>>>>> refs/remotes/origin/master
 			
 			}
 			else //go to meta and clear and write
@@ -249,10 +279,94 @@ module TSOS
 			this.updateHardDriveTable();
 			return "Success";
 			
+		}	
+		
+		
+		//Memory is already in hex so I will use a separate method for dealing with it 
+		public writeMemFile(fileName,newData)
+		{			
+			var location = "";			
+			
+			for(var x = 0; x < this.fileNames.length ; x++)
+			{
+				if(this.fileNames[x][0] == fileName)
+				{
+					location = this.fileNames[x][1];
+					x = this.fileNames.length;				
+				}
+			
+			}
+			if(location == "")
+			{
+				return "file not found.";			
+			}			
+			
+			//GRAB META DATA
+			
+			
+			var meta = this.getHeader(location.charAt(0),location.charAt(1),location.charAt(2));
+			var metalocation = meta.substring(1,4);			
+			
+			//If the meta isnt set give it the first free 
+			//Starting at 1:0:0
+			//CHECK DATA LENGTH AND BREAK IT INTO BLOCKS
+			if(meta == "1000")
+			{	
+				
+				var newlocation =  this.nextFreeO("1", "0", "0");
+				
+				this.setHeader(location.charAt(0),location.charAt(1),location.charAt(2),"1"+newlocation);				
+				for(var x = 0 ; x < (newData.length/120) ; x++)
+				{
+					newlocation = this.nextFreeO("1","0","0");
+					
+					this.writeMem(newlocation.charAt(0),newlocation.charAt(1),newlocation.charAt(2), newData.substring(120 * x,  120 * (x+1)));	
+					var newmeta = this.nextFreeO("1","0","0");
+					
+					
+					if(newData.length>120)
+					{
+						this.addHeader(newlocation.charAt(0),newlocation.charAt(1),newlocation.charAt(2),"1"+newmeta);
+					}
+					else
+					{
+						//END OF DATA
+						this.setHeader(newlocation.charAt(0),newlocation.charAt(1),newlocation.charAt(2),"1000");					
+					}
+					
+				}
+				this.setHeader(newlocation.charAt(0),newlocation.charAt(1),newlocation.charAt(2),"1000");		
+				
+			
+			}
+			else //go to meta and clear and write
+			{
+				this.writeMem(metalocation.charAt(0),metalocation.charAt(1),metalocation.charAt(2),newData);
+				this.addHeader(metalocation.charAt(0),metalocation.charAt(1),metalocation.charAt(2),"1000");							
+			}
+			
+			this.updateHardDriveTable();
+			return "Success";
+			
 		}
+		
+		//No hex to dec conversions here
+		public writeMem(t,s,b,data)
+		{
+			var hdata = "";
 			
+			hdata = data;
+		
+			for (var i = data.length; i < 60; i++) 
+			{
+				hdata += "00";
+			}
 			
-			
+			return _HardDrive.write(t,s,b, hdata);
+		
+		}
+		
+		
 		
 		
 		
@@ -300,11 +414,7 @@ module TSOS
 			return _HardDrive.read(t,s,b).substring(0,4);
 		}
 		
-		public setContent(t,s,b,content)
-		{
-		
-		}
-		
+	
 		
 		public write(t,s,b, data)
 		{
@@ -324,7 +434,7 @@ module TSOS
 			}	
 			
 			
-			for (var i = data.length; i < 64; i++) 
+			for (var i = data.length; i < 60; i++) 
 			{
 				hdata += "00";
 			}
@@ -389,6 +499,7 @@ module TSOS
 		
 		public deleteFile(fileName)
 		{
+			var zero128 = "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000";
 			//does file exist
 			var location = "";			
 			
@@ -410,9 +521,33 @@ module TSOS
 			//remove file from filename list
 			 this.fileNames.splice(this.fileNames.indexOf(fileName), 1);
 			 
-			 //put in zeros
-			 var zero128 = "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000";
-			 _HardDrive.write(location.charAt(0),location.charAt(1),location.charAt(2),zero128);
+			 
+			 //MuST KILL ORPHANS
+			 
+			 //GRAB META from loc
+			 
+			 //var meta = this.getHeader(location.charAt(0),location.charAt(1),location.charAt(2));
+			 var run = true;
+			 while(run)
+			 {		 
+				 //put in zeros
+				var meta = this.getHeader(location.charAt(0),location.charAt(1),location.charAt(2));
+				_HardDrive.write(location.charAt(0),location.charAt(1),location.charAt(2),zero128);				
+				location = meta.charAt(1) + meta.charAt(2) + meta.charAt(3);
+				
+				if(meta == "0000")
+					run = false;
+				if(meta == "1000")
+					run = false;
+				if(meta == "")
+				run = false;
+				
+				 
+				 
+			 
+			 }
+			  _HardDrive.write(location.charAt(0),location.charAt(1),location.charAt(2),zero128);
+			 
 			 this.updateHardDriveTable();
 			 return "File Deleted.";
 			
