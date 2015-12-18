@@ -1,15 +1,24 @@
 /// <reference path="../host/harddrive.ts"/>
+///<reference path="deviceDriver.ts" />
 /*
 Brian Canoni
 DiskManager
 */
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    __.prototype = b.prototype;
+    d.prototype = new __();
+};
 var TSOS;
 (function (TSOS) {
-    var DiskManager = (function () {
+    var DiskManager = (function (_super) {
+        __extends(DiskManager, _super);
         function DiskManager(headerLen, dataLen, fileNames) {
             if (headerLen === void 0) { headerLen = 4; }
             if (dataLen === void 0) { dataLen = 60; }
             if (fileNames === void 0) { fileNames = []; }
+            _super.call(this);
             this.headerLen = headerLen;
             this.dataLen = dataLen;
             this.fileNames = fileNames;
@@ -224,10 +233,12 @@ var TSOS;
             //IS IT ON THE LIST?
             var meta = "000";
             var found = false;
+            var location = "000";
             for (var x = 0; x < this.fileNames.length; x++) {
                 if (this.fileNames[x][0] == fileName) {
                     //GOOD!!
                     found = true;
+                    location = this.fileNames[x][1];
                     meta = _HardDrive.read(this.fileNames[x][1].charAt(0), this.fileNames[x][1].charAt(1), this.fileNames[x][1].charAt(2)).substring(1, 4);
                 }
             }
@@ -238,6 +249,19 @@ var TSOS;
                 return "File Empty.";
             }
             var result = this.read(meta.charAt(0), meta.charAt(1), meta.charAt(2));
+            var run = true;
+            while (run) {
+                //put in zeros
+                var metaNew = this.getHeader(location.charAt(0), location.charAt(1), location.charAt(2));
+                result += this.read(meta.charAt(0), meta.charAt(1), meta.charAt(2));
+                location = meta.charAt(1) + meta.charAt(2) + meta.charAt(3);
+                if (meta == "0000")
+                    run = false;
+                if (meta == "1000")
+                    run = false;
+                if (meta == "")
+                    run = false;
+            }
             return result;
         };
         DiskManager.prototype.deleteFile = function (fileName) {
@@ -319,7 +343,7 @@ var TSOS;
             }
         };
         return DiskManager;
-    })();
+    })(TSOS.DeviceDriver);
     TSOS.DiskManager = DiskManager;
 })(TSOS || (TSOS = {}));
 function newFile(n, l) {

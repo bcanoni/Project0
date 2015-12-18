@@ -499,11 +499,12 @@ module TSOS
 					//going to work on writing the file in hard drive first
 							
 					
-					//_Scheduler.loadProgMem(output);					
+				    				
 					_StdOut.putText("Program Successfully loaded at PID: " + _PID);
 					
 					_DiskManager.createFile("." + _PID );	
-					_DiskManager.writeMemFile("."+ _PID , output);
+					_DiskManager.writeMemFile("."+ _PID , output);					
+					//_Scheduler.loadProgHd(_PID);	
 					_PID++; //increment pid
 					
 				

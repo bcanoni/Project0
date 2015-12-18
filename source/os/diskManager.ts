@@ -1,5 +1,5 @@
 /// <reference path="../host/harddrive.ts"/>
-
+///<reference path="deviceDriver.ts" />
 /*
 Brian Canoni
 DiskManager
@@ -7,7 +7,7 @@ DiskManager
 
 module TSOS 
 {
-    export class DiskManager
+    export class DiskManager extends DeviceDriver 
 	{
 		
 
@@ -16,7 +16,10 @@ module TSOS
 					public dataLen = 60,
 					public fileNames = []
 					//public newFile = {name:"",loc:""}				
-					){}
+					)
+					{
+						super();
+					}
 		
 		public init()
 		{
