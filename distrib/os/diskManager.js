@@ -98,11 +98,18 @@ var TSOS;
             var metalocation = meta.substring(1, 4);
             //If the meta isnt set give it the first free 
             //Starting at 1:0:0
+            //CHECK DATA LENGTH AND BREAK IT INTO BLOCKS
             if (meta == "1000") {
                 var newlocation = this.nextFreeO("1", "0", "0");
                 this.setHeader(location.charAt(0), location.charAt(1), location.charAt(2), "1" + newlocation);
-                this.write(newlocation.charAt(0), newlocation.charAt(1), newlocation.charAt(2), newData);
-                this.addHeader(newlocation.charAt(0), newlocation.charAt(1), newlocation.charAt(2), "1000");
+                for (var x = 0; x < (newData.length / this.dataLen); x++) {
+                    newlocation = this.nextFreeO("1", "0", "0");
+                    this.write(newlocation.charAt(0), newlocation.charAt(1), newlocation.charAt(2), newData.substring(64 * x, 64 * (x + 1)));
+                    var newmeta = this.nextFreeO("1", "0", "0");
+                    this.addHeader(newlocation.charAt(0), newlocation.charAt(1), newlocation.charAt(2), "1" + newmeta);
+                }
+                //END OF DATA
+                this.setHeader(newlocation.charAt(0), newlocation.charAt(1), newlocation.charAt(2), "1000");
             }
             else {
                 this.write(metalocation.charAt(0), metalocation.charAt(1), metalocation.charAt(2), newData);
@@ -128,8 +135,6 @@ var TSOS;
         };
         DiskManager.prototype.getHeader = function (t, s, b) {
             return _HardDrive.read(t, s, b).substring(0, 4);
-        };
-        DiskManager.prototype.setContent = function (t, s, b, content) {
         };
         DiskManager.prototype.write = function (t, s, b, data) {
             var hdata = "";
