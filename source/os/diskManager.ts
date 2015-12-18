@@ -248,16 +248,14 @@ module TSOS
 					
 				}
 				
-<<<<<<< HEAD
 
 				
 			
 
-				this.write(newlocation.charAt(0),newlocation.charAt(1),newlocation.charAt(2),newData);	
-				this.addHeader(newlocation.charAt(0),newlocation.charAt(1),newlocation.charAt(2),"1000");			
+				//this.write(newlocation.charAt(0),newlocation.charAt(1),newlocation.charAt(2),newData);	
+				/this.addHeader(newlocation.charAt(0),newlocation.charAt(1),newlocation.charAt(2),"1000");			
 
-=======
->>>>>>> refs/remotes/origin/master
+
 			
 			}
 			else //go to meta and clear and write

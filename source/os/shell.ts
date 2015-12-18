@@ -592,10 +592,7 @@ module TSOS
 		
 		public shellWrite(args)
 		{
-<<<<<<< HEAD
-			//write filename "data"
-			_StdOut.putText("" + _DiskManager.writeFile(args[0],args[1]));
-=======
+
 			//_DiskManager
 			
 			if (args.length >= 2 ) //needs to have at least ""
@@ -617,8 +614,7 @@ module TSOS
 			}
 			else
 			_StdOut.putText("need filename");
-			
->>>>>>> refs/remotes/origin/master
+
 			
 		}
 		
