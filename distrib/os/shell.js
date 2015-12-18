@@ -324,9 +324,9 @@ var TSOS;
                     //going to work on writing the file in hard drive first
                     //_Scheduler.loadProgMem(output);					
                     _StdOut.putText("Program Successfully loaded at PID: " + _PID);
-                    _PID++; //increment pid
                     _DiskManager.createFile("." + _PID);
                     _DiskManager.writeMemFile("." + _PID, output);
+                    _PID++; //increment pid
                 }
                 else
                     _StdOut.putText("Invalid Code");
