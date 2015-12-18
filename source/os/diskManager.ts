@@ -102,6 +102,7 @@ module TSOS
 		
 		}
 		
+		//Next free with start point
 		public nextFreeO(st , ss , sb) //OVERLOADED VERSION 
 		{
 			
@@ -420,6 +421,7 @@ module TSOS
 		
 		public deleteFile(fileName)
 		{
+			var zero128 = "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000";
 			//does file exist
 			var location = "";			
 			
@@ -441,9 +443,26 @@ module TSOS
 			//remove file from filename list
 			 this.fileNames.splice(this.fileNames.indexOf(fileName), 1);
 			 
-			 //put in zeros
-			 var zero128 = "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000";
-			 _HardDrive.write(location.charAt(0),location.charAt(1),location.charAt(2),zero128);
+			 
+			 //MuST KILL ORPHANS
+			 
+			 //GRAB META from loc
+			 
+			 var meta = this.getHeader(location.charAt(0),location.charAt(1),location.charAt(2));
+			 while(meta != "1000")
+			 {		 
+				 //put in zeros
+				 
+				 _HardDrive.write(location.charAt(0),location.charAt(1),location.charAt(2),zero128);
+				 
+				 location = meta.charAt(1) + meta.charAt(2) + meta.charAt(3);
+				 meta = this.getHeader(location.charAt(0),location.charAt(1),location.charAt(2));
+				 
+				 
+			 
+			 }
+			  _HardDrive.write(location.charAt(0),location.charAt(1),location.charAt(2),zero128);
+			 
 			 this.updateHardDriveTable();
 			 return "File Deleted.";
 			

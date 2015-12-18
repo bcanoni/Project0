@@ -58,6 +58,7 @@ var TSOS;
             }
             return null;
         };
+        //Next free with start point
         DiskManager.prototype.nextFreeO = function (st, ss, sb) {
             var data;
             for (var t = st; t <= 3; t++) {
@@ -239,6 +240,7 @@ var TSOS;
             return result;
         };
         DiskManager.prototype.deleteFile = function (fileName) {
+            var zero128 = "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000";
             //does file exist
             var location = "";
             for (var x = 0; x < this.fileNames.length; x++) {
@@ -253,8 +255,15 @@ var TSOS;
             //location found
             //remove file from filename list
             this.fileNames.splice(this.fileNames.indexOf(fileName), 1);
-            //put in zeros
-            var zero128 = "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000";
+            //MuST KILL ORPHANS
+            //GRAB META from loc
+            var meta = this.getHeader(location.charAt(0), location.charAt(1), location.charAt(2));
+            while (meta != "1000") {
+                //put in zeros
+                _HardDrive.write(location.charAt(0), location.charAt(1), location.charAt(2), zero128);
+                location = meta.charAt(1) + meta.charAt(2) + meta.charAt(3);
+                meta = this.getHeader(location.charAt(0), location.charAt(1), location.charAt(2));
+            }
             _HardDrive.write(location.charAt(0), location.charAt(1), location.charAt(2), zero128);
             this.updateHardDriveTable();
             return "File Deleted.";
