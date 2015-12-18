@@ -267,6 +267,7 @@ module TSOS
 					}
 					
 				}
+				this.setHeader(newlocation.charAt(0),newlocation.charAt(1),newlocation.charAt(2),"1000");		
 				
 			
 			}
@@ -448,15 +449,22 @@ module TSOS
 			 
 			 //GRAB META from loc
 			 
-			 var meta = this.getHeader(location.charAt(0),location.charAt(1),location.charAt(2));
-			 while(meta != "1000")
+			 //var meta = this.getHeader(location.charAt(0),location.charAt(1),location.charAt(2));
+			 var run = true;
+			 while(run)
 			 {		 
 				 //put in zeros
-				 
-				 _HardDrive.write(location.charAt(0),location.charAt(1),location.charAt(2),zero128);
-				 
-				 location = meta.charAt(1) + meta.charAt(2) + meta.charAt(3);
-				 meta = this.getHeader(location.charAt(0),location.charAt(1),location.charAt(2));
+				var meta = this.getHeader(location.charAt(0),location.charAt(1),location.charAt(2));
+				_HardDrive.write(location.charAt(0),location.charAt(1),location.charAt(2),zero128);				
+				location = meta.charAt(1) + meta.charAt(2) + meta.charAt(3);
+				
+				if(meta == "0000")
+					run = false;
+				if(meta == "1000")
+					run = false;
+				if(meta == "")
+				run = false;
+				
 				 
 				 
 			 
