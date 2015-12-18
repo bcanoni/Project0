@@ -109,9 +109,11 @@ var TSOS;
                     if (newData.length > 120) {
                         this.addHeader(newlocation.charAt(0), newlocation.charAt(1), newlocation.charAt(2), "1" + newmeta);
                     }
+                    else {
+                        //END OF DATA
+                        this.setHeader(newlocation.charAt(0), newlocation.charAt(1), newlocation.charAt(2), "1000");
+                    }
                 }
-                //END OF DATA
-                this.setHeader(newlocation.charAt(0), newlocation.charAt(1), newlocation.charAt(2), "1000");
             }
             else {
                 this.write(metalocation.charAt(0), metalocation.charAt(1), metalocation.charAt(2), newData);
@@ -141,16 +143,18 @@ var TSOS;
             if (meta == "1000") {
                 var newlocation = this.nextFreeO("1", "0", "0");
                 this.setHeader(location.charAt(0), location.charAt(1), location.charAt(2), "1" + newlocation);
-                for (var x = 0; x < (newData.length / this.dataLen); x++) {
+                for (var x = 0; x < (newData.length / 120); x++) {
                     newlocation = this.nextFreeO("1", "0", "0");
                     this.writeMem(newlocation.charAt(0), newlocation.charAt(1), newlocation.charAt(2), newData.substring(120 * x, 120 * (x + 1)));
                     var newmeta = this.nextFreeO("1", "0", "0");
                     if (newData.length > 120) {
                         this.addHeader(newlocation.charAt(0), newlocation.charAt(1), newlocation.charAt(2), "1" + newmeta);
                     }
+                    else {
+                        //END OF DATA
+                        this.setHeader(newlocation.charAt(0), newlocation.charAt(1), newlocation.charAt(2), "1000");
+                    }
                 }
-                //END OF DATA
-                this.setHeader(newlocation.charAt(0), newlocation.charAt(1), newlocation.charAt(2), "1000");
             }
             else {
                 this.writeMem(metalocation.charAt(0), metalocation.charAt(1), metalocation.charAt(2), newData);
